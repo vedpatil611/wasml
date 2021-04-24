@@ -1,0 +1,25 @@
+[package]
+authors = ["Archit Bhonsle <abhonsle2000@gmail.com>"]
+description = "WebAssembly implementation of vectors and matrices"
+edition = "2018"
+license = "APACHE"
+name = "dataframes"
+repository = "https://github.com/wasml/wasml"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["console_error_panic_hook", "wee_alloc"]
+
+[dependencies]
+console_error_panic_hook = {version = "0.1.6", optional = true}
+wasm-bindgen = "0.2.63"
+wee_alloc = {version = "0.4.5", optional = true}
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.13"
+
+[profile.release]
+opt-level = "s"

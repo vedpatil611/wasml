@@ -15,7 +15,7 @@ pub fn set_panic_hook() {
 }
 
 #[wasm_bindgen]
-extern {
+extern "C" {
     fn alert(s: &str);
 }
 
@@ -27,5 +27,5 @@ pub fn start() {
 
 #[wasm_bindgen]
 pub fn greet() {
-    alert("Hello, watrix!");
+    alert("Hello, dataframes!");
 }
