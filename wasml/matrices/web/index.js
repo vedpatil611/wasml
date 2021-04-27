@@ -1,4 +1,4 @@
-import init, { Integers1d, Floats1d, Strings1d } from '../pkg/matrices.js';
+import init, { Integers1d, Floats1d, Strings1d } from '../pkg/ndarrays.js';
 
 (async () => {
   await init();

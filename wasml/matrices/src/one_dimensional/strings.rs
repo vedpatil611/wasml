@@ -10,6 +10,7 @@ pub struct Strings1d {
 
 // All the rust only functions
 impl Strings1d {
+    /// Create a new Strings1d
     pub fn new(array: Vec<String>) -> Strings1d {
         Strings1d { data: arr1(&array) }
     }
@@ -18,6 +19,9 @@ impl Strings1d {
 // All the wasm bindgen functions
 #[wasm_bindgen]
 impl Strings1d {
+    // UTITLITY FUNCTIONS
+
+    /// Create a new Strings1d from javascript
     #[wasm_bindgen(constructor)]
     pub fn new_with_js(js_array: JsValue) -> Strings1d {
         let vector: Vec<String> = js_array.into_serde().unwrap();
@@ -26,11 +30,13 @@ impl Strings1d {
         }
     }
 
-    #[wasm_bindgen(getter)]
+    /// Gives the value contained in the ndarray as a javascript array
+    #[wasm_bindgen(getter, js_name = data)]
     pub fn data(&self) -> JsValue {
         JsValue::from_serde(&self.data.to_vec()).unwrap()
     }
 
+    /// Get the string representation of the underlying ndarray
     #[wasm_bindgen(js_name = toString)]
     pub fn to_string(&self) -> String {
         format!("{:#?}", self.data)
