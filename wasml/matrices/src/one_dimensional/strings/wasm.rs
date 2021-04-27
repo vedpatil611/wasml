@@ -1,26 +1,9 @@
-use ndarray::{arr1, Array1};
-use serde::{Deserialize, Serialize};
+use super::Strings1d;
+use ndarray::arr1;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-#[derive(Serialize, Deserialize)]
-pub struct Strings1d {
-    data: Array1<String>,
-}
-
-// All the rust only functions
 impl Strings1d {
-    /// Create a new Strings1d
-    pub fn new(array: Vec<String>) -> Strings1d {
-        Strings1d { data: arr1(&array) }
-    }
-}
-
-// All the wasm bindgen functions
-#[wasm_bindgen]
-impl Strings1d {
-    // UTITLITY FUNCTIONS
-
     /// Create a new Strings1d from javascript
     #[wasm_bindgen(constructor)]
     pub fn new_with_js(js_array: JsValue) -> Strings1d {
