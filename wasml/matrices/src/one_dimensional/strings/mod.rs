@@ -1,3 +1,4 @@
+mod basic;
 mod wasm;
 
 use ndarray::{arr1, Array1};
