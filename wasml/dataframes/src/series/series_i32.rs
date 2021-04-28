@@ -52,7 +52,7 @@ impl SeriesI32 {
     }
 
     pub fn data(&self) -> JsValue {
-        return self.data.data();
+        return self.data.data_to_js();
     }
 
     // pub fn push_data(&mut self, data_item: JsValue) -> js_sys::Int32Array {
