@@ -7,9 +7,7 @@ import init, { Integers1d, Floats1d, Strings1d } from '../pkg/ndarrays.js';
     '%cONE DIMENSIONAL',
     'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
   );
-  one_dimensional_integers();
   one_dimensional_floats();
-  one_dimensional_strings();
   console.groupEnd();
 
   console.group(
@@ -19,97 +17,60 @@ import init, { Integers1d, Floats1d, Strings1d } from '../pkg/ndarrays.js';
   console.groupEnd();
 })();
 
-const one_dimensional_integers = () => {
-  console.group('INTEGERS');
-
-  const a = new Integers1d([1, 4, 3, 2, 5]);
-  const b = new Integers1d([6, 7, 8, 9, 10]);
-  console.log(a.toString());
-  console.log(b.toString());
-
-  console.group('basic');
-  console.log('a.get(2):', a.get(2));
-  console.log('a.len():', a.len());
-  console.log('a.shape()', a.shape());
-  a.swap(0, 4);
-  console.log('a after swap', a.data);
-  a.reverse();
-  console.log('a after reverse', a.data);
-  console.groupEnd();
-
-  console.group('math');
-  const add = a.add(b);
-  const sub = a.sub(b);
-  const mul = a.mul(b);
-  const div = a.div(b);
-
-  console.log(a.data);
-  console.log(b.data);
-  console.log('add', add.data);
-  console.log('sub', sub.data);
-  console.log('mul', mul.data);
-  console.log('div', div.data);
-  console.groupEnd();
-
-  console.groupEnd();
-};
-
 const one_dimensional_floats = () => {
   console.group('FLOATS');
 
-  const a = new Floats1d([1.0, 4.0, 3.0, 2.0, 5.0]);
-  const b = new Floats1d([6.0, 7.0, 8.0, 9.0, 10.0]);
-  console.log(a.toString());
-  console.log(b.toString());
-
-  console.group('basic');
-  console.log('a.get(2):', a.get(2));
-  console.log('a.len():', a.len());
-  console.log('a.shape()', a.shape());
-  a.swap(0, 4);
-  console.log('a after swap', a.data);
-  a.reverse();
-  console.log('a after reverse', a.data);
-  console.groupEnd();
-
-  console.group('math');
-  console.log(a.data);
-  console.log(b.data);
-  const add = a.add(b);
-  const sub = a.sub(b);
-  const mul = a.mul(b);
-  const div = a.div(b);
-
-  console.log('add', add.data);
-  console.log('sub', sub.data);
-  console.log('mul', mul.data);
-  console.log('div', div.data);
-  console.groupEnd();
+  one_dimensional_floats_basics();
+  one_dimensional_floats_math();
 
   console.groupEnd();
 };
 
-const one_dimensional_strings = () => {
-  console.group('STRINGS');
+const one_dimensional_floats_basics = () => {
+  console.group('basics');
 
-  const a = new Strings1d(['a', 'd', 'c', 'b', 'e']);
-  const b = new Strings1d(['f', 'g', 'h', 'i', 'j']);
+  const a = new Floats1d([5.0, 2.0, 10.0, 4.0, 1.0]);
+  const b = new Floats1d([6.0, 7.0, 8.0, 9.0, 10.0]);
+
   console.log(a.toString());
-  console.log(b.toString());
 
-  console.group('basic');
-  console.log('a.get(2):', a.get(2));
   console.log('a.len():', a.len());
   console.log('a.shape()', a.shape());
+  console.log('a.get(2):', a.get(2));
+  a.set(2, 3.0);
+  console.log('a.set(2, 10.0)', a.data);
   a.swap(0, 4);
-  console.log('a after swap', a.data);
-  a.reverse();
-  console.log('a after reverse', a.data);
-  console.groupEnd();
+  console.log('a.swap(0, 4)', a.data);
+  console.log('a.reversed()', a.reversed().data);
+  console.log('a.appended(6.0)', a.appended(6.0).data);
+  console.log('a.extended(a)', a.extended(b).data);
 
-  console.group('math');
-  console.log('no math operations on strings');
   console.groupEnd();
+};
+
+const one_dimensional_floats_math = () => {
+  console.group('math');
+
+  const a = new Floats1d([1.0, 2.0, 3.0, 4.0, 5.0]);
+  const b = new Floats1d([6.0, 7.0, 8.0, 9.0, 10.0]);
+  console.log(a.data);
+  console.log(b.data);
+
+  const add = a.add(b);
+  const sub = a.sub(b);
+  const mul = a.mul(b);
+  const div = a.div(b);
+  console.log('add', add.data);
+  console.log('sub', sub.data);
+  console.log('mul', mul.data);
+  console.log('div', div.data);
+
+  const a_clone = new Floats1d([1.0, 2.0, 3.0, 4.0, 5.0]);
+  console.log('a_clone.scaled_add(b)', a_clone.scaled_add(b));
+  console.log('a.sum()', a.sum());
+  console.log('a.product()', a.product());
+  console.log('a.variance(0)', a.variance(0));
+  console.log('a.standard_deviation(0)', a.standard_deviation(0));
 
   console.groupEnd();
 };

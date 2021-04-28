@@ -2,7 +2,7 @@
 authors = ["Archit Bhonsle <abhonsle2000@gmail.com>"]
 description = "WASML's implementation of n-dimensional arrays"
 edition = "2018"
-license = "APACHE"
+license-file = "../../LICENSE"
 name = "ndarrays"
 repository = "https://github.com/wasml/wasml"
 version = "0.1.0"
