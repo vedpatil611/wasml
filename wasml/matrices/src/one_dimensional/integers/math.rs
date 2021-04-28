@@ -1,5 +1,7 @@
 use super::Integers1d;
+use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen]
 impl Integers1d {
     /// Add two Integers1d's and return the result
     pub fn add(&self, other: &Integers1d) -> Integers1d {

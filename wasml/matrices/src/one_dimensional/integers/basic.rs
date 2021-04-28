@@ -12,7 +12,7 @@ impl Integers1d {
         JsValue::from_serde(self.data.shape()).unwrap()
     }
 
-    pub fn index(&self, index: usize) -> i32 {
+    pub fn get(&self, index: usize) -> i32 {
         self.data[index]
     }
 

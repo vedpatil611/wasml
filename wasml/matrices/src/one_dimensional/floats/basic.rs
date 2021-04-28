@@ -12,7 +12,7 @@ impl Floats1d {
         JsValue::from_serde(self.data.shape()).unwrap()
     }
 
-    pub fn index(&self, index: usize) -> f64 {
+    pub fn get(&self, index: usize) -> f64 {
         self.data[index]
     }
 

@@ -12,7 +12,7 @@ impl Strings1d {
         JsValue::from_serde(self.data.shape()).unwrap()
     }
 
-    pub fn index(&self, index: usize) -> String {
+    pub fn get(&self, index: usize) -> String {
         self.data[index].clone()
     }
 

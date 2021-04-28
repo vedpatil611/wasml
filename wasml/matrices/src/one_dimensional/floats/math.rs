@@ -1,5 +1,7 @@
 use super::Floats1d;
+use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen]
 impl Floats1d {
     /// Add two Floats1d's and return the result
     pub fn add(&self, other: &Floats1d) -> Floats1d {
