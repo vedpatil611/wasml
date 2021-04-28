@@ -1,5 +1,5 @@
-mod one_dimensional;
-mod utils;
+pub mod one_dimensional;
+pub mod utils;
 
 use wasm_bindgen::prelude::*;
 

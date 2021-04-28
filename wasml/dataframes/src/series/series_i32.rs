@@ -1,4 +1,4 @@
-use crate::one_dimensional::integers::Integers1d;
+use ndarrays::one_dimensional::integers::Integers1d;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]

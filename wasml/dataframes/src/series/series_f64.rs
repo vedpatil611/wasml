@@ -1,4 +1,4 @@
-use crate::one_dimensional::floats::Floats1d;
+use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
