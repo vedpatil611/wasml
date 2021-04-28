@@ -48,7 +48,19 @@ impl SeriesI32 {
         //     "{}\nName: {}\nData: {}\n(1x{})\n{}",
         //     margin, col_name, data, col_size, margin
         // )
-        serde_wasm_bindgen::to_value(&self).unwrap()
+        #[derive(Serialize, Deserialize)]
+        struct Display {
+            name: String,
+            data: Vec<i32>,
+            length: usize,
+        };
+
+        let display_series = Display {
+            name: self.name.clone(),
+            data: self.data.vector_data(),
+            length: self.size,
+        };
+        serde_wasm_bindgen::to_value(&display_series).unwrap()
     }
 
     pub fn data(&self) -> JsValue {

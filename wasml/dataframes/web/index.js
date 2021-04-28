@@ -5,7 +5,7 @@ import init, { SeriesF64, SeriesI32 } from "../pkg/dataframes.js";
 
   let int_data = new SeriesI32("Dion", [1, 2, 3, 4, 5]);
   // console.table(int_data.data());
-  // console.table(int_data.show());
+  console.table(int_data.show());
 
   console.log(int_data.data());
   int_data.append(6);
