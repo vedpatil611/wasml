@@ -1,18 +1,22 @@
+use ndarrays::one_dimensional::integers::Integers1d;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
 pub struct SeriesI32 {
     name: String,
-    data: Vec<i32>,
+    data: Integers1d,
     size: usize,
 }
 
 #[wasm_bindgen]
 impl SeriesI32 {
     #[wasm_bindgen(constructor)]
-    pub fn series_i32(name: JsValue, data: JsValue) -> SeriesI32 {
+    pub fn new(name: JsValue, data: JsValue) -> SeriesI32 {
         let col_name = serde_wasm_bindgen::from_value(name).unwrap();
-        let col_data: Vec<i32> = serde_wasm_bindgen::from_value(data).unwrap();
+        let serde_data: Vec<i32> = serde_wasm_bindgen::from_value(data).unwrap();
+        let col_data = Integers1d::new(serde_data);
         let col_size = col_data.len();
         let new_series = SeriesI32 {
             name: col_name,
@@ -22,39 +26,41 @@ impl SeriesI32 {
 
         new_series
     }
-    pub fn show(&self) -> String {
-        let margin = "#".repeat((self.size * 3) + 6);
-        let col_name = self.name.clone();
-        let col_size = self.size.to_string();
-        let mut c = 0;
-        let data: String = self
-            .data
-            .iter()
-            .map(|&x| {
-                c += 1;
-                if c == self.size {
-                    x.to_string()
-                } else {
-                    x.to_string() + ", "
-                }
-            })
-            .collect();
-        format!(
-            "{}\nName: {}\nData: {}\n(1x{})\n{}",
-            margin, col_name, data, col_size, margin
-        )
+    pub fn show(&self) -> JsValue {
+        // let margin = "#".repeat((self.size * 3) + 6);
+        // let col_name = self.name.clone();
+        // let col_size = self.size.to_string();
+        // let mut c = 0;
+        // let data: String = self
+        //     .data
+        //     .vector_data()
+        //     .iter()
+        //     .map(|&x| {
+        //         c += 1;
+        //         if c == self.size {
+        //             x.to_string()
+        //         } else {
+        //             x.to_string() + ", "
+        //         }
+        //     })
+        //     .collect();
+        // format!(
+        //     "{}\nName: {}\nData: {}\n(1x{})\n{}",
+        //     margin, col_name, data, col_size, margin
+        // )
+        serde_wasm_bindgen::to_value(&self).unwrap()
     }
 
-    pub fn data(&self) -> js_sys::Int32Array {
-        return js_sys::Int32Array::from(&self.data[..]);
+    pub fn data(&self) -> JsValue {
+        return self.data.data_to_js();
     }
 
-    pub fn push_data(&mut self, data_item: JsValue) -> js_sys::Int32Array {
-        let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
-        self.data.push(data_item);
-        self.size += 1;
-        return js_sys::Int32Array::from(&self.data[..]);
-    }
+    // pub fn push_data(&mut self, data_item: JsValue) -> js_sys::Int32Array {
+    //     let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
+    //     self.data.push(data_item);
+    //     self.size += 1;
+    //     return js_sys::Int32Array::from(&self.data[..]);
+    // }
 
     pub fn name(&self) -> String {
         self.name.clone()

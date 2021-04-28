@@ -19,6 +19,10 @@ impl Floats1d {
         JsValue::from_serde(&self.data.to_vec()).unwrap()
     }
 
+    pub fn vector_data(&self) -> Vec<f64> {
+        self.data.to_vec()
+    }
+
     /// Get the string representation of the underlying ndarray
     #[wasm_bindgen(js_name = toString)]
     pub fn to_string(&self) -> String {
