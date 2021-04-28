@@ -14,8 +14,8 @@ impl Floats1d {
     }
 
     /// Gives the value contained in the ndarray as a javascript array
-    #[wasm_bindgen(getter)]
-    pub fn data(&self) -> JsValue {
+    #[wasm_bindgen(getter, js_name = data)]
+    pub fn data_to_js(&self) -> JsValue {
         JsValue::from_serde(&self.data.to_vec()).unwrap()
     }
 
