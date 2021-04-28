@@ -55,9 +55,28 @@ impl SeriesI32 {
         return self.data.data_to_js();
     }
 
-    pub fn append(&mut self, data_item: JsValue) -> JsValue {
+    pub fn append(&mut self, data_item: JsValue) {
         let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
         self.data.append(data_item);
+    }
+
+    pub fn appended(&mut self, data_item: JsValue) -> JsValue {
+        let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
+        self.data.append(data_item);
+
+        self.data.data_to_js()
+    }
+
+    pub fn extend(&mut self, data_arr: JsValue) {
+        let data_arr = serde_wasm_bindgen::from_value(data_arr).unwrap();
+        let ndarray_data_arr = Integers1d::new(data_arr);
+        self.data.extend(ndarray_data_arr)
+    }
+
+    pub fn extended(&mut self, data_arr: JsValue) -> JsValue {
+        let data_arr = serde_wasm_bindgen::from_value(data_arr).unwrap();
+        let ndarray_data_arr = Integers1d::new(data_arr);
+        self.data.extend(ndarray_data_arr);
 
         self.data.data_to_js()
     }
