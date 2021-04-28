@@ -1,18 +1,20 @@
+use crate::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub struct SeriesF64 {
     name: String,
-    data: Vec<f64>,
+    data: Floats1d,
     size: usize,
 }
 
 #[wasm_bindgen]
 impl SeriesF64 {
     #[wasm_bindgen(constructor)]
-    pub fn series_f64(name: JsValue, data: JsValue) -> SeriesF64 {
+    pub fn new(name: JsValue, data: JsValue) -> SeriesF64 {
         let col_name = serde_wasm_bindgen::from_value(name).unwrap();
-        let col_data: Vec<f64> = serde_wasm_bindgen::from_value(data).unwrap();
+        let serde_data: Vec<f64> = serde_wasm_bindgen::from_value(data).unwrap();
+        let col_data = Floats1d::new(serde_data);
         let col_size = col_data.len();
         let new_series = SeriesF64 {
             name: col_name,
@@ -29,6 +31,7 @@ impl SeriesF64 {
         let mut c = 0;
         let data: String = self
             .data
+            .vector_data()
             .iter()
             .map(|&x| {
                 c += 1;
@@ -45,16 +48,16 @@ impl SeriesF64 {
         )
     }
 
-    pub fn data(&self) -> js_sys::Float64Array {
-        return js_sys::Float64Array::from(&self.data[..]);
+    pub fn data(&self) -> JsValue {
+        self.data.data()
     }
 
-    pub fn push_data(&mut self, data_item: JsValue) -> js_sys::Float64Array {
-        let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
-        self.data.push(data_item);
-        self.size += 1;
-        return js_sys::Float64Array::from(&self.data[..]);
-    }
+    // pub fn push_data(&mut self, data_item: JsValue) -> js_sys::Float64Array {
+    //     let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
+    //     self.data.push(data_item);
+    //     self.size += 1;
+    //     return js_sys::Float64Array::from(&self.data[..]);
+    // }
 
     pub fn name(&self) -> String {
         self.name.clone()

@@ -1,10 +1,14 @@
-import init, { greet, SeriesF64 } from "../pkg/dataframes.js";
+import init, { greet, SeriesF64, SeriesI32 } from "../pkg/dataframes.js";
 
 (async () => {
   await init();
 
   // greet();
 
-  const exmaple = new SeriesF64("Dion", [1, 2, 3, 4]);
-  console.table(exmaple.data());
+  const int_data = new SeriesI32("Dion", [1, 2, 3, 4, 5]);
+  console.table(int_data.data());
+  console.log(int_data.show());
+
+  const float_data = new SeriesF64("pinto", [1.2, 6.9]);
+  console.table(float_data.data());
 })();

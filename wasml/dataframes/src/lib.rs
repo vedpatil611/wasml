@@ -1,5 +1,6 @@
 use wasm_bindgen::prelude::*;
 
+mod one_dimensional;
 mod series;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
