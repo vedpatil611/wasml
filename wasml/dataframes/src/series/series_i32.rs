@@ -55,12 +55,12 @@ impl SeriesI32 {
         return self.data.data_to_js();
     }
 
-    // pub fn push_data(&mut self, data_item: JsValue) -> js_sys::Int32Array {
-    //     let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
-    //     self.data.push(data_item);
-    //     self.size += 1;
-    //     return js_sys::Int32Array::from(&self.data[..]);
-    // }
+    pub fn append(&mut self, data_item: JsValue) -> JsValue {
+        let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
+        self.data.append(data_item);
+
+        self.data.data_to_js()
+    }
 
     pub fn name(&self) -> String {
         self.name.clone()
