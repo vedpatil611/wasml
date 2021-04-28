@@ -1,7 +1,9 @@
 use ndarrays::one_dimensional::integers::Integers1d;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
 pub struct SeriesI32 {
     name: String,
     data: Integers1d,
@@ -24,28 +26,29 @@ impl SeriesI32 {
 
         new_series
     }
-    pub fn show(&self) -> String {
-        let margin = "#".repeat((self.size * 3) + 6);
-        let col_name = self.name.clone();
-        let col_size = self.size.to_string();
-        let mut c = 0;
-        let data: String = self
-            .data
-            .vector_data()
-            .iter()
-            .map(|&x| {
-                c += 1;
-                if c == self.size {
-                    x.to_string()
-                } else {
-                    x.to_string() + ", "
-                }
-            })
-            .collect();
-        format!(
-            "{}\nName: {}\nData: {}\n(1x{})\n{}",
-            margin, col_name, data, col_size, margin
-        )
+    pub fn show(&self) -> JsValue {
+        // let margin = "#".repeat((self.size * 3) + 6);
+        // let col_name = self.name.clone();
+        // let col_size = self.size.to_string();
+        // let mut c = 0;
+        // let data: String = self
+        //     .data
+        //     .vector_data()
+        //     .iter()
+        //     .map(|&x| {
+        //         c += 1;
+        //         if c == self.size {
+        //             x.to_string()
+        //         } else {
+        //             x.to_string() + ", "
+        //         }
+        //     })
+        //     .collect();
+        // format!(
+        //     "{}\nName: {}\nData: {}\n(1x{})\n{}",
+        //     margin, col_name, data, col_size, margin
+        // )
+        serde_wasm_bindgen::to_value(&self).unwrap()
     }
 
     pub fn data(&self) -> JsValue {
