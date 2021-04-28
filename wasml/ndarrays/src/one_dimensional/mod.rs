@@ -1,3 +1,3 @@
-mod floats;
-mod integers;
-mod strings;
+pub mod floats;
+pub mod integers;
+pub mod strings;
