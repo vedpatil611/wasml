@@ -25,6 +25,12 @@ impl SeriesF64 {
         }
     }
 
+    pub fn get_ref(&self) -> JsValue {
+        let js_series = self;
+
+        serde_wasm_bindgen::to_value(&js_series).unwrap()
+    }
+
     pub fn show(&self) -> JsValue {
         #[derive(Serialize, Deserialize)]
         struct Display {

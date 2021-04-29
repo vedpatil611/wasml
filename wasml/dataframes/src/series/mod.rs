@@ -1,2 +1,2 @@
-mod series_f64;
-mod series_i32;
+pub mod series_f64;
+pub mod series_i32;
