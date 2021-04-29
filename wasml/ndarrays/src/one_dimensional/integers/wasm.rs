@@ -19,13 +19,17 @@ impl Integers1d {
         JsValue::from_serde(&self.data.to_vec()).unwrap()
     }
 
-    pub fn vector_data(&self) -> Vec<i32> {
-        self.data.to_vec()
-    }
-
     /// Get the string representation of the underlying ndarray
     #[wasm_bindgen(js_name = toString)]
     pub fn to_string(&self) -> String {
         format!("{:#?}", self.data)
+    }
+
+    /// Clone the object
+    #[wasm_bindgen(js_name = clone)]
+    pub fn clone_for_wasm(&self) -> Integers1d {
+        Integers1d {
+            data: self.data.clone(),
+        }
     }
 }

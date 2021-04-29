@@ -1,5 +1,5 @@
 use super::Integers1d;
-use ndarray::{s, Array1};
+use ndarray::{s, Array1, Axis};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -42,7 +42,7 @@ impl Integers1d {
         }
     }
 
-    /// Append a new element to the array
+    /// Appending an element to the array
     pub fn append(&mut self, element: i32) {
         let new = Array1::from_iter(
             self.data
@@ -55,7 +55,7 @@ impl Integers1d {
         self.data = new;
     }
 
-    /// Append a new element to the array and return the result
+    /// Return the result of appending an element to the array
     pub fn appended(&mut self, element: i32) -> Integers1d {
         let new = Array1::from_iter(
             self.data
@@ -68,7 +68,7 @@ impl Integers1d {
         Integers1d { data: new }
     }
 
-    /// Extend an array with another
+    /// Extend the array with another
     pub fn extend(&mut self, other: Integers1d) {
         let new = Array1::from_iter(
             self.data
@@ -81,16 +81,67 @@ impl Integers1d {
         self.data = new;
     }
 
-    /// Extend an array with another and returns the result
+    /// Return the result of extending the array with another
     pub fn extended(&self, other: Integers1d) -> Integers1d {
         let new = Array1::from_iter(
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| x.clone())
-                .chain(other.data.clone().into_iter().map(|x| x.clone())),
+                .map(|x| *x)
+                .chain(other.data.clone().into_iter().map(|x| *x)),
         );
 
         Integers1d { data: new }
+    }
+
+    /// Insert a value at the specified index
+    pub fn insert(&mut self, index: usize, value: i32) {
+        let (first, second) = self.data.view().split_at(Axis(0), index);
+        let new = Array1::from_iter(
+            first
+                .iter()
+                .map(|x| *x)
+                .chain(std::iter::once(value))
+                .chain(second.iter().map(|x| *x)),
+        );
+
+        self.data = new;
+    }
+
+    /// Return the array with the value inseted at the specified index
+    pub fn inserted(&mut self, index: usize, value: i32) -> Integers1d {
+        let (first, second) = self.data.view().split_at(Axis(0), index);
+        let new = Array1::from_iter(
+            first
+                .iter()
+                .map(|x| *x)
+                .chain(std::iter::once(value))
+                .chain(second.iter().map(|x| *x)),
+        );
+
+        Integers1d { data: new }
+    }
+
+    /// Remove the value at the specified index and return the result
+    pub fn splice(&mut self, index: usize) -> i32 {
+        let val = self.data[index];
+        let (first, second) = self.data.multi_slice_mut((s![..index], s![index + 1..]));
+        let new = Array1::from_iter(first.iter().map(|x| *x).chain(second.iter().map(|x| *x)));
+
+        self.data = new;
+
+        val
+    }
+
+    /// Return the array after removing an element at the specified index
+    /// and the element
+    pub fn spliced(&mut self, index: usize) -> js_sys::Array {
+        let val = self.data[index];
+        let (first, second) = self.data.multi_slice_mut((s![..index], s![index + 1..]));
+        let new = Array1::from_iter(first.iter().map(|x| *x).chain(second.iter().map(|x| *x)));
+
+        let spliced = Integers1d { data: new };
+
+        js_sys::Array::of2(&JsValue::from(spliced), &JsValue::from(val))
     }
 }

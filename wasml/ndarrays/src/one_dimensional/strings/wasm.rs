@@ -24,4 +24,12 @@ impl Strings1d {
     pub fn to_string(&self) -> String {
         format!("{:#?}", self.data)
     }
+
+    /// Clone the object
+    #[wasm_bindgen(js_name = clone)]
+    pub fn clone_for_wasm(&self) -> Strings1d {
+        Strings1d {
+            data: self.data.clone(),
+        }
+    }
 }

@@ -44,6 +44,8 @@ const one_dimensional_floats_basics = () => {
   console.log('a.reversed()', a.reversed().data);
   console.log('a.appended(6.0)', a.appended(6.0).data);
   console.log('a.extended(a)', a.extended(b).data);
+  console.log('a.inserted(0, 0.0)', a.inserted(0, 0.0).data);
+  console.log('a.spliced(0)', a.spliced(0)[0].data, a.spliced(0)[1]);
 
   console.groupEnd();
 };
