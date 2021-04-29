@@ -9,7 +9,8 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Integers1d {
-    data: Array1<i32>,
+    #[wasm_bindgen(skip)]
+    pub data: Array1<i32>,
 }
 
 // All the rust only functions

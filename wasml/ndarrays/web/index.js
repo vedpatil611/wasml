@@ -67,8 +67,9 @@ const one_dimensional_floats_math = () => {
   console.log('mul', mul.data);
   console.log('div', div.data);
 
-  const a_clone = new Floats1d([1.0, 2.0, 3.0, 4.0, 5.0]);
-  console.log('a_clone.scaled_add(b)', a_clone.scaled_add(b));
+  const a_clone = a.clone();
+  a.scaled_add(b);
+  console.log('a.clone().scaled_add(b)', a_clone.data);
   console.log('a.sum()', a.sum());
   console.log('a.product()', a.product());
   console.log('a.variance(0)', a.variance(0));

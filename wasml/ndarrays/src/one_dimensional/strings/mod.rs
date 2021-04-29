@@ -8,7 +8,8 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Strings1d {
-    data: Array1<String>,
+    #[wasm_bindgen(skip)]
+    pub data: Array1<String>,
 }
 
 // All the rust only functions
