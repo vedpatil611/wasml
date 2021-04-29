@@ -1,4 +1,4 @@
-import init, { Integers1d, Floats1d, Strings1d } from '../pkg/ndarrays.js';
+import init, { Floats1d, Floats2d } from '../pkg/ndarrays.js';
 
 (async () => {
   await init();
@@ -14,7 +14,10 @@ import init, { Integers1d, Floats1d, Strings1d } from '../pkg/ndarrays.js';
     '%cTWO DIMENSIONAL',
     'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
   );
+  two_dimensional_floats();
   console.groupEnd();
+
+  dot_test();
 })();
 
 const one_dimensional_floats = () => {
@@ -76,4 +79,45 @@ const one_dimensional_floats_math = () => {
   console.log('a.standard_deviation(0)', a.standard_deviation(0));
 
   console.groupEnd();
+};
+
+const two_dimensional_floats = () => {
+  console.group('FLOATS');
+
+  const a = new Floats2d([
+    [1.0, 2.0],
+    [4.0, 5.0],
+  ]);
+  const b = new Floats2d([
+    [6.0, 7.0],
+    [9.0, 10.0],
+  ]);
+  console.log(a.data);
+  console.log(b.data);
+
+  const add = a.add(b);
+  const sub = a.sub(b);
+  const mul = a.mul(b);
+  const div = a.div(b);
+  const dot = a.dot(b);
+  console.log('add', add.data);
+  console.log('sub', sub.data);
+  console.log('mul', mul.data);
+  console.log('div', div.data);
+  console.log('dot', dot.data);
+
+  console.groupEnd();
+};
+
+const dot_test = () => {
+  const a = new Floats2d([
+    [4.0, -1.0],
+    [0.0, 5.0],
+  ]);
+  const b = new Floats2d([
+    [1.0, 8.0, 0.0],
+    [6.0, -2.0, 3.0],
+  ]);
+  const dot = a.dot(b);
+  console.log('dot', dot.data);
 };
