@@ -24,7 +24,7 @@ impl SeriesI32 {
             size: col_size,
         }
     }
-    
+
     pub fn show(&self) -> JsValue {
         #[derive(Serialize, Deserialize)]
         struct Display {
@@ -35,7 +35,7 @@ impl SeriesI32 {
 
         let display_series = Display {
             name: self.name.clone(),
-            data: self.data.vector_data(),
+            data: self.data.data.to_vec(),
             length: self.size,
         };
         serde_wasm_bindgen::to_value(&display_series).unwrap()

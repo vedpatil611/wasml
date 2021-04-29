@@ -26,7 +26,19 @@ impl SeriesF64 {
     }
 
     pub fn show(&self) -> JsValue {
-        serde_wasm_bindgen::to_value(&self).unwrap()
+        #[derive(Serialize, Deserialize)]
+        struct Display {
+            name: String,
+            data: Vec<f64>,
+            length: usize,
+        };
+
+        let display_series = Display {
+            name: self.name.clone(),
+            data: self.data.data.to_vec(),
+            length: self.size,
+        };
+        serde_wasm_bindgen::to_value(&display_series).unwrap()
     }
 
     pub fn data(&self) -> JsValue {
