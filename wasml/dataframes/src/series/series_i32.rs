@@ -18,14 +18,13 @@ impl SeriesI32 {
         let serde_data: Vec<i32> = serde_wasm_bindgen::from_value(data).unwrap();
         let col_data = Integers1d::new(serde_data);
         let col_size = col_data.len();
-        let new_series = SeriesI32 {
+        SeriesI32 {
             name: col_name,
             data: col_data,
             size: col_size,
-        };
-
-        new_series
+        }
     }
+    
     pub fn show(&self) -> JsValue {
         #[derive(Serialize, Deserialize)]
         struct Display {
@@ -84,6 +83,6 @@ impl SeriesI32 {
     }
 
     pub fn size(&self) -> usize {
-        self.size.clone()
+        self.size
     }
 }
