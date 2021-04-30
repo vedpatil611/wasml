@@ -11,7 +11,6 @@ use wasm_bindgen::prelude::*;
 pub struct SeriesF64 {
     name: String,
     data: Floats1d,
-    size: usize,
 }
 
 #[wasm_bindgen]
@@ -19,5 +18,4 @@ pub struct SeriesF64 {
 pub struct SeriesI32 {
     name: String,
     data: Integers1d,
-    size: usize,
 }

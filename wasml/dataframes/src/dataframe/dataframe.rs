@@ -25,19 +25,37 @@ pub struct DataFrame {
 impl DataFrame {
     #[wasm_bindgen(constructor)]
     pub fn new(vec_series: Vec<JsValue>) -> DataFrame {
+        let mut series_size = 0;
+        let first_series_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
+            serde_wasm_bindgen::from_value(vec_series[0].clone());
+        if let Ok(series_int) = first_series_int {
+            series_size = series_int.size()
+        }
+
+        let first_series_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
+            serde_wasm_bindgen::from_value(vec_series[0].clone());
+        if let Ok(series_float) = first_series_float {
+            series_size = series_float.size()
+        }
+
         let series_data = vec_series
             .iter()
             .map(|series| {
                 let as_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
                     serde_wasm_bindgen::from_value(series.clone());
+
                 if let Ok(x) = as_int {
-                    return Series::Integers(x);
+                    if x.size() == series_size {
+                        return Series::Integers(x);
+                    }
                 }
 
                 let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
                     serde_wasm_bindgen::from_value(series.clone());
                 if let Ok(x) = as_float {
-                    return Series::Floats(x);
+                    if x.size() == series_size {
+                        return Series::Floats(x);
+                    }
                 }
 
                 panic!("Type couldn't be matched");
@@ -46,11 +64,6 @@ impl DataFrame {
 
         DataFrame { data: series_data }
     }
-
-    // #[wasm_bindgen(constructor)]
-    // pub fn new() -> DataFrame {
-    //     DataFrame { data: Vec::new() }
-    // }
 
     #[wasm_bindgen(js_name = addColumn)]
     pub fn add_column(&mut self, datatype: ColumnType, series: JsValue) {

@@ -10,11 +10,10 @@ impl SeriesF64 {
         let col_name = serde_wasm_bindgen::from_value(name).unwrap();
         let serde_data: Vec<f64> = serde_wasm_bindgen::from_value(data).unwrap();
         let col_data = Floats1d::new(serde_data);
-        let col_size = col_data.len();
+
         SeriesF64 {
             name: col_name,
             data: col_data,
-            size: col_size,
         }
     }
 
@@ -29,13 +28,11 @@ impl SeriesF64 {
         struct Display {
             name: String,
             data: Vec<f64>,
-            length: usize,
         }
 
         let display_series = Display {
             name: self.name.clone(),
             data: self.data.data.to_vec(),
-            length: self.size,
         };
         serde_wasm_bindgen::to_value(&display_series).unwrap()
     }
@@ -82,6 +79,6 @@ impl SeriesF64 {
     }
 
     pub fn size(&self) -> usize {
-        self.size
+        self.data.len()
     }
 }
