@@ -1,4 +1,4 @@
-import init, { SeriesF64, SeriesI32, DataFrame } from "../pkg/dataframes.js";
+import init, { SeriesF64, SeriesI32, DataFrame, ColumnType } from "../pkg/dataframes.js";
 
 (async () => {
   await init();
@@ -16,7 +16,13 @@ import init, { SeriesF64, SeriesI32, DataFrame } from "../pkg/dataframes.js";
   const float_data = new SeriesF64("pinto", [1.2, 6.9]);
   console.table(float_data.show());
 
-  let dataf = new DataFrame([ref_ser1, ref_ser2]);
-  console.log("################--SERIES (Int)--##################");
+  console.log(typeof(ref_ser1));
+  console.log(ref_ser1);
+
+  let dataf = new DataFrame();
+  dataf.addColumn(ColumnType.INTEGER, ref_ser1);
+  dataf.addColumn(ColumnType.INTEGER, ser2.get_ref());
+  dataf.addColumn(ColumnType.FLOAT, float_data.get_ref());
+  console.log("################--DF--##################");
   console.log(dataf.show());
 })();
