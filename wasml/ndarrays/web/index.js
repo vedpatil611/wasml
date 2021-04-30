@@ -1,7 +1,11 @@
 import init, { Floats1d, Floats2d } from '../pkg/ndarrays.js';
+// import { matrixMultiplicationTest } from './matrix_multiplication.js';
 
 (async () => {
   await init();
+
+  // matrixMultiplicationTest();
+  // demo();
 
   console.group(
     '%cONE DIMENSIONAL',
@@ -16,9 +20,9 @@ import init, { Floats1d, Floats2d } from '../pkg/ndarrays.js';
   );
   two_dimensional_floats();
   console.groupEnd();
-
-  dot_test();
 })();
+
+// const demo = () => {};
 
 const one_dimensional_floats = () => {
   console.group('FLOATS');
@@ -107,17 +111,4 @@ const two_dimensional_floats = () => {
   console.log('dot', dot.data);
 
   console.groupEnd();
-};
-
-const dot_test = () => {
-  const a = new Floats2d([
-    [4.0, -1.0],
-    [0.0, 5.0],
-  ]);
-  const b = new Floats2d([
-    [1.0, 8.0, 0.0],
-    [6.0, -2.0, 3.0],
-  ]);
-  const dot = a.dot(b);
-  console.log('dot', dot.data);
 };
