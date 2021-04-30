@@ -1,14 +1,7 @@
+use super::SeriesF64;
 use ndarrays::one_dimensional::floats::Floats1d;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-#[derive(Serialize, Deserialize)]
-pub struct SeriesF64 {
-    name: String,
-    data: Floats1d,
-    size: usize,
-}
 
 #[wasm_bindgen]
 impl SeriesF64 {
@@ -37,7 +30,7 @@ impl SeriesF64 {
             name: String,
             data: Vec<f64>,
             length: usize,
-        };
+        }
 
         let display_series = Display {
             name: self.name.clone(),

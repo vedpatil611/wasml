@@ -1,14 +1,7 @@
+use super::SeriesI32;
 use ndarrays::one_dimensional::integers::Integers1d;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-#[derive(Serialize, Deserialize)]
-pub struct SeriesI32 {
-    name: String,
-    data: Integers1d,
-    size: usize,
-}
 
 #[wasm_bindgen]
 impl SeriesI32 {
@@ -37,7 +30,7 @@ impl SeriesI32 {
             name: String,
             data: Vec<i32>,
             length: usize,
-        };
+        }
 
         let display_series = Display {
             name: self.name.clone(),
