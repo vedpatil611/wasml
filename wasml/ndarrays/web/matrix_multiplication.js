@@ -1,6 +1,6 @@
 import init, { Floats2d } from '../pkg/ndarrays.js';
 
-function timeit(callback) {
+export function timeit(callback) {
   const bef = new Date();
   const ret = callback();
   const aft = new Date();

@@ -32,7 +32,7 @@ impl Integers1d {
     }
 
     /// Efficiently performs self += alpha * rhs
-    pub fn scaled_add(&mut self, other: Integers1d, alpha: i32) {
+    pub fn scaled_add(&mut self, alpha: i32, other: Integers1d) {
         self.data.scaled_add(alpha, &other.data);
     }
 

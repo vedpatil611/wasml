@@ -1,22 +1,24 @@
 use super::Integers1d;
-use ndarray::arr1;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl Integers1d {
     /// Create a new Integers1d from javascript
     #[wasm_bindgen(constructor)]
-    pub fn new_with_js(js_array: JsValue) -> Integers1d {
-        let vector: Vec<i32> = js_array.into_serde().unwrap();
-        Integers1d {
-            data: arr1(&vector),
-        }
+    pub fn new_with_js(value: JsValue) -> Integers1d {
+        serde_wasm_bindgen::from_value(value).unwrap()
+    }
+
+    /// Gives the JSON representation of the array
+    #[wasm_bindgen(js_name = toJSON)]
+    pub fn to_json(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(self).unwrap()
     }
 
     /// Gives the value contained in the ndarray as a javascript array
     #[wasm_bindgen(getter, js_name = data)]
     pub fn data_to_js(&self) -> JsValue {
-        JsValue::from_serde(&self.data.to_vec()).unwrap()
+        self.to_json()
     }
 
     /// Get the string representation of the underlying ndarray
