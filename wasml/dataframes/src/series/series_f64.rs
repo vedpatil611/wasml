@@ -81,4 +81,8 @@ impl SeriesF64 {
     pub fn size(&self) -> usize {
         self.data.len()
     }
+
+    pub fn dtype(&self) -> String {
+        String::from("f64")
+    }
 }

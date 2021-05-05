@@ -81,4 +81,8 @@ impl SeriesI32 {
     pub fn size(&self) -> usize {
         self.data.len()
     }
+
+    pub fn dtype(&self) -> String {
+        String::from("i32")
+    }
 }

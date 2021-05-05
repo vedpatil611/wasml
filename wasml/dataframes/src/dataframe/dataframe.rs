@@ -25,6 +25,7 @@ pub struct DataFrame {
 impl DataFrame {
     #[wasm_bindgen(constructor)]
     pub fn new(vec_series: Vec<JsValue>) -> DataFrame {
+        //Get first Series data size
         let mut series_size = 0;
         let first_series_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
@@ -65,7 +66,33 @@ impl DataFrame {
         DataFrame { data: series_data }
     }
 
-    #[wasm_bindgen(js_name = addColumn)]
+    #[wasm_bindgen(js_name = columns)]
+    pub fn show_columns(&self) -> JsValue {
+        let mut res: Vec<String> = Vec::new();
+        self.data.iter().for_each(|ser| {
+            match ser {
+                Series::Integers(x) => res.push(x.name()),
+                Series::Floats(x) => res.push(x.name()),
+            };
+        });
+
+        serde_wasm_bindgen::to_value(&res).unwrap()
+    }
+
+    #[wasm_bindgen(js_name = dTypes)]
+    pub fn show_datatypes(&self) -> JsValue {
+        let mut res: Vec<String> = Vec::new();
+        self.data.iter().for_each(|ser| {
+            match ser {
+                Series::Integers(x) => res.push(x.dtype()),
+                Series::Floats(x) => res.push(x.dtype()),
+            };
+        });
+
+        serde_wasm_bindgen::to_value(&res).unwrap()
+    }
+
+    #[wasm_bindgen(js_name = append)]
     pub fn add_column(&mut self, datatype: ColumnType, series: JsValue) {
         // let dt: ColumnType = serde_wasm_bindgen::from_value(datatype).unwrap();
         match datatype {
@@ -78,6 +105,11 @@ impl DataFrame {
                 self.data.push(Series::Integers(ser));
             }
         }
+    }
+
+    #[wasm_bindgen(js_name = size)]
+    pub fn dataframe_size(&self) -> usize {
+        self.data.iter().count()
     }
 
     pub fn show(&self) -> js_sys::Map {
