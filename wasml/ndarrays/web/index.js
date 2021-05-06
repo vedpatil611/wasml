@@ -1,5 +1,5 @@
 import init, { Floats1d, Floats2d } from '../pkg/ndarrays.js';
-// import { matrixMultiplicationTest } from './matrix_multiplication.js';
+import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
 
 (async () => {
   await init();
@@ -22,7 +22,7 @@ import init, { Floats1d, Floats2d } from '../pkg/ndarrays.js';
   console.groupEnd();
 })();
 
-// const demo = () => {};
+const demo = () => {};
 
 const one_dimensional_floats = () => {
   console.group('FLOATS');
@@ -75,12 +75,14 @@ const one_dimensional_floats_math = () => {
   console.log('div', div.data);
 
   const a_clone = a.clone();
-  a.scaled_add(b);
-  console.log('a.clone().scaled_add(b)', a_clone.data);
+  a_clone.scaled_add(2, b);
+  console.log('a.clone().scaled_add(2, b)', a_clone.data);
   console.log('a.sum()', a.sum());
   console.log('a.product()', a.product());
   console.log('a.variance(0)', a.variance(0));
   console.log('a.standard_deviation(0)', a.standard_deviation(0));
+  console.log('a.variance(1)', a.variance(1));
+  console.log('a.standard_deviation(1)', a.standard_deviation(1));
 
   console.groupEnd();
 };
