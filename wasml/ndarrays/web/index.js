@@ -1,4 +1,4 @@
-import init, { Floats1d, Floats2d } from '../pkg/ndarrays.js';
+import init, { Floats1d, Floats2d, Strings1d } from '../pkg/ndarrays.js';
 import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
 
 (async () => {
@@ -12,6 +12,8 @@ import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
     'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
   );
   one_dimensional_floats();
+  one_dimensional_strings();
+
   console.groupEnd();
 
   console.group(
@@ -32,6 +34,36 @@ const one_dimensional_floats = () => {
 
   console.groupEnd();
 };
+
+const one_dimensional_strings = () => {
+  console.group('STRINGS');
+  one_dimensional_strings_basics();
+  console.groupEnd();
+}
+
+const one_dimensional_strings_basics = () => {
+  console.group('Basics');
+  const s1 = new Strings1d(['a','b','c','d','e']);
+  const s2 = new Strings1d(['p','q','r','s','t']);
+
+  console.log('s1.len():', s1.len());
+  console.log('s1.get(2):', s1.get(2));
+  console.log('s2.get(1):', s2.get(1));
+  console.log('s1.shape()', s1.shape());
+
+  s2.swap(0, 4);
+  console.log('s2.swap(0, 4)', s2.data);
+  s1.set(2, 'x');
+  console.log('s1.set(2, 10.0)', s1.data);
+  
+  console.log('s2.reversed()', s2.reversed().data);
+  console.log('s2.appended("z")', s2.appended('z').data);
+  console.log('s1.extended(s2)', s1.extended(s2).data);
+  console.log('s1.inserted(3, "y")', s1.inserted(3, "y").data);
+  console.log('s1.spliced(0)', s1.spliced(0)[0].data, s1.spliced(0)[1]);
+  console.groupEnd();
+
+}
 
 const one_dimensional_floats_basics = () => {
   console.group('basics');
