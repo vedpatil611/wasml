@@ -1,3 +1,4 @@
+use crate::dataframe::ColumnType;
 use super::SeriesF64;
 use ndarrays::one_dimensional::floats::Floats1d;
 use serde::{Deserialize, Serialize};
@@ -17,7 +18,8 @@ impl SeriesF64 {
         }
     }
 
-    pub fn get_ref(&self) -> JsValue {
+    #[wasm_bindgen(js_name = toJson)]
+    pub fn to_json(&self) -> JsValue {
         let js_series = self;
 
         serde_wasm_bindgen::to_value(&js_series).unwrap()
@@ -71,6 +73,7 @@ impl SeriesF64 {
         self.name.clone()
     }
 
+    #[wasm_bindgen(js_name = updateName)]
     pub fn update_name(&mut self, column_name: JsValue) -> String {
         let column_name = serde_wasm_bindgen::from_value(column_name).unwrap();
         self.name = column_name;
@@ -82,7 +85,7 @@ impl SeriesF64 {
         self.data.len()
     }
 
-    pub fn dtype(&self) -> String {
-        String::from("f64")
+    pub fn dtype(&self) -> ColumnType {
+        ColumnType::FLOAT
     }
 }
