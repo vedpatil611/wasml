@@ -1,25 +1,9 @@
 use crate::series::SeriesF64;
 use crate::series::SeriesI32;
-use serde::{Deserialize, Serialize};
+use super::ColumnType;
+use super::DataFrame;
+use super::Series;
 use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-#[derive(Serialize, Deserialize)]
-pub enum ColumnType {
-    INTEGER,
-    FLOAT,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum Series {
-    Integers(SeriesI32),
-    Floats(SeriesF64),
-}
-
-#[wasm_bindgen]
-pub struct DataFrame {
-    data: Vec<Series>,
-}
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -27,14 +11,12 @@ impl DataFrame {
     pub fn new(vec_series: Vec<JsValue>) -> DataFrame {
         //Get first Series data size
         let mut series_size = 0;
-        let first_series_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
-            serde_wasm_bindgen::from_value(vec_series[0].clone());
+        let first_series_int: Result<SeriesI32, serde_wasm_bindgen::Error> = serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_int) = first_series_int {
             series_size = series_int.size()
         }
 
-        let first_series_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
-            serde_wasm_bindgen::from_value(vec_series[0].clone());
+        let first_series_float: Result<SeriesF64, serde_wasm_bindgen::Error> = serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_float) = first_series_float {
             series_size = series_float.size()
         }
@@ -42,8 +24,7 @@ impl DataFrame {
         let series_data = vec_series
             .iter()
             .map(|series| {
-                let as_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
-                    serde_wasm_bindgen::from_value(series.clone());
+                let as_int: Result<SeriesI32, serde_wasm_bindgen::Error> = serde_wasm_bindgen::from_value(series.clone());
 
                 if let Ok(x) = as_int {
                     if x.size() == series_size {
@@ -51,8 +32,7 @@ impl DataFrame {
                     }
                 }
 
-                let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
-                    serde_wasm_bindgen::from_value(series.clone());
+                let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> = serde_wasm_bindgen::from_value(series.clone());
                 if let Ok(x) = as_float {
                     if x.size() == series_size {
                         return Series::Floats(x);
@@ -81,7 +61,7 @@ impl DataFrame {
 
     #[wasm_bindgen(js_name = dTypes)]
     pub fn show_datatypes(&self) -> JsValue {
-        let mut res: Vec<String> = Vec::new();
+        let mut res: Vec<ColumnType> = Vec::new();
         self.data.iter().for_each(|ser| {
             match ser {
                 Series::Integers(x) => res.push(x.dtype()),
