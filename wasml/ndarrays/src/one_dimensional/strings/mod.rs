@@ -1,6 +1,6 @@
-mod basic;
-mod custom_serde;
-mod wasm;
+pub mod basic;
+pub mod custom_serde;
+pub mod wasm;
 
 use ndarray::{arr1, Array1};
 use wasm_bindgen::prelude::*;

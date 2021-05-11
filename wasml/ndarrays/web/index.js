@@ -4,7 +4,6 @@ import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
 (async () => {
   await init();
 
-  // matrixMultiplicationTest();
   // demo();
 
   // console.group(
@@ -22,7 +21,14 @@ import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
   console.groupEnd();
 })();
 
-const demo = () => {};
+const demo = () => {
+  // const a = new Floats1d([5.0, 2.0, 10.0, 4.0, 1.0]);
+  // const b = new Floats1d([6.0, 7.0, 8.0, 9.0, 10.0]);
+  // console.log(a.data);
+  // console.log(b.data);
+  // console.log(a.add(b).data);
+  // console.log(a.standard_deviation(1));
+};
 
 const one_dimensional_floats = () => {
   console.group('FLOATS');
@@ -32,35 +38,6 @@ const one_dimensional_floats = () => {
 
   console.groupEnd();
 };
-
-// const one_dimensional_strings = () => {
-//   console.group('STRINGS');
-//   one_dimensional_strings_basics();
-//   console.groupEnd();
-// }
-
-// const one_dimensional_strings_basics = () => {
-//   console.group('Basics');
-//   const s1 = new Strings1d(['a','b','c','d','e']);
-//   const s2 = new Strings1d(['p','q','r','s','t']);
-
-//   console.log('s1.len():', s1.len());
-//   console.log('s1.get(2):', s1.get(2));
-//   console.log('s2.get(1):', s2.get(1));
-//   console.log('s1.shape()', s1.shape());
-
-//   s2.swap(0, 4);
-//   console.log('s2.swap(0, 4)', s2.data);
-//   s1.set(2, 'x');
-//   console.log('s1.set(2, 10.0)', s1.data);
-
-//   console.log('s2.reversed()', s2.reversed().data);
-//   console.log('s2.appended("z")', s2.appended('z').data);
-//   console.log('s1.extended(s2)', s1.extended(s2).data);
-//   console.log('s1.inserted(3, "y")', s1.inserted(3, "y").data);
-//   console.log('s1.spliced(0)', s1.spliced(0)[0].data, s1.spliced(0)[1]);
-//   console.groupEnd();
-// }
 
 const one_dimensional_floats_basics = () => {
   console.group('basics');
@@ -119,6 +96,15 @@ const one_dimensional_floats_math = () => {
 const two_dimensional_floats = () => {
   console.group('FLOATS');
 
+  two_dimensional_floats_basics();
+  two_dimensional_floats_math();
+
+  console.groupEnd();
+};
+
+const two_dimensional_floats_math = () => {
+  console.group('math');
+
   const a = new Floats2d([
     [1.0, 2.0],
     [4.0, 5.0],
@@ -147,4 +133,32 @@ const two_dimensional_floats = () => {
   console.log('column standard deviation', a.column_standard_deviation(1).data);
 
   console.groupEnd();
-};
+}
+
+const two_dimensional_floats_basics = () => {
+  console.group('basics');
+
+  const a = new Floats2d([
+    [1.0, 2.0, 3.0],
+    [4.0, 6.0, 9.0],
+  ]);
+
+  console.log(a.toString());
+
+  console.log('a.shape()', a.shape());
+  console.log('a.get([2, 3])', a.get([1, 2]));
+  console.log('a.set([2, 3], 5.0)', a.set([1, 2], 5.0));
+  console.log('a.swap([2, 2], [2, 3])', a.swap([1, 1], [1, 2]));
+  console.log('a.get_column(0)', a.get_row(0).data);
+  console.log('a.get_row(0)', a.get_row(0).data);
+
+  const a_clone = a.clone();
+  const row = new Floats1d([-1.0, -2.0, -3.0]);
+  a_clone.set_row(0, row);
+  console.log('a_clone after set_row', a_clone.data);
+  const col = new Floats1d([-4.0, 5.0]);
+  a_clone.set_column(0, col);
+  console.log('a_clone after set_column', a_clone.data);
+
+  console.groupEnd();
+}

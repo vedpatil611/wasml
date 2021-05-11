@@ -1,5 +1,6 @@
-mod math;
-mod wasm;
+pub mod basic;
+pub mod math;
+pub mod wasm;
 
 use ndarray::Array2;
 use serde::{Deserialize, Serialize};

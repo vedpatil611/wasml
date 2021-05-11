@@ -4,7 +4,7 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl Strings1d {
-    /// Get the length of the string
+    /// Get the length of the array
     pub fn len(&self) -> usize {
         self.data.len()
     }
