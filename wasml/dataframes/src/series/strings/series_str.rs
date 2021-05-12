@@ -25,4 +25,8 @@ impl SeriesSTR {
     pub fn append(&mut self, element: String) {
         self.data.append(element);
     }
+
+    pub fn len(&self) -> usize {
+        self.data.len()
+    }
 }

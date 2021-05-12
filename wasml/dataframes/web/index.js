@@ -21,8 +21,9 @@ import init, {
   console.log(df1.display);
   console.log(df1.ilocr(1));
 
-  let s1 = new SeriesSTR("Arpit", ["tolyoy", "owkdos"]);
+  let s1 = new SeriesSTR("Arpit", ["tolyoy", "owkdos", "oapsoapsos"]);
   console.log(s1.display);
+  console.log(s1.len());
 
   // let df = new DataFrame([ser1.toJson(), f1.toJson()]);
   // console.log(df.display);
