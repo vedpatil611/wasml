@@ -6,39 +6,37 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl SeriesI32 {
-    // #[wasm_bindgen(getter,js_name = display)]
-    // pub fn show(&self) -> String {
-    //     let col_name = self.name.clone();
-    //     let col_name_size = self.name.chars().count();
-    //     let margin = "#".repeat(8 + col_name_size);
+    #[wasm_bindgen(getter,js_name = display)]
+    pub fn show(&self) -> String {
+        let col_name = self.name.clone();
+        let col_name_size = self.name.chars().count();
+        let margin = "#".repeat(8 + col_name_size);
+        let space = " ".repeat((8 + col_name_size) - col_name_size - 3);
 
-    //     let mut c = 0;
-    //     let data: String = self
-    //         .data
-    //         .data
-    //         .iter()
-    //         .map(|&x| {
-    //             c += 1;
+        let mut c = 0;
+        let data: String = self
+            .data
+            .data
+            .iter()
+            .map(|&x| {
+                c += 1;
 
-    //             if c == self.size() {
-    //                 // for _ in 0..x.to_string().chars().count() {
-    //                 //     margin.push_str("#");
-    //                 // }
-
-    //                 x.to_string()
-    //             } else {
-    //                 // for _ in 0..x.to_string().chars().count() {
-    //                 //     margin.push_str("#");
-    //                 // }
-    //                 x.to_string() + "\n#"
-    //             }
-    //         })
-    //         .collect();
-    //     format!(
-    //         "{}\n#Name: {}\n#Data\n#{}\n{}",
-    //         margin, col_name, data, margin
-    //     )
-    // }
+                if c == self.len() {
+                    let x_size = x.to_string().chars().count();
+                    let num_space = " ".repeat(8 + col_name_size - x_size - 3);
+                    x.to_string() + &num_space + &"#".to_string()
+                } else {
+                    let x_size = x.to_string().chars().count();
+                    let num_space = " ".repeat(8 + col_name_size - x_size - 3);
+                    x.to_string() + &num_space + &"#".to_string() + &"\n# ".to_string()
+                }
+            })
+            .collect();
+        format!(
+            "{}\n# {}{}#\n{}\n# {}\n{}",
+            margin, col_name, space, margin, data, margin
+        )
+    }
 
     #[wasm_bindgen(constructor)]
     pub fn new(name: JsValue, data: JsValue) -> SeriesI32 {
@@ -59,20 +57,20 @@ impl SeriesI32 {
         serde_wasm_bindgen::to_value(&js_series).unwrap()
     }
 
-    #[wasm_bindgen(getter,js_name = display)]
-    pub fn show(&self) -> JsValue {
-        #[derive(Serialize, Deserialize)]
-        struct Display {
-            name: String,
-            data: Vec<i32>,
-        }
+    // #[wasm_bindgen(getter,js_name = display)]
+    // pub fn show(&self) -> JsValue {
+    //     #[derive(Serialize, Deserialize)]
+    //     struct Display {
+    //         name: String,
+    //         data: Vec<i32>,
+    //     }
 
-        let display_series = Display {
-            name: self.name.clone(),
-            data: self.data.data.to_vec(),
-        };
-        serde_wasm_bindgen::to_value(&display_series).unwrap()
-    }
+    //     let display_series = Display {
+    //         name: self.name.clone(),
+    //         data: self.data.data.to_vec(),
+    //     };
+    //     serde_wasm_bindgen::to_value(&display_series).unwrap()
+    // }
 
     pub fn data(&self) -> JsValue {
         return self.data.data_to_js();
