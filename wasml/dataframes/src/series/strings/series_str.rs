@@ -1,23 +1,84 @@
-use super::SeriesStr;
-use crate::dataframe::ColumnType;
+use super::SeriesSTR;
 use ndarrays::one_dimensional::strings::Strings1d;
-use serde::{Deserialize, Serialize};
+// use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-impl SeriesStr {
+impl SeriesSTR {
     #[wasm_bindgen(constructor)]
-    pub fn new(name: JsValue, data: JsValue) -> SeriesStr {
+    pub fn new(name: JsValue, data: JsValue) -> SeriesSTR {
         let col_name = serde_wasm_bindgen::from_value(name).unwrap();
-        let serde_data: Vec<i32> = serde_wasm_bindgen::from_value(data).unwrap();
+        let serde_data: Vec<String> = serde_wasm_bindgen::from_value(data).unwrap();
         let col_data = Strings1d::new(serde_data);
 
-        SeriesStr {
+        SeriesSTR {
             name: col_name,
             data: col_data,
         }
     }
 
-        
+    #[wasm_bindgen(getter,js_name = display)]
+    pub fn show(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(&self).unwrap()
+    }
 
+    pub fn len(&self) -> usize {
+        self.data.len()
+    }
+
+    pub fn get(&self, index: usize) -> String {
+        self.data.get(index)
+    }
+
+    pub fn set(&mut self, index: usize, value: String) {
+        self.data.set(index, value);
+    }
+
+    pub fn swap(&mut self, index1: usize, index2: usize) {
+        self.data.swap(index1, index2);
+    }
+
+    pub fn reverse(&mut self) {
+        self.data.reverse();
+    }
+
+    pub fn reversed(&self) -> Strings1d {
+        self.data.reversed()
+    }
+
+    pub fn append(&mut self, element: String) {
+        self.data.append(element);
+    }
+
+    pub fn appended(&mut self, element: String) -> Strings1d {
+        self.data.appended(element)
+    }
+
+    pub fn insert(&mut self, index: usize, value: String) {
+        self.data.insert(index, value);
+    }
+
+    pub fn inserted(&mut self, index: usize, value: String) -> Strings1d {
+        self.data.inserted(index, value)
+    }
+
+    pub fn splice(&mut self, index: usize) -> String {
+        self.data.splice(index)
+    }
+
+    pub fn spliced(&mut self, index: usize) -> js_sys::Array {
+        self.data.spliced(index)
+    }
+    
+    pub fn extend(&mut self, data_arr: JsValue) {
+        let data_arr = serde_wasm_bindgen::from_value(data_arr).unwrap();
+        let ndarray_data_arr = Strings1d::new(data_arr);
+        self.data.extend(ndarray_data_arr)
+    }
+
+    pub fn extended(&mut self, data_arr: JsValue) -> Strings1d {
+        let data_arr = serde_wasm_bindgen::from_value(data_arr).unwrap();
+        let ndarray_data_arr = Strings1d::new(data_arr);
+        self.data.extended(ndarray_data_arr)
+    }
 }

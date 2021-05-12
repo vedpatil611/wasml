@@ -3,8 +3,8 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
+// use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
-use ndarrays::one_dimensional::floats::Floats1d;
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -97,18 +97,17 @@ impl DataFrame {
         self.data.iter().count()
     }
 
-    pub fn loc(&self, column_name: JsValue) -> String {
-        let name: String = serde_wasm_bindgen::from_value(column_name).unwrap();
+    pub fn loc(&self, column_name: String) -> String {
         let mut res = String::from("");
         self.data.iter().for_each(|ser| {
             match ser {
                 Series::Integers(x) => {
-                    if x.name() == name {
+                    if x.name() == column_name {
                         res = x.show();
                     }
                 }
                 Series::Floats(x) => {
-                    if x.name() == name {
+                    if x.name() == column_name {
                         res = x.show();
                     }
                 }
@@ -116,6 +115,38 @@ impl DataFrame {
         });
 
         res
+    }
+
+    pub fn ilocr(&self, row: usize) -> js_sys::Array {
+        let array = js_sys::Array::new();
+        self.data.iter().for_each(|ser| {
+            match ser {
+                Series::Integers(x) => {
+                    let val = serde_wasm_bindgen::to_value(&x.get(row)).unwrap();
+                    array.push(&val);
+                }
+                Series::Floats(x) => {
+                    let val = serde_wasm_bindgen::to_value(&x.get(row)).unwrap();
+                    array.push(&val);
+                }
+            };
+        });
+
+        array
+    }
+
+    pub fn ilocc(&self, col: usize) -> JsValue {
+        let val: JsValue;
+        let ser = &self.data[col];
+        match ser {
+            Series::Integers(x) => {
+                val = x.data();
+            }
+            Series::Floats(x) => {
+                val = x.data();
+            }
+        };
+        val
     }
 
     #[wasm_bindgen(getter,js_name = display)]
@@ -132,20 +163,19 @@ impl DataFrame {
         res
     }
 
-    pub fn mean(&self) -> Floats1d {
-        let mut res: Vec<f64> = Vec::new();
-        
-        self.data.iter().for_each(|ser| {
-            match &ser {
-                Series::Integers(value) => {
-                    // res.push(value.me)
-                },
-                Series::Floats(value) => {
-                    res.push(value.mean());
-                }
+    pub fn mean(&self) -> js_sys::Array {
+        let array = js_sys::Array::new();
+        self.data.iter().for_each(|ser| match &ser {
+            Series::Integers(value) => {
+                let val = serde_wasm_bindgen::to_value(&value.mean()).unwrap();
+                array.push(&val);
+            }
+            Series::Floats(value) => {
+                let val = serde_wasm_bindgen::to_value(&value.mean()).unwrap();
+                array.push(&val);
             }
         });
 
-        Floats1d::new(res)
+        array
     }
 }
