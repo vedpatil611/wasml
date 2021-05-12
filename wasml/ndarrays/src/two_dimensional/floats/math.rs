@@ -6,6 +6,18 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl Floats2d {
+    /// Transpose the Floats2d
+    pub fn transpose(&mut self) {
+        self.data.swap_axes(0, 1);
+    }
+
+    /// Return the transpose of the Floats2d
+    pub fn transposed(&self) -> Floats2d {
+        Floats2d {
+            data: self.data.t().into_owned(),
+        }
+    }
+
     /// Add two Floats2d's and return the result
     pub fn add(&self, other: &Floats2d) -> Floats2d {
         Floats2d {

@@ -7,6 +7,13 @@ import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
   // demo();
 
   // console.group(
+  //   '%cMATRIX MULTPLICATION TEST',
+  //   'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
+  // );
+  // matmul(100);
+  // console.groupEnd();
+
+  // console.group(
   //   '%cONE DIMENSIONAL',
   //   'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
   // );
@@ -22,13 +29,38 @@ import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
 })();
 
 const demo = () => {
-  // const a = new Floats1d([5.0, 2.0, 10.0, 4.0, 1.0]);
-  // const b = new Floats1d([6.0, 7.0, 8.0, 9.0, 10.0]);
-  // console.log(a.data);
-  // console.log(b.data);
-  // console.log(a.add(b).data);
-  // console.log(a.standard_deviation(1));
+
 };
+
+const matmul = (n) => {
+  console.log(`Multiplying 10 ${n}x${n} matrices ->`);
+  const naive = [];
+  const wasml = [];
+  for (let i = 0; i < 10; ++i) {
+    const [ntime, wtime] = matrixMultiplicationTest(n, n);
+    naive.push(ntime);
+    wasml.push(wtime);
+  }
+  const naive_avg = naive.reduce((a, b) => a + b) / naive.length;
+  const naive_max = Math.max(...naive);
+  const naive_min = Math.min(...naive);
+  const wasml_avg = wasml.reduce((a, b) => a + b) / wasml.length;
+  const wasml_max = Math.max(...wasml);
+  const wasml_min = Math.min(...wasml);
+
+  console.table({
+    'Naive': {
+      'Maximum': naive_max,
+      'Minimum': naive_min,
+      'Average': naive_avg,
+    },
+    'WASML': {
+      'Maximum': wasml_max,
+      'Minimum': wasml_min,
+      'Average': wasml_avg,
+    }
+  });
+}
 
 const one_dimensional_floats = () => {
   console.group('FLOATS');
@@ -144,21 +176,21 @@ const two_dimensional_floats_math = () => {
   console.group('math');
 
   const a = new Floats2d([
-    [1.0, 2.0],
-    [4.0, 5.0],
+    [1.0, 2.0, 3.0],
+    [4.0, 5.0, 6.0],
   ]);
   const b = new Floats2d([
-    [6.0, 7.0],
-    [9.0, 10.0],
+    [7.0, 8.0, 9.0],
+    [10.0, 11.0, 12.0],
   ]);
   console.log(a.data);
   console.log(b.data);
 
-  console.log('add', a.add(b).data);
-  console.log('sub', a.sub(b).data);
-  console.log('mul', a.mul(b).data);
-  console.log('div', a.div(b).data);
-  console.log('dot', a.dot(b).data);
+  console.log('a.add(b)', a.add(b).data);
+  console.log('a.sub(b)', a.sub(b).data);
+  console.log('a.mul(b)', a.mul(b).data);
+  console.log('a.div(b)', a.div(b).data);
+  console.log('a.dot(b.transposed())', a.dot(b.transposed()).data);
 
   console.log('mean', a.mean());
   console.log('row mean', a.row_mean().data);
