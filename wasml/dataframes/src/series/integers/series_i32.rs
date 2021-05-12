@@ -98,16 +98,12 @@ impl SeriesI32 {
         self.data.reversed()
     }
 
-    pub fn append(&mut self, data_item: JsValue) {
-        let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
-        self.data.append(data_item);
+    pub fn append(&mut self, element: i32) {
+        self.data.append(element);
     }
 
-    pub fn appended(&mut self, data_item: JsValue) -> JsValue {
-        let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
-        self.data.append(data_item);
-
-        self.data.data_to_js()
+    pub fn appended(&mut self, element: i32) -> Integers1d {
+        self.data.appended(element)
     }
 
     pub fn extend(&mut self, data_arr: JsValue) {
@@ -116,12 +112,10 @@ impl SeriesI32 {
         self.data.extend(ndarray_data_arr)
     }
 
-    pub fn extended(&mut self, data_arr: JsValue) -> JsValue {
+    pub fn extended(&mut self, data_arr: JsValue) -> Integers1d {
         let data_arr = serde_wasm_bindgen::from_value(data_arr).unwrap();
         let ndarray_data_arr = Integers1d::new(data_arr);
-        self.data.extend(ndarray_data_arr);
-
-        self.data.data_to_js()
+        self.data.extended(ndarray_data_arr)
     }
 
     pub fn insert(&mut self, index: usize, value: i32) {
