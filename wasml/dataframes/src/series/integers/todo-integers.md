@@ -1,3 +1,4 @@
+## Basic Methods
  - [X] get 
  - [X] set
  - [X] swap
@@ -14,4 +15,8 @@
  - [X] len  
  - [X] dtype   
 
-
+## Math Methods
+ - [X] sum 
+ - [X] product 
+ - [X] mean
+ 

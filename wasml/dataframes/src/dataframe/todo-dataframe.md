@@ -53,3 +53,4 @@ df.std() | Returns the standard deviation of each column
  - [ ] renamecolumns -> change column names
  - [x] dtypes -> Datatype of series
  - [ ] iloc -> lookup series with slicing
+ - [x] loc

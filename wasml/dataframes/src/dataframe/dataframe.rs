@@ -3,8 +3,8 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
-use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
+use ndarrays::one_dimensional::floats::Floats1d;
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -97,25 +97,26 @@ impl DataFrame {
         self.data.iter().count()
     }
 
-    // #[wasm_bindgen(getter,js_name = display)]
-    // pub fn show(&self) -> js_sys::Map {
-    //     let data = js_sys::Map::new();
-    //     self.data.iter().for_each(|ser| match &ser {
-    //         Series::Integers(value) => {
-    //             data.set(
-    //                 &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
-    //                 &value.data(),
-    //             );
-    //         }
-    //         Series::Floats(value) => {
-    //             data.set(
-    //                 &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
-    //                 &value.data(),
-    //             );
-    //         }
-    //     });
-    //     data
-    // }
+    pub fn loc(&self, column_name: JsValue) -> String {
+        let name: String = serde_wasm_bindgen::from_value(column_name).unwrap();
+        let mut res = String::from("");
+        self.data.iter().for_each(|ser| {
+            match ser {
+                Series::Integers(x) => {
+                    if x.name() == name {
+                        res = x.show();
+                    }
+                }
+                Series::Floats(x) => {
+                    if x.name() == name {
+                        res = x.show();
+                    }
+                }
+            };
+        });
+
+        res
+    }
 
     #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> String {

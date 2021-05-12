@@ -1,4 +1,4 @@
-import init, { Floats1d, Floats2d, Strings1d } from '../pkg/ndarrays.js';
+import init, { Floats1d, Floats2d, Strings1d } from '../../pkg/ndarrays.js';
 import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
 
 (async () => {
@@ -28,11 +28,9 @@ import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
   console.groupEnd();
 })();
 
-const demo = () => {
+const demo = () => {};
 
-};
-
-const matmul = (n) => {
+const matmul = n => {
   console.log(`Multiplying 10 ${n}x${n} matrices ->`);
   const naive = [];
   const wasml = [];
@@ -49,18 +47,18 @@ const matmul = (n) => {
   const wasml_min = Math.min(...wasml);
 
   console.table({
-    'Naive': {
-      'Maximum': naive_max,
-      'Minimum': naive_min,
-      'Average': naive_avg,
+    Naive: {
+      Maximum: naive_max,
+      Minimum: naive_min,
+      Average: naive_avg,
     },
-    'WASML': {
-      'Maximum': wasml_max,
-      'Minimum': wasml_min,
-      'Average': wasml_avg,
-    }
+    WASML: {
+      Maximum: wasml_max,
+      Minimum: wasml_min,
+      Average: wasml_avg,
+    },
   });
-}
+};
 
 const one_dimensional_floats = () => {
   console.group('FLOATS');
@@ -146,9 +144,9 @@ const two_dimensional_floats_basics = () => {
 
   console.log('a.shape()', a.shape());
   console.log('a.get([2, 3])', a.get([1, 2]));
-  a.set([1, 2], 5.0)
+  a.set([1, 2], 5.0);
   console.log('a.set([2, 3], 5.0)', a.data);
-  a.swap([1, 1], [1, 2])
+  a.swap([1, 1], [1, 2]);
   console.log('a.swap([2, 2], [2, 3])', a.data);
   console.log('a.get_column(0)', a.get_row(0).data);
   console.log('a.get_row(0)', a.get_row(0).data);
@@ -161,16 +159,31 @@ const two_dimensional_floats_basics = () => {
   a_clone.set_column(0, col);
   console.log('a_clone after set_column', a_clone.data);
 
-  console.log('a.row_appended(a.get_row(0))', a.row_appended(a.get_row(0)).data);
-  console.log('a.column_appended(a.get_column(0))', a.column_appended(a.get_column(0)).data);
+  console.log(
+    'a.row_appended(a.get_row(0))',
+    a.row_appended(a.get_row(0)).data
+  );
+  console.log(
+    'a.column_appended(a.get_column(0))',
+    a.column_appended(a.get_column(0)).data
+  );
   console.log('a.rows_extended(a.clone())', a.rows_extended(a.clone()).data);
-  console.log('a.columns_extended(a.clone())', a.columns_extended(a.clone()).data);
+  console.log(
+    'a.columns_extended(a.clone())',
+    a.columns_extended(a.clone()).data
+  );
 
-  console.log('a.row_spliced(1)', a.row_spliced(1).map(x => x.data));
-  console.log('a.column_spliced(1)', a.column_spliced(1).map(x => x.data));
+  console.log(
+    'a.row_spliced(1)',
+    a.row_spliced(1).map(x => x.data)
+  );
+  console.log(
+    'a.column_spliced(1)',
+    a.column_spliced(1).map(x => x.data)
+  );
 
   console.groupEnd();
-}
+};
 
 const two_dimensional_floats_math = () => {
   console.group('math');
@@ -203,5 +216,4 @@ const two_dimensional_floats_math = () => {
   console.log('column standard deviation', a.column_standard_deviation(1).data);
 
   console.groupEnd();
-}
-
+};
