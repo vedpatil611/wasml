@@ -14,7 +14,7 @@ impl DataFrame {
         let first_series_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_int) = first_series_int {
-            series_size = series_int.size()
+            series_size = series_int.len()
         }
 
         let first_series_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
@@ -30,7 +30,7 @@ impl DataFrame {
                     serde_wasm_bindgen::from_value(series.clone());
 
                 if let Ok(x) = as_int {
-                    if x.size() == series_size {
+                    if x.len() == series_size {
                         return Series::Integers(x);
                     }
                 }
