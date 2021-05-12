@@ -128,8 +128,10 @@ impl Floats2d {
             .collect::<Vec<f64>>();
 
         self.data =
-            Array::from_shape_vec((self.row_count(), self.column_count() + 1), new_array_vec)
-                .unwrap();
+            Array::from_shape_vec((self.column_count() + 1, self.row_count()), new_array_vec)
+                .unwrap()
+                .t()
+                .into_owned();
     }
 
     /// Return the reuslt of appending a new column to the array
@@ -143,8 +145,10 @@ impl Floats2d {
             .collect::<Vec<f64>>();
 
         Floats2d {
-            data: Array::from_shape_vec((self.row_count(), self.column_count() + 1), new_array_vec)
-                .unwrap(),
+            data: Array::from_shape_vec((self.column_count() + 1, self.row_count()), new_array_vec)
+                .unwrap()
+                .t()
+                .into_owned(),
         }
     }
 
@@ -188,15 +192,17 @@ impl Floats2d {
             .data
             .t()
             .iter()
-            .chain(other.data.iter())
+            .chain(other.data.t().iter())
             .map(|x| *x)
             .collect::<Vec<f64>>();
 
         self.data = Array::from_shape_vec(
-            (self.row_count(), self.column_count() + other.column_count()),
+            (self.column_count() + other.column_count(), self.row_count()),
             new_array_vec,
         )
-        .unwrap();
+        .unwrap()
+        .t()
+        .into_owned();
     }
 
     /// Return the result of extending the array by appending columns
@@ -206,16 +212,18 @@ impl Floats2d {
             .data
             .t()
             .iter()
-            .chain(other.data.iter())
+            .chain(other.data.t().iter())
             .map(|x| *x)
             .collect::<Vec<f64>>();
 
         Floats2d {
             data: Array::from_shape_vec(
-                (self.row_count(), self.column_count() + other.column_count()),
+                (self.column_count() + other.column_count(), self.row_count()),
                 new_array_vec,
             )
-            .unwrap(),
+            .unwrap()
+            .t()
+            .into_owned(),
         }
     }
 }
