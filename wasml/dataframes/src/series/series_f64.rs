@@ -23,6 +23,7 @@ impl SeriesF64 {
         serde_wasm_bindgen::to_value(&js_series).unwrap()
     }
 
+    #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> JsValue {
         #[derive(Serialize, Deserialize)]
         struct Display {

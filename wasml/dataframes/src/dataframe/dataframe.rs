@@ -10,7 +10,7 @@ pub enum ColumnType {
     FLOAT,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub enum Series {
     Integers(SeriesI32),
     Floats(SeriesF64),
@@ -20,6 +20,8 @@ pub enum Series {
 pub struct DataFrame {
     data: Vec<Series>,
 }
+
+
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -79,7 +81,7 @@ impl DataFrame {
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
 
-    #[wasm_bindgen(js_name = dTypes)]
+    #[wasm_bindgen(getter, js_name = dTypes)]
     pub fn show_datatypes(&self) -> JsValue {
         let mut res: Vec<String> = Vec::new();
         self.data.iter().for_each(|ser| {
@@ -112,23 +114,21 @@ impl DataFrame {
         self.data.iter().count()
     }
 
+    #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> js_sys::Map {
         let data = js_sys::Map::new();
-        self.data.iter().for_each(|ser| {
-            // let series_name = serde_wasm_bindgen::to_value((*ser).name).unwrap();
-            match &ser {
-                Series::Integers(value) => {
-                    data.set(
-                        &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
-                        &value.data(),
-                    );
-                }
-                Series::Floats(value) => {
-                    data.set(
-                        &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
-                        &value.data(),
-                    );
-                }
+        self.data.iter().for_each(|ser| match &ser {
+            Series::Integers(value) => {
+                data.set(
+                    &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
+                    &value.data(),
+                );
+            }
+            Series::Floats(value) => {
+                data.set(
+                    &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
+                    &value.data(),
+                );
             }
         });
         data

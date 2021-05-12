@@ -1,7 +1,17 @@
 use super::SeriesI32;
 use ndarrays::one_dimensional::integers::Integers1d;
 use serde::{Deserialize, Serialize};
+// use std::ops::{Index, IndexMut};
 use wasm_bindgen::prelude::*;
+
+// #[wasm_bindgen]
+// impl Index<usize> for SeriesI32 {
+//     type Output = i32;
+
+//     fn index(&self, index: usize) -> &Self::Output {
+//         &self.data.data[index]
+//     }
+// }
 
 #[wasm_bindgen]
 impl SeriesI32 {
@@ -23,6 +33,7 @@ impl SeriesI32 {
         serde_wasm_bindgen::to_value(&js_series).unwrap()
     }
 
+    #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> JsValue {
         #[derive(Serialize, Deserialize)]
         struct Display {
@@ -36,6 +47,40 @@ impl SeriesI32 {
         };
         serde_wasm_bindgen::to_value(&display_series).unwrap()
     }
+
+    // #[wasm_bindgen(getter,js_name = display)]
+    // pub fn show(&self) -> String {
+    //     let col_name = self.name.clone();
+    //     let col_name_size = self.name.chars().count();
+    //     let margin = "#".repeat(8 + col_name_size);
+
+    //     let mut c = 0;
+    //     let data: String = self
+    //         .data
+    //         .data
+    //         .iter()
+    //         .map(|&x| {
+    //             c += 1;
+
+    //             if c == self.size() {
+    //                 // for _ in 0..x.to_string().chars().count() {
+    //                 //     margin.push_str("#");
+    //                 // }
+
+    //                 x.to_string()
+    //             } else {
+    //                 // for _ in 0..x.to_string().chars().count() {
+    //                 //     margin.push_str("#");
+    //                 // }
+    //                 x.to_string() + "\n#"
+    //             }
+    //         })
+    //         .collect();
+    //     format!(
+    //         "{}\n#Name: {}\n#Data\n#{}\n{}",
+    //         margin, col_name, data, margin
+    //     )
+    // }
 
     pub fn data(&self) -> JsValue {
         return self.data.data_to_js();
