@@ -25,21 +25,6 @@ impl SeriesI32 {
         serde_wasm_bindgen::to_value(&js_series).unwrap()
     }
 
-    // #[wasm_bindgen(getter,js_name = display)]
-    // pub fn show(&self) -> JsValue {
-    //     #[derive(Serialize, Deserialize)]
-    //     struct Display {
-    //         name: String,
-    //         data: Vec<i32>,
-    //     }
-
-    //     let display_series = Display {
-    //         name: self.name.clone(),
-    //         data: self.data.data.to_vec(),
-    //     };
-    //     serde_wasm_bindgen::to_value(&display_series).unwrap()
-    // }
-
     pub fn data(&self) -> JsValue {
         return self.data.data_to_js();
     }
@@ -151,4 +136,19 @@ impl SeriesI32 {
             margin, col_name, space, margin, data, margin
         )
     }
+
+    // #[wasm_bindgen(getter,js_name = display)]
+    // pub fn show(&self) -> JsValue {
+    //     #[derive(Serialize, Deserialize)]
+    //     struct Display {
+    //         name: String,
+    //         data: Vec<i32>,
+    //     }
+
+    //     let display_series = Display {
+    //         name: self.name.clone(),
+    //         data: self.data.data.to_vec(),
+    //     };
+    //     serde_wasm_bindgen::to_value(&display_series).unwrap()
+    // }
 }

@@ -3,8 +3,8 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
-use js_sys::JsString;
 use wasm_bindgen::prelude::*;
+use ndarrays::one_dimensional::floats::Floats1d;
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -97,37 +97,55 @@ impl DataFrame {
         self.data.iter().count()
     }
 
-    #[wasm_bindgen(getter,js_name = display)]
-    pub fn show(&self) -> js_sys::Map {
-        let data = js_sys::Map::new();
-        self.data.iter().for_each(|ser| match &ser {
-            Series::Integers(value) => {
-                data.set(
-                    &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
-                    &value.data(),
-                );
-            }
-            Series::Floats(value) => {
-                data.set(
-                    &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
-                    &value.data(),
-                );
-            }
+    pub fn loc(&self, column_name: JsValue) -> String {
+        let name: String = serde_wasm_bindgen::from_value(column_name).unwrap();
+        let mut res = String::from("");
+        self.data.iter().for_each(|ser| {
+            match ser {
+                Series::Integers(x) => {
+                    if x.name() == name {
+                        res = x.show();
+                    }
+                }
+                Series::Floats(x) => {
+                    if x.name() == name {
+                        res = x.show();
+                    }
+                }
+            };
         });
-        data
+
+        res
     }
 
-    // #[wasm_bindgen(getter,js_name = display)]
-    // pub fn show(&self) -> String {
-    //     let res;
-    //     self.data.iter().for_each(|ser| match &ser {
-    //         Series::Integers(value) => {
-    //             res + value.show();
-    //         }
-    //         Series::Floats(value) => {
-    //             res + value.show();
-    //         }
-    //     });
-    //     res
-    // }
+    #[wasm_bindgen(getter,js_name = display)]
+    pub fn show(&self) -> String {
+        let mut res: String = String::from("");
+        self.data.iter().for_each(|ser| match &ser {
+            Series::Integers(value) => {
+                res.push_str(&value.show());
+            }
+            Series::Floats(value) => {
+                res.push_str(&value.show());
+            }
+        });
+        res
+    }
+
+    pub fn mean(&self) -> Floats1d {
+        let mut res: Vec<f64> = Vec::new();
+        
+        self.data.iter().for_each(|ser| {
+            match &ser {
+                Series::Integers(value) => {
+                    // res.push(value.me)
+                },
+                Series::Floats(value) => {
+                    res.push(value.mean());
+                }
+            }
+        });
+
+        Floats1d::new(res)
+    }
 }

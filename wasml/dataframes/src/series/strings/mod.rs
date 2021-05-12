@@ -1,12 +1,12 @@
-use ndarrays::one_dimensional::floats::Floats1d;
-pub mod series_f64;
-pub mod maths;
+use ndarrays::one_dimensional::strings::Strings1d;
+pub mod series_str;
 
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
+
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
-pub struct SeriesF64 {
+pub struct SeriesI32 {
     name: String,
-    data: Floats1d,
+    data: Strings1d,
 }
