@@ -3,7 +3,7 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
-use js_sys::JsString;
+
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -95,6 +95,27 @@ impl DataFrame {
     #[wasm_bindgen(js_name = size)]
     pub fn dataframe_size(&self) -> usize {
         self.data.iter().count()
+    }
+
+    pub fn loc(&self, column_name: JsValue) -> String {
+        let name: String = serde_wasm_bindgen::from_value(column_name).unwrap();
+        let mut res = String::from("");
+        self.data.iter().for_each(|ser| {
+            match ser {
+                Series::Integers(x) => {
+                    if x.name() == name {
+                        res = x.show();
+                    }
+                }
+                Series::Floats(x) => {
+                    if x.name() == name {
+                        res = x.show();
+                    }
+                }
+            };
+        });
+
+        res
     }
 
     #[wasm_bindgen(getter,js_name = display)]
