@@ -6,40 +6,6 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl SeriesI32 {
-    #[wasm_bindgen(constructor)]
-    pub fn new(name: JsValue, data: JsValue) -> SeriesI32 {
-        let col_name = serde_wasm_bindgen::from_value(name).unwrap();
-        let serde_data: Vec<i32> = serde_wasm_bindgen::from_value(data).unwrap();
-        let col_data = Integers1d::new(serde_data);
-
-        SeriesI32 {
-            name: col_name,
-            data: col_data,
-        }
-    }
-
-    #[wasm_bindgen(js_name = toJson)]
-    pub fn to_json(&self) -> JsValue {
-        let js_series = self;
-
-        serde_wasm_bindgen::to_value(&js_series).unwrap()
-    }
-
-    #[wasm_bindgen(getter,js_name = display)]
-    pub fn show(&self) -> JsValue {
-        #[derive(Serialize, Deserialize)]
-        struct Display {
-            name: String,
-            data: Vec<i32>,
-        }
-
-        let display_series = Display {
-            name: self.name.clone(),
-            data: self.data.data.to_vec(),
-        };
-        serde_wasm_bindgen::to_value(&display_series).unwrap()
-    }
-
     // #[wasm_bindgen(getter,js_name = display)]
     // pub fn show(&self) -> String {
     //     let col_name = self.name.clone();
@@ -74,8 +40,62 @@ impl SeriesI32 {
     //     )
     // }
 
+    #[wasm_bindgen(constructor)]
+    pub fn new(name: JsValue, data: JsValue) -> SeriesI32 {
+        let col_name = serde_wasm_bindgen::from_value(name).unwrap();
+        let serde_data: Vec<i32> = serde_wasm_bindgen::from_value(data).unwrap();
+        let col_data = Integers1d::new(serde_data);
+
+        SeriesI32 {
+            name: col_name,
+            data: col_data,
+        }
+    }
+
+    #[wasm_bindgen(js_name = toJson)]
+    pub fn to_json(&self) -> JsValue {
+        let js_series = self;
+
+        serde_wasm_bindgen::to_value(&js_series).unwrap()
+    }
+
+    #[wasm_bindgen(getter,js_name = display)]
+    pub fn show(&self) -> JsValue {
+        #[derive(Serialize, Deserialize)]
+        struct Display {
+            name: String,
+            data: Vec<i32>,
+        }
+
+        let display_series = Display {
+            name: self.name.clone(),
+            data: self.data.data.to_vec(),
+        };
+        serde_wasm_bindgen::to_value(&display_series).unwrap()
+    }
+
     pub fn data(&self) -> JsValue {
         return self.data.data_to_js();
+    }
+
+    pub fn get(&self, index: usize) -> i32 {
+        self.data.get(index)
+    }
+
+    pub fn set(&mut self, index: usize, value: i32) {
+        self.data.set(index, value);
+    }
+
+    pub fn swap(&mut self, index1: usize, index2: usize) {
+        self.data.swap(index1, index2);
+    }
+
+    pub fn reverse(&mut self) {
+        self.data.reverse();
+    }
+
+    pub fn reversed(&self) -> Integers1d {
+        self.data.reversed()
     }
 
     pub fn append(&mut self, data_item: JsValue) {
@@ -102,6 +122,22 @@ impl SeriesI32 {
         self.data.extend(ndarray_data_arr);
 
         self.data.data_to_js()
+    }
+
+    pub fn insert(&mut self, index: usize, value: i32) {
+        self.data.insert(index, value);
+    }
+
+    pub fn inserted(&mut self, index: usize, value: i32) -> Integers1d {
+        self.data.inserted(index, value)
+    }
+
+    pub fn splice(&mut self, index: usize) -> i32 {
+        self.data.splice(index)
+    }
+
+    pub fn spliced(&mut self, index: usize) -> js_sys::Array {
+        self.data.spliced(index)
     }
 
     pub fn name(&self) -> String {

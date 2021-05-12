@@ -22,4 +22,6 @@ import init, {
   // console.log(dataf.size());
   // console.log(dataf.columns());
   // console.log(dataf.dTypes);
+
+  console.log(ser1.reversed().data);
 })();

@@ -1,0 +1,14 @@
+ - [ ] get
+ - [ ] set
+ - [ ] swap
+ - [ ] reverse
+ - [ ] reversed
+ - [ ] append
+ - [ ] appended
+ - [ ] extend
+ - [ ] extended
+ - [ ] insert
+ - [ ] inserted
+ - [ ] splice
+ - [ ] spliced  
+
