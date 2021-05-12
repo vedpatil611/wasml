@@ -1,27 +1,9 @@
+use super::ColumnType;
+use super::DataFrame;
+use super::Series;
 use crate::series::SeriesF64;
 use crate::series::SeriesI32;
-use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-#[derive(Serialize, Deserialize)]
-pub enum ColumnType {
-    INTEGER,
-    FLOAT,
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-pub enum Series {
-    Integers(SeriesI32),
-    Floats(SeriesF64),
-}
-
-#[wasm_bindgen]
-pub struct DataFrame {
-    data: Vec<Series>,
-}
-
-
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -83,7 +65,7 @@ impl DataFrame {
 
     #[wasm_bindgen(getter, js_name = dTypes)]
     pub fn show_datatypes(&self) -> JsValue {
-        let mut res: Vec<String> = Vec::new();
+        let mut res: Vec<ColumnType> = Vec::new();
         self.data.iter().for_each(|ser| {
             match ser {
                 Series::Integers(x) => res.push(x.dtype()),

@@ -1,22 +1,24 @@
 use super::Strings1d;
-use ndarray::arr1;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl Strings1d {
     /// Create a new Strings1d from javascript
     #[wasm_bindgen(constructor)]
-    pub fn new_with_js(js_array: JsValue) -> Strings1d {
-        let vector: Vec<String> = js_array.into_serde().unwrap();
-        Strings1d {
-            data: arr1(&vector),
-        }
+    pub fn new_with_js(value: JsValue) -> Strings1d {
+        serde_wasm_bindgen::from_value(value).unwrap()
+    }
+
+    /// Gives the JSON representation of the array
+    #[wasm_bindgen(js_name = toJSON)]
+    pub fn to_json(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(self).unwrap()
     }
 
     /// Gives the value contained in the ndarray as a javascript array
     #[wasm_bindgen(getter, js_name = data)]
     pub fn data_to_js(&self) -> JsValue {
-        JsValue::from_serde(&self.data.to_vec()).unwrap()
+        self.to_json()
     }
 
     /// Get the string representation of the underlying ndarray

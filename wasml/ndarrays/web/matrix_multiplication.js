@@ -1,6 +1,6 @@
 import init, { Floats2d } from '../pkg/ndarrays.js';
 
-function timeit(callback) {
+export function timeit(callback) {
   const bef = new Date();
   const ret = callback();
   const aft = new Date();
@@ -8,9 +8,9 @@ function timeit(callback) {
   return [ret, aft - bef];
 }
 
-export function matrixMultiplicationTest() {
-  const a = generateMatrix(1000, 1000);
-  const b = generateMatrix(1000, 1000);
+export function matrixMultiplicationTest(size) {
+  const a = generateMatrix(size, size);
+  const b = generateMatrix(size, size);
 
   const x = new Floats2d(a);
   const y = new Floats2d(b);
@@ -18,12 +18,14 @@ export function matrixMultiplicationTest() {
   const [vRes, vTime] = timeit(() => vanillaMultiplication(a, b));
   const [oRes, oTime] = timeit(() => x.dot(y));
 
-  console.log(
-    `Time for vanilla implementation: ${vTime.toString().padStart(8)} ms`
-  );
-  console.log(
-    `Time for our implementation:     ${oTime.toString().padStart(8)} ms`
-  );
+  // console.log(
+  //   `Time for pure js implementation: ${vTime.toString().padStart(8)} ms`
+  // );
+  // console.log(
+  //   `Time for our implementation:     ${oTime.toString().padStart(8)} ms`
+  // );
+
+  return [vTime, oTime];
 }
 
 function generateMatrix(m, n) {

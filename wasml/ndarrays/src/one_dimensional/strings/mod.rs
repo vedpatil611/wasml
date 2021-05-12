@@ -1,12 +1,11 @@
-mod basic;
-mod wasm;
+pub mod basic;
+pub mod custom_serde;
+pub mod wasm;
 
 use ndarray::{arr1, Array1};
-use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-#[derive(Serialize, Deserialize)]
 pub struct Strings1d {
     #[wasm_bindgen(skip)]
     pub data: Array1<String>,

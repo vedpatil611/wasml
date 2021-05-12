@@ -32,7 +32,7 @@ impl Floats1d {
     }
 
     /// Efficiently performs self += alpha * rhs
-    pub fn scaled_add(&mut self, other: Floats1d, alpha: f64) {
+    pub fn scaled_add(&mut self, alpha: f64, other: Floats1d) {
         self.data.scaled_add(alpha, &other.data);
     }
 
