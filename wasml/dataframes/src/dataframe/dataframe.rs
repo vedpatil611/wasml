@@ -3,6 +3,7 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
+use js_sys::JsString;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -115,4 +116,18 @@ impl DataFrame {
         });
         data
     }
+
+    // #[wasm_bindgen(getter,js_name = display)]
+    // pub fn show(&self) -> String {
+    //     let res;
+    //     self.data.iter().for_each(|ser| match &ser {
+    //         Series::Integers(value) => {
+    //             res + value.show();
+    //         }
+    //         Series::Floats(value) => {
+    //             res + value.show();
+    //         }
+    //     });
+    //     res
+    // }
 }
