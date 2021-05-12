@@ -3,8 +3,8 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
-use wasm_bindgen::prelude::*;
 use ndarrays::one_dimensional::floats::Floats1d;
+use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -117,23 +117,37 @@ impl DataFrame {
         res
     }
 
-    // pub fn iloc(&self, row: usize, col: usize) -> String {
-    //     let array = js_sys::Array::new();
-    //     self.data.iter().for_each(|ser| {
-    //         match ser {
-    //             Series::Integers(x) => {
-    //                 if x.name() == column_name {
-    //                     res = x.show();
-    //                 }
-    //             }
-    //             Series::Floats(x) => {
-    //                 if x.name() == column_name {
-    //                     res = x.show();
-    //                 }
-    //             }
-    //         };
-    //     });
-    // }
+    pub fn ilocr(&self, row: usize) -> js_sys::Array {
+        let array = js_sys::Array::new();
+        self.data.iter().for_each(|ser| {
+            match ser {
+                Series::Integers(x) => {
+                    let val = serde_wasm_bindgen::to_value(&x.get(row)).unwrap();
+                    array.push(&val);
+                }
+                Series::Floats(x) => {
+                    let val = serde_wasm_bindgen::to_value(&x.get(row)).unwrap();
+                    array.push(&val);
+                }
+            };
+        });
+
+        array
+    }
+
+    pub fn ilocc(&self, col: usize) -> JsValue {
+        let val: JsValue;
+        let ser = &self.data[col];
+        match ser {
+            Series::Integers(x) => {
+                val = x.data();
+            }
+            Series::Floats(x) => {
+                val = x.data();
+            }
+        };
+        val
+    }
 
     #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> String {
@@ -151,12 +165,12 @@ impl DataFrame {
 
     pub fn mean(&self) -> Floats1d {
         let mut res: Vec<f64> = Vec::new();
-        
+
         self.data.iter().for_each(|ser| {
             match &ser {
                 Series::Integers(value) => {
                     // res.push(value.me)
-                },
+                }
                 Series::Floats(value) => {
                     res.push(value.mean());
                 }
