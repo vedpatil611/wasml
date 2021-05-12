@@ -1,6 +1,6 @@
 use super::Floats2d;
 use crate::one_dimensional::floats::Floats1d;
-use ndarray::Array;
+use ndarray::{s, Array};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -207,7 +207,7 @@ impl Floats2d {
 
     /// Return the result of extending the array by appending columns
     /// from another array
-    pub fn columns_extended(&mut self, other: &Floats2d) -> Floats2d {
+    pub fn columns_extended(&self, other: &Floats2d) -> Floats2d {
         let new_array_vec = self
             .data
             .t()
@@ -225,5 +225,91 @@ impl Floats2d {
             .t()
             .into_owned(),
         }
+    }
+
+    /// Remove the row at the specified index and return it
+    pub fn row_splice(&mut self, index: usize) -> Floats1d {
+        let row = self.get_row(index);
+        let (first, second) = self
+            .data
+            .multi_slice_mut((s![..index, ..], s![(index + 1).., ..]));
+        let new_array_vec = first
+            .iter()
+            .chain(second.iter())
+            .map(|x| *x)
+            .collect::<Vec<f64>>();
+
+        self.data =
+            Array::from_shape_vec((self.row_count() - 1, self.column_count()), new_array_vec)
+                .unwrap();
+
+        row
+    }
+
+    /// Remove the row at the specified index and return the modified array and
+    /// the removed row
+    pub fn row_spliced(&mut self, index: usize) -> js_sys::Array {
+        let row = self.get_row(index);
+        let (first, second) = self
+            .data
+            .multi_slice_mut((s![..index, ..], s![(index + 1).., ..]));
+        let new_array_vec = first
+            .iter()
+            .chain(second.iter())
+            .map(|x| *x)
+            .collect::<Vec<f64>>();
+
+        let spliced = Floats2d {
+            data: Array::from_shape_vec((self.row_count() - 1, self.column_count()), new_array_vec)
+                .unwrap(),
+        };
+
+        js_sys::Array::of2(&JsValue::from(spliced), &JsValue::from(row))
+    }
+
+    /// Remove the column at the specified index and return it
+    pub fn column_splice(&mut self, index: usize) -> Floats1d {
+        let col = self.get_column(index);
+        let (first, second) = self
+            .data
+            .multi_slice_mut((s![.., ..index], s![.., (index + 1)..]));
+        let new_array_vec = first
+            .t()
+            .iter()
+            .chain(second.t().iter())
+            .map(|x| *x)
+            .collect::<Vec<f64>>();
+
+        self.data =
+            Array::from_shape_vec((self.row_count(), self.column_count() - 1), new_array_vec)
+                .unwrap()
+                .t()
+                .to_owned();
+
+        col
+    }
+
+    /// Remove the column at the specified index and return the modified array
+    /// and the removed column
+    pub fn column_spliced(&mut self, index: usize) -> js_sys::Array {
+        let col = self.get_row(index);
+        let (first, second) = self
+            .data
+            .multi_slice_mut((s![.., ..index], s![.., (index + 1)..]));
+        let new_array_vec = first
+            .t()
+            .iter()
+            .chain(second.t().iter())
+            .map(|x| *x)
+            .collect::<Vec<f64>>();
+
+        let spliced = Floats2d {
+            data: Array::from_shape_vec((self.row_count(), self.column_count() - 1), new_array_vec)
+                .unwrap()
+                .t()
+                .into_owned(),
+        };
+
+        js_sys::Array::of2(&JsValue::from(spliced), &JsValue::from(col))
     }
 }

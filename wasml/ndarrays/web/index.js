@@ -102,6 +102,44 @@ const two_dimensional_floats = () => {
   console.groupEnd();
 };
 
+const two_dimensional_floats_basics = () => {
+  console.group('basics');
+
+  const a = new Floats2d([
+    [1.0, 2.0, 3.0],
+    [4.0, 6.0, 9.0],
+  ]);
+
+  console.log(a.toString());
+
+  console.log('a.shape()', a.shape());
+  console.log('a.get([2, 3])', a.get([1, 2]));
+  a.set([1, 2], 5.0)
+  console.log('a.set([2, 3], 5.0)', a.data);
+  a.swap([1, 1], [1, 2])
+  console.log('a.swap([2, 2], [2, 3])', a.data);
+  console.log('a.get_column(0)', a.get_row(0).data);
+  console.log('a.get_row(0)', a.get_row(0).data);
+
+  const a_clone = a.clone();
+  const row = new Floats1d([-1.0, -2.0, -3.0]);
+  a_clone.set_row(0, row);
+  console.log('a_clone after set_row', a_clone.data);
+  const col = new Floats1d([-4.0, 5.0]);
+  a_clone.set_column(0, col);
+  console.log('a_clone after set_column', a_clone.data);
+
+  console.log('a.row_appended(a.get_row(0))', a.row_appended(a.get_row(0)).data);
+  console.log('a.column_appended(a.get_column(0))', a.column_appended(a.get_column(0)).data);
+  console.log('a.rows_extended(a.clone())', a.rows_extended(a.clone()).data);
+  console.log('a.columns_extended(a.clone())', a.columns_extended(a.clone()).data);
+
+  console.log('a.row_spliced(1)', a.row_spliced(1).map(x => x.data));
+  console.log('a.column_spliced(1)', a.column_spliced(1).map(x => x.data));
+
+  console.groupEnd();
+}
+
 const two_dimensional_floats_math = () => {
   console.group('math');
 
@@ -135,37 +173,3 @@ const two_dimensional_floats_math = () => {
   console.groupEnd();
 }
 
-const two_dimensional_floats_basics = () => {
-  console.group('basics');
-
-  const a = new Floats2d([
-    [1.0, 2.0, 3.0],
-    [4.0, 6.0, 9.0],
-  ]);
-
-  console.log(a.toString());
-
-  console.log('a.shape()', a.shape());
-  console.log('a.get([2, 3])', a.get([1, 2]));
-  a.set([1, 2], 5.0)
-  console.log('a.set([2, 3], 5.0)', a.data);
-  a.swap([1, 1], [1, 2])
-  console.log('a.swap([2, 2], [2, 3])', a.data);
-  console.log('a.get_column(0)', a.get_row(0).data);
-  console.log('a.get_row(0)', a.get_row(0).data);
-
-  const a_clone = a.clone();
-  const row = new Floats1d([-1.0, -2.0, -3.0]);
-  a_clone.set_row(0, row);
-  console.log('a_clone after set_row', a_clone.data);
-  const col = new Floats1d([-4.0, 5.0]);
-  a_clone.set_column(0, col);
-  console.log('a_clone after set_column', a_clone.data);
-
-  console.log('a.row_appended(a.get_row(0))', a.row_appended(a.get_row(0)).data);
-  console.log('a.column_appended(a.get_column(0))', a.column_appended(a.get_column(0)).data);
-  console.log('a.rows_extended(a.clone())', a.rows_extended(a.clone()).data);
-  console.log('a.columns_extended(a.clone())', a.columns_extended(a.clone()).data);
-
-  console.groupEnd();
-}
