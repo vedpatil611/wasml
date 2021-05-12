@@ -3,6 +3,7 @@ import init, {
   SeriesI32,
   DataFrame,
   ColumnType,
+  SeriesSTR,
 } from "../pkg/dataframes.js";
 
 (async () => {
@@ -16,6 +17,9 @@ import init, {
 
   let df1 = new DataFrame([ser1.toJson(), f1.toJson()]);
   console.log(df1.loc("Floty"));
+
+  let s1 = new SeriesSTR("Arpit", ["tolyoy", "owkdos"]);
+  console.log(s1.display);
 
   // let df = new DataFrame([ser1.toJson(), f1.toJson()]);
   // console.log(df.display);

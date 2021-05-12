@@ -3,7 +3,6 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
-
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -97,18 +96,17 @@ impl DataFrame {
         self.data.iter().count()
     }
 
-    pub fn loc(&self, column_name: JsValue) -> String {
-        let name: String = serde_wasm_bindgen::from_value(column_name).unwrap();
+    pub fn loc(&self, column_name: String) -> String {
         let mut res = String::from("");
         self.data.iter().for_each(|ser| {
             match ser {
                 Series::Integers(x) => {
-                    if x.name() == name {
+                    if x.name() == column_name {
                         res = x.show();
                     }
                 }
                 Series::Floats(x) => {
-                    if x.name() == name {
+                    if x.name() == column_name {
                         res = x.show();
                     }
                 }
@@ -117,6 +115,24 @@ impl DataFrame {
 
         res
     }
+
+    // pub fn iloc(&self, row: usize, col: usize) -> String {
+    //     let array = js_sys::Array::new();
+    //     self.data.iter().for_each(|ser| {
+    //         match ser {
+    //             Series::Integers(x) => {
+    //                 if x.name() == column_name {
+    //                     res = x.show();
+    //                 }
+    //             }
+    //             Series::Floats(x) => {
+    //                 if x.name() == column_name {
+    //                     res = x.show();
+    //                 }
+    //             }
+    //         };
+    //     });
+    // }
 
     #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> js_sys::Map {
