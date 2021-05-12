@@ -8,21 +8,12 @@ import init, {
 (async () => {
   await init();
 
-  let ser1 = new SeriesI32("Integer", [1, 2, 5, 6, 7, 7, 882112]);
+  let ser1 = new SeriesI32("Integer", [1, 2, 5, 6, 7, 8, 9]);
+  console.log(ser1.display);
 
-  // const float_data = new SeriesF64("Float", [12, 12.9]);
+  let f1 = new SeriesF64("Floty", [1.11, 2.34]);
+  console.log(f1.display);
 
-  // let dataf = new DataFrame([ser1.toJson(), float_data.toJson()]);
-  // console.log("################--DF--##################");
-  // console.log(dataf.display);
-  console.table(ser1.display);
-  // dataf.append(ColumnType.FLOAT, float_data.toJson());
-  // console.log("################--DF--##################");
-  // console.log(dataf.display);
-
-  // console.log(dataf.size());
-  // console.log(dataf.columns());
-  // console.log(dataf.dTypes);
-
-  // console.log(ser1.reversed().data);
+  // let df = new DataFrame([ser1.toJson(), f1.toJson()]);
+  // console.log(df.display);
 })();
