@@ -52,11 +52,11 @@ section.end {
 }
 
 .data {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   margin-left: 10px;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  padding: 5px;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
 }
 
 .row {
@@ -64,5 +64,9 @@ section.end {
 }
 
 .cell {
-  margin: 10px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -16,16 +16,15 @@ const createOneDiv = (id, one) => {
 
   const dataDiv = document.createElement('div');
   dataDiv.classList.add('data');
+  const [cols] = one.shape();
+  dataDiv.style.gridTemplateRows = '1fr';
+  dataDiv.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   oneDiv.appendChild(dataDiv);
-
-  const rowDiv = document.createElement('div');
-  rowDiv.classList.add('row');
-  dataDiv.appendChild(rowDiv);
 
   one.data.forEach(element => {
     const cellDiv = document.createElement('div');
     cellDiv.classList.add('cell');
-    rowDiv.appendChild(cellDiv);
+    dataDiv.appendChild(cellDiv);
 
     cellDiv.innerText = element;
   });
@@ -43,17 +42,16 @@ const createTwoDiv = (id, two) => {
 
   const dataDiv = document.createElement('div');
   dataDiv.classList.add('data');
+  const [rows, cols] = two.shape();
+  dataDiv.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+  dataDiv.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   twoDiv.appendChild(dataDiv);
 
   two.data.forEach(row => {
-    const rowDiv = document.createElement('div');
-    rowDiv.classList.add('row');
-    dataDiv.appendChild(rowDiv);
-
     row.forEach(element => {
       const cellDiv = document.createElement('div');
       cellDiv.classList.add('cell');
-      rowDiv.appendChild(cellDiv);
+      dataDiv.appendChild(cellDiv);
 
       cellDiv.innerText = element;
     });
