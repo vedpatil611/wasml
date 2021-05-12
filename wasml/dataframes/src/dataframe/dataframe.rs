@@ -3,7 +3,7 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
-use js_sys::JsString;
+use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -130,4 +130,19 @@ impl DataFrame {
         });
         res
     }
+
+    // pub fn mean(&self) -> Floats1d {
+    //     let res: Vec<f64> = Vec::new();
+        
+    //     self.data.iter().for_each(|ser| {
+    //         match &ser {
+    //             Series::Integers(value) => {
+    //                 res.push(value.m)
+    //             },
+    //             Series::Floats(value) => {
+
+    //             }
+    //         }
+    //     });
+    // }
 }
