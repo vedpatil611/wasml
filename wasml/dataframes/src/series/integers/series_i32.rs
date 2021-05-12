@@ -152,7 +152,7 @@ impl SeriesI32 {
         self.name.clone()
     }
 
-    pub fn size(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.data.len()
     }
 

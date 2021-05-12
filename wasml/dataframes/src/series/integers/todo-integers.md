@@ -1,4 +1,4 @@
- - [X] get
+ - [X] get 
  - [X] set
  - [X] swap
  - [X] reverse
@@ -11,6 +11,7 @@
  - [X] inserted
  - [X] splice
  - [X] spliced  
-
+ - [X] len  
+ - [X] dtype   
 
 
