@@ -1,8 +1,8 @@
 use super::ColumnType;
 use super::DataFrame;
 use super::Series;
-use crate::series::SeriesF64;
-use crate::series::SeriesI32;
+use crate::series::floats::SeriesF64;
+use crate::series::integers::SeriesI32;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]

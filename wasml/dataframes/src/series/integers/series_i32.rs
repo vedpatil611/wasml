@@ -1,18 +1,8 @@
-use crate::dataframe::ColumnType;
 use super::SeriesI32;
+use crate::dataframe::ColumnType;
 use ndarrays::one_dimensional::integers::Integers1d;
 use serde::{Deserialize, Serialize};
-// use std::ops::{Index, IndexMut};
 use wasm_bindgen::prelude::*;
-
-// #[wasm_bindgen]
-// impl Index<usize> for SeriesI32 {
-//     type Output = i32;
-
-//     fn index(&self, index: usize) -> &Self::Output {
-//         &self.data.data[index]
-//     }
-// }
 
 #[wasm_bindgen]
 impl SeriesI32 {
