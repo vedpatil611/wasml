@@ -18,12 +18,13 @@ import init, {
   console.log(f1.display);
 
   let df1 = new DataFrame([ser1.toJson(), f1.toJson(), ser2.toJson()]);
-  console.log(df1.display);
-  console.log(df1.ilocr(1));
+  // console.log(df1.display);
+  // console.log(df1.ilocr(1));
+  console.log(df1.mean());
 
-  let s1 = new SeriesSTR("Arpit", ["tolyoy", "owkdos", "oapsoapsos"]);
-  console.log(s1.display);
-  console.log(s1.len());
+  // let s1 = new SeriesSTR("Arpit", ["tolyoy", "owkdos", "oapsoapsos"]);
+  // console.log(s1.display);
+  // console.log(s1.len());
 
   // let df = new DataFrame([ser1.toJson(), f1.toJson()]);
   // console.log(df.display);
