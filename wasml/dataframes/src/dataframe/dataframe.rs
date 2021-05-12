@@ -97,37 +97,37 @@ impl DataFrame {
         self.data.iter().count()
     }
 
-    #[wasm_bindgen(getter,js_name = display)]
-    pub fn show(&self) -> js_sys::Map {
-        let data = js_sys::Map::new();
-        self.data.iter().for_each(|ser| match &ser {
-            Series::Integers(value) => {
-                data.set(
-                    &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
-                    &value.data(),
-                );
-            }
-            Series::Floats(value) => {
-                data.set(
-                    &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
-                    &value.data(),
-                );
-            }
-        });
-        data
-    }
-
     // #[wasm_bindgen(getter,js_name = display)]
-    // pub fn show(&self) -> String {
-    //     let res;
+    // pub fn show(&self) -> js_sys::Map {
+    //     let data = js_sys::Map::new();
     //     self.data.iter().for_each(|ser| match &ser {
     //         Series::Integers(value) => {
-    //             res + value.show();
+    //             data.set(
+    //                 &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
+    //                 &value.data(),
+    //             );
     //         }
     //         Series::Floats(value) => {
-    //             res + value.show();
+    //             data.set(
+    //                 &serde_wasm_bindgen::to_value(&value.name()).unwrap(),
+    //                 &value.data(),
+    //             );
     //         }
     //     });
-    //     res
+    //     data
     // }
+
+    #[wasm_bindgen(getter,js_name = display)]
+    pub fn show(&self) -> String {
+        let mut res: String = String::from("");
+        self.data.iter().for_each(|ser| match &ser {
+            Series::Integers(value) => {
+                res.push_str(&value.show());
+            }
+            Series::Floats(value) => {
+                res.push_str(&value.show());
+            }
+        });
+        res
+    }
 }
