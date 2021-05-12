@@ -3,8 +3,26 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
-// use ndarrays::one_dimensional::floats::Floats1d;
+use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
+
+// macro_rules! MMM {
+//     ($fn_name: ident) => {
+//         pub fn $fn_name(&self) -> Floats1d {
+//             let mut res: Vec<f64> = Vec::new();
+//             self.data.iter().for_each(|ser| match &ser {
+//                 Series::Integers(value) => {
+//                     res.push(value.mean());
+//                 }
+//                 Series::Floats(value) => {
+//                     res.push(value.mean());
+//                 }
+//             });
+
+//             Floats1d::new(res)
+//         }
+//     }
+// }
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -163,19 +181,60 @@ impl DataFrame {
         res
     }
 
-    pub fn mean(&self) -> js_sys::Array {
-        let array = js_sys::Array::new();
+    pub fn min(&self) -> Floats1d {
+        let mut res: Vec<f64> = Vec::new();
         self.data.iter().for_each(|ser| match &ser {
             Series::Integers(value) => {
-                let val = serde_wasm_bindgen::to_value(&value.mean()).unwrap();
-                array.push(&val);
+                res.push(value.min() as f64);
             }
             Series::Floats(value) => {
-                let val = serde_wasm_bindgen::to_value(&value.mean()).unwrap();
-                array.push(&val);
+                res.push(value.min());
+            }
+        });
+        
+        Floats1d::new(res)
+    }
+    
+    pub fn max(&self) -> Floats1d {
+        let mut res: Vec<f64> = Vec::new();
+        self.data.iter().for_each(|ser| match &ser {
+            Series::Integers(value) => {
+                res.push(value.max() as f64);
+            }
+            Series::Floats(value) => {
+                res.push(value.max());
+            }
+        });
+        
+        Floats1d::new(res)
+    }
+    
+    // MMM!(mean);
+    pub fn mean(&self) -> Floats1d {
+        let mut res: Vec<f64> = Vec::new();
+        self.data.iter().for_each(|ser| match &ser {
+            Series::Integers(value) => {
+                res.push(value.mean());
+            }
+            Series::Floats(value) => {
+                res.push(value.mean());
             }
         });
 
-        array
+        Floats1d::new(res)
+    }
+
+    pub fn median(&self) -> Floats1d {
+        let mut res: Vec<f64> = Vec::new();
+        self.data.iter().for_each(|ser| match &ser {
+            Series::Integers(value) => {
+                res.push(value.median());
+            }
+            Series::Floats(value) => {
+                res.push(value.median());
+            }
+        });
+
+        Floats1d::new(res)
     }
 }
