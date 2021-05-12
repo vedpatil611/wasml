@@ -26,23 +26,15 @@ impl SeriesI32 {
         total
     }
 
+    pub fn median(&self) -> f64 {
+        self.data.median()
+    }
+
     pub fn max(&self) -> i32 {
-        let mut max: i32 = 0;
-        self.data.data.iter().for_each(|elem| {
-            if max < *elem {
-                max = *elem;
-            }
-        });
-        max
+        self.data.max()
     }
 
     pub fn min(&self) -> i32 {
-        let mut min: i32 = self.data.get(0);
-        self.data.data.iter().for_each(|elem| {
-            if min > *elem {
-                min = *elem;
-            }
-        });
-        min
+        self.data.min()
     }
 }
