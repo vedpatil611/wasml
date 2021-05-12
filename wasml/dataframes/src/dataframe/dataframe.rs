@@ -131,18 +131,20 @@ impl DataFrame {
         res
     }
 
-    // pub fn mean(&self) -> Floats1d {
-    //     let res: Vec<f64> = Vec::new();
+    pub fn mean(&self) -> Floats1d {
+        let mut res: Vec<f64> = Vec::new();
         
-    //     self.data.iter().for_each(|ser| {
-    //         match &ser {
-    //             Series::Integers(value) => {
-    //                 res.push(value.m)
-    //             },
-    //             Series::Floats(value) => {
+        self.data.iter().for_each(|ser| {
+            match &ser {
+                Series::Integers(value) => {
+                    // res.push(value.me)
+                },
+                Series::Floats(value) => {
+                    res.push(value.mean());
+                }
+            }
+        });
 
-    //             }
-    //         }
-    //     });
-    // }
+        Floats1d::new(res)
+    }
 }
