@@ -1,0 +1,12 @@
+use ndarrays::one_dimensional::strings::Strings1d;
+pub mod series_str;
+
+use serde::{Deserialize, Serialize};
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
+pub struct SeriesI32 {
+    name: String,
+    data: Strings1d,
+}
