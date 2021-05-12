@@ -3,7 +3,7 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
-use ndarrays::one_dimensional::floats::Floats1d;
+// use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -163,20 +163,19 @@ impl DataFrame {
         res
     }
 
-    pub fn mean(&self) -> Floats1d {
-        let mut res: Vec<f64> = Vec::new();
-
-        self.data.iter().for_each(|ser| {
-            match &ser {
-                Series::Integers(value) => {
-                    // res.push(value.me)
-                }
-                Series::Floats(value) => {
-                    res.push(value.mean());
-                }
+    pub fn mean(&self) -> js_sys::Array {
+        let array = js_sys::Array::new();
+        self.data.iter().for_each(|ser| match &ser {
+            Series::Integers(value) => {
+                let val = serde_wasm_bindgen::to_value(&value.mean()).unwrap();
+                array.push(&val);
+            }
+            Series::Floats(value) => {
+                let val = serde_wasm_bindgen::to_value(&value.mean()).unwrap();
+                array.push(&val);
             }
         });
 
-        Floats1d::new(res)
+        array
     }
 }

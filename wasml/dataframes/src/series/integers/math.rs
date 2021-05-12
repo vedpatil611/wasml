@@ -13,7 +13,36 @@ impl SeriesI32 {
         self.data.product()
     }
 
-    pub fn mean(&self) -> i32 {
-        self.data.mean()
+    pub fn mean(&self) -> f64 {
+        let mut c = 0;
+        let mut sum = 0;
+        let total;
+        self.data.data.iter().for_each(|x| {
+            c += 1;
+            sum += x;
+        });
+
+        total = sum as f64 / c as f64;
+        total
+    }
+
+    pub fn max(&self) -> i32 {
+        let mut max: i32 = 0;
+        self.data.data.iter().for_each(|elem| {
+            if max < *elem {
+                max = *elem;
+            }
+        });
+        max
+    }
+
+    pub fn min(&self) -> i32 {
+        let mut min: i32 = self.data.get(0);
+        self.data.data.iter().for_each(|elem| {
+            if min > *elem {
+                min = *elem;
+            }
+        });
+        min
     }
 }
