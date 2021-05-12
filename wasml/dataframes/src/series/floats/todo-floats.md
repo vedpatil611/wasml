@@ -1,14 +1,19 @@
- - [ ] get
- - [ ] set
- - [ ] swap
- - [ ] reverse
- - [ ] reversed
- - [ ] append
- - [ ] appended
- - [ ] extend
- - [ ] extended
- - [ ] insert
- - [ ] inserted
- - [ ] splice
- - [ ] spliced  
+## Basic Methods
+ - [X] name
+ - [X] updatename
+ - [X] len
+ - [X] get
+ - [X] set
+ - [X] swap
+ - [X] reverse
+ - [X] reversed
+ - [X] append
+ - [X] appended
+ - [X] extend
+ - [X] extended
+ - [X] insert
+ - [X] inserted
+ - [X] splice
+ - [X] spliced  
+ - [X] dtype 
 

@@ -1,5 +1,5 @@
-use crate::dataframe::ColumnType;
 use super::SeriesF64;
+use crate::dataframe::ColumnType;
 use ndarrays::one_dimensional::floats::Floats1d;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -44,16 +44,32 @@ impl SeriesF64 {
         self.data.data_to_js()
     }
 
-    pub fn append(&mut self, data_item: JsValue) {
-        let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
-        self.data.append(data_item);
+    pub fn get(&self, index: usize) -> f64 {
+        self.data.get(index)
     }
 
-    pub fn appended(&mut self, data_item: JsValue) -> JsValue {
-        let data_item = serde_wasm_bindgen::from_value(data_item).unwrap();
-        self.data.append(data_item);
+    pub fn set(&mut self, index: usize, value: f64) {
+        self.data.set(index, value);
+    }
 
-        self.data.data_to_js()
+    pub fn swap(&mut self, index1: usize, index2: usize) {
+        self.data.swap(index1, index2);
+    }
+
+    pub fn reverse(&mut self) {
+        self.data.reverse();
+    }
+
+    pub fn reversed(&self) -> Floats1d {
+        self.data.reversed()
+    }
+
+    pub fn append(&mut self, element: f64) {
+        self.data.append(element);
+    }
+
+    pub fn appended(&mut self, element: f64) -> Floats1d {
+        self.data.appended(element)
     }
 
     pub fn extend(&mut self, data_arr: JsValue) {
@@ -62,12 +78,26 @@ impl SeriesF64 {
         self.data.extend(ndarray_data_arr)
     }
 
-    pub fn extended(&mut self, data_arr: JsValue) -> JsValue {
+    pub fn extended(&mut self, data_arr: JsValue) -> Floats1d {
         let data_arr = serde_wasm_bindgen::from_value(data_arr).unwrap();
         let ndarray_data_arr = Floats1d::new(data_arr);
-        self.data.extend(ndarray_data_arr);
+        self.data.extended(ndarray_data_arr)
+    }
 
-        self.data.data_to_js()
+    pub fn insert(&mut self, index: usize, value: f64) {
+        self.data.insert(index, value);
+    }
+
+    pub fn inserted(&self, index: usize, value: f64) -> Floats1d {
+        self.data.inserted(index, value)
+    }
+
+    pub fn splice(&mut self, index: usize) -> f64 {
+        self.data.splice(index)
+    }
+
+    pub fn spliced(&mut self, index: usize) -> js_sys::Array {
+        self.data.spliced(index)
     }
 
     pub fn name(&self) -> String {
@@ -82,7 +112,7 @@ impl SeriesF64 {
         self.name.clone()
     }
 
-    pub fn size(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.data.len()
     }
 

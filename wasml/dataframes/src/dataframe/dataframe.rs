@@ -20,7 +20,7 @@ impl DataFrame {
         let first_series_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_float) = first_series_float {
-            series_size = series_float.size()
+            series_size = series_float.len()
         }
 
         let series_data = vec_series
@@ -38,7 +38,7 @@ impl DataFrame {
                 let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
                     serde_wasm_bindgen::from_value(series.clone());
                 if let Ok(x) = as_float {
-                    if x.size() == series_size {
+                    if x.len() == series_size {
                         return Series::Floats(x);
                     }
                 }
