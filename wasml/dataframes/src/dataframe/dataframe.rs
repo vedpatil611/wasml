@@ -222,27 +222,26 @@ impl DataFrame {
 
     pub fn min(&self, col: JsValue) -> f64 {
         let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        let mut r: f64 = 0.0;
         for x in &self.data {
             match x {
                 Series::Floats(value) => {
                     if col_name == value.name() {
-                        r = value.min();
-                        break;
+                        return value.min();
                     }
                 },
                 Series::Integers(value) => {
                     if col_name == value.name() {
-                        r = value.min() as f64;
-                        break;
+                        return value.min() as f64;
                     }
                 },
-                _ => {
-                    panic!()
+                Series::Strings(value) => {
+                    if col_name == value.name() {
+                        panic!("min function not supported for strings");
+                    }
                 }
             }
         }
-        r
+        panic!("Column name {} not found", col_name);
     }
 
     #[wasm_bindgen(js_name = minColumns)]
@@ -263,25 +262,26 @@ impl DataFrame {
 
     pub fn max(&self, col: JsValue) -> f64 {
         let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        let mut r: f64 = 0.0;
         for x in &self.data {
             match x {
                 Series::Floats(value) => {
                     if col_name == value.name() {
-                        r = value.min();
-                        break;
+                        return value.min();
                     }
                 },
                 Series::Integers(value) => {
                     if col_name == value.name() {
-                        r = value.min() as f64;
-                        break;
+                        return value.min() as f64;
                     }
                 },
-                _ => {}
+                Series::Strings(value) => {
+                    if col_name == value.name() {
+                        panic!("max function not supported for strings");
+                    }
+                }
             }
         }
-        r
+        panic!("Column name {} not found", col_name);
     }
 
     #[wasm_bindgen(js_name = maxColumns)]
@@ -302,25 +302,26 @@ impl DataFrame {
 
     pub fn mean(&self, col: JsValue) -> f64 {
         let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        let mut r: f64 = 0.0;
         for x in &self.data {
             match x {
                 Series::Floats(value) => {
                     if col_name == value.name() {
-                        r = value.mean();
-                        break;
+                        return value.mean();
                     }
                 },
                 Series::Integers(value) => {
                     if col_name == value.name() {
-                        r = value.mean();
-                        break;
+                        return value.mean();
                     }
                 },
-                _ => {}
+                Series::Strings(value) => {
+                    if col_name == value.name() {
+                        panic!("mean function not supported for strings");
+                    }
+                }
             }
         }
-        r
+        panic!("Column name {} not found", col_name);
     }
 
     #[wasm_bindgen(js_name = meanColumns)]
@@ -341,25 +342,26 @@ impl DataFrame {
 
     pub fn median(&self, col: JsValue) -> f64 {
         let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        let mut r: f64 = 0.0;
         for x in &self.data {
             match x {
                 Series::Floats(value) => {
                     if col_name == value.name() {
-                        r = value.median();
-                        break;
+                        return value.median();
                     }
                 },
                 Series::Integers(value) => {
                     if col_name == value.name() {
-                        r = value.median();
-                        break;
+                        return value.median();
                     }
                 },
-                _ => {}
+                Series::Strings(value) => {
+                    if col_name == value.name() {
+                        panic!("median function not supported for strings");
+                    }
+                }
             }
         }
-        r
+        panic!("Column name {} not found", col_name);
     }
 
     #[wasm_bindgen(js_name = medianColumns)]
