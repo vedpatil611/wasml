@@ -3,6 +3,7 @@ use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
+use crate::series::strings::SeriesSTR;
 use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
 
@@ -42,6 +43,12 @@ impl DataFrame {
             series_size = series_float.len()
         }
 
+        let first_series_str: Result<SeriesSTR, serde_wasm_bindgen::Error> =
+            serde_wasm_bindgen::from_value(vec_series[0].clone());
+        if let Ok(series_str) = first_series_str {
+            series_size = series_str.len()
+        }
+
         let series_data = vec_series
             .iter()
             .map(|series| {
@@ -56,9 +63,19 @@ impl DataFrame {
 
                 let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
                     serde_wasm_bindgen::from_value(series.clone());
+
                 if let Ok(x) = as_float {
                     if x.len() == series_size {
                         return Series::Floats(x);
+                    }
+                }
+
+                let as_str: Result<SeriesSTR, serde_wasm_bindgen::Error> =
+                    serde_wasm_bindgen::from_value(series.clone());
+
+                if let Ok(x) = as_str {
+                    if x.len() == series_size {
+                        return Series::Strings(x);
                     }
                 }
 
@@ -76,6 +93,7 @@ impl DataFrame {
             match ser {
                 Series::Integers(x) => res.push(x.name()),
                 Series::Floats(x) => res.push(x.name()),
+                Series::Strings(x) => res.push(x.name()),
             };
         });
 
@@ -89,6 +107,7 @@ impl DataFrame {
             match ser {
                 Series::Integers(x) => res.push(x.dtype()),
                 Series::Floats(x) => res.push(x.dtype()),
+                Series::Strings(x) => res.push(x.dtype()),
             };
         });
 
@@ -106,6 +125,10 @@ impl DataFrame {
             ColumnType::INTEGER => {
                 let ser = serde_wasm_bindgen::from_value(series).unwrap();
                 self.data.push(Series::Integers(ser));
+            }
+            ColumnType::STR => {
+                let ser = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data.push(Series::Strings(ser));
             }
         }
     }
@@ -129,6 +152,11 @@ impl DataFrame {
                         res = x.show();
                     }
                 }
+                Series::Strings(x) => {
+                    if x.name() == column_name {
+                        res = x.show();
+                    }
+                }
             };
         });
 
@@ -144,6 +172,10 @@ impl DataFrame {
                     array.push(&val);
                 }
                 Series::Floats(x) => {
+                    let val = serde_wasm_bindgen::to_value(&x.get(row)).unwrap();
+                    array.push(&val);
+                }
+                Series::Strings(x) => {
                     let val = serde_wasm_bindgen::to_value(&x.get(row)).unwrap();
                     array.push(&val);
                 }
@@ -163,6 +195,9 @@ impl DataFrame {
             Series::Floats(x) => {
                 val = x.data();
             }
+            Series::Strings(x) => {
+                val = x.data();
+            }
         };
         val
     }
@@ -175,6 +210,9 @@ impl DataFrame {
                 res.push_str(&value.show());
             }
             Series::Floats(value) => {
+                res.push_str(&value.show());
+            }
+            Series::Strings(value) => {
                 res.push_str(&value.show());
             }
         });
@@ -190,11 +228,12 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.min());
             }
+            _ => panic!(),
         });
-        
+
         Floats1d::new(res)
     }
-    
+
     pub fn max(&self) -> Floats1d {
         let mut res: Vec<f64> = Vec::new();
         self.data.iter().for_each(|ser| match &ser {
@@ -204,11 +243,12 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.max());
             }
+            _ => panic!(),
         });
-        
+
         Floats1d::new(res)
     }
-    
+
     // MMM!(mean);
     pub fn mean(&self) -> Floats1d {
         let mut res: Vec<f64> = Vec::new();
@@ -219,6 +259,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.mean());
             }
+            _ => panic!(),
         });
 
         Floats1d::new(res)
@@ -233,6 +274,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.median());
             }
+            _ => panic!(),
         });
 
         Floats1d::new(res)

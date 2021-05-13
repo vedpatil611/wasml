@@ -9,13 +9,34 @@ import init, {
 (async () => {
   await init();
 
+  // console.group(
+  //   "%cSeries",
+  //   "color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px"
+  // );
+  // seriesDemo();
+  // console.groupEnd();
+
   console.group(
-    "%cSeries",
+    "%cDataFrame",
     "color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px"
   );
-  seriesDemo();
+  dataframeDemo();
   console.groupEnd();
 })();
+
+const dataframeDemo = () => {
+  console.group("DataFrame");
+
+  let sera = new SeriesI32("Apples", [1, 2, 3, 4]);
+  let sero = new SeriesF64("Orange", [1.1, 2.1, 3.1, 4.1]);
+  let serb = new SeriesSTR("Banana", ["ban", "nan", "qwe", "rty"]);
+
+  console.log("DataFrame");
+  let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
+  console.log(df.display);
+
+  console.groupEnd();
+};
 
 const seriesDemo = () => {
   console.group("SeriesI32");

@@ -1,4 +1,5 @@
 use super::SeriesSTR;
+use crate::dataframe::ColumnType;
 use ndarrays::one_dimensional::strings::Strings1d;
 // use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -15,6 +16,25 @@ impl SeriesSTR {
             name: col_name,
             data: col_data,
         }
+    }
+
+    pub fn name(&self) -> String {
+        self.name.clone()
+    }
+
+    pub fn dtype(&self) -> ColumnType {
+        ColumnType::STR
+    }
+
+    pub fn data(&self) -> JsValue {
+        self.data.data_to_js()
+    }
+
+    #[wasm_bindgen(js_name = toJson)]
+    pub fn to_json(&self) -> JsValue {
+        let js_series = self;
+
+        serde_wasm_bindgen::to_value(&js_series).unwrap()
     }
 
     pub fn len(&self) -> usize {
