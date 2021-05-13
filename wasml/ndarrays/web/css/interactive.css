@@ -6,7 +6,7 @@ html, body {
 
 body {
   display: grid;
-  grid-template-rows: 1fr 100px 1fr;
+  grid-template-rows: auto 100px auto;
 }
 
 section.start {

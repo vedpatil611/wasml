@@ -6,12 +6,12 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 impl Floats2d {
     /// Get the number of columns in the array
-    pub fn column_count(&self) -> usize {
+    pub fn ncols(&self) -> usize {
         self.data.ncols()
     }
 
     /// Get the number of rows in the array
-    pub fn row_count(&self) -> usize {
+    pub fn nrows(&self) -> usize {
         self.data.nrows()
     }
 
@@ -54,14 +54,16 @@ impl Floats2d {
     }
 
     /// Get the column at the specified index
-    pub fn get_column(&self, index: usize) -> Floats1d {
+    #[wasm_bindgen(js_name = getCol)]
+    pub fn get_col(&self, index: usize) -> Floats1d {
         Floats1d {
             data: self.data.column(index).into_owned(),
         }
     }
 
     /// Set the column at the specified index
-    pub fn set_column(&mut self, index: usize, array: &Floats1d) {
+    #[wasm_bindgen(js_name = setCol)]
+    pub fn set_col(&mut self, index: usize, array: &Floats1d) {
         self.data
             .column_mut(index)
             .iter_mut()
@@ -72,6 +74,7 @@ impl Floats2d {
     }
 
     /// Get the row at the specified index
+    #[wasm_bindgen(js_name = getRow)]
     pub fn get_row(&self, index: usize) -> Floats1d {
         Floats1d {
             data: self.data.row(index).into_owned(),
@@ -79,6 +82,7 @@ impl Floats2d {
     }
 
     /// Set the row at the specified index
+    #[wasm_bindgen(js_name = setRow)]
     pub fn set_row(&mut self, index: usize, array: &Floats1d) {
         self.data
             .row_mut(index)
@@ -90,6 +94,7 @@ impl Floats2d {
     }
 
     /// Append a new row to the array
+    #[wasm_bindgen(js_name = rowAppend)]
     pub fn row_append(&mut self, row: &Floats1d) {
         let new_array_vec = self
             .data
@@ -97,12 +102,11 @@ impl Floats2d {
             .chain(row.data.iter())
             .map(|x| *x)
             .collect::<Vec<f64>>();
-        self.data =
-            Array::from_shape_vec((self.row_count() + 1, self.column_count()), new_array_vec)
-                .unwrap();
+        self.data = Array::from_shape_vec((self.nrows() + 1, self.ncols()), new_array_vec).unwrap();
     }
 
     /// Return the result of appending a new row to the array
+    #[wasm_bindgen(js_name = rowAppended)]
     pub fn row_appended(&self, row: &Floats1d) -> Floats2d {
         let new_array_vec = self
             .data
@@ -112,13 +116,13 @@ impl Floats2d {
             .collect::<Vec<f64>>();
 
         Floats2d {
-            data: Array::from_shape_vec((self.row_count() + 1, self.column_count()), new_array_vec)
-                .unwrap(),
+            data: Array::from_shape_vec((self.nrows() + 1, self.ncols()), new_array_vec).unwrap(),
         }
     }
 
     /// Append a new column to the array
-    pub fn column_append(&mut self, col: &Floats1d) {
+    #[wasm_bindgen(js_name = colAppend)]
+    pub fn col_append(&mut self, col: &Floats1d) {
         let new_array_vec = self
             .data
             .t()
@@ -127,15 +131,15 @@ impl Floats2d {
             .map(|x| *x)
             .collect::<Vec<f64>>();
 
-        self.data =
-            Array::from_shape_vec((self.column_count() + 1, self.row_count()), new_array_vec)
-                .unwrap()
-                .t()
-                .into_owned();
+        self.data = Array::from_shape_vec((self.ncols() + 1, self.nrows()), new_array_vec)
+            .unwrap()
+            .t()
+            .into_owned();
     }
 
     /// Return the reuslt of appending a new column to the array
-    pub fn column_appended(&mut self, col: &Floats1d) -> Floats2d {
+    #[wasm_bindgen(js_name = colAppended)]
+    pub fn col_appended(&mut self, col: &Floats1d) -> Floats2d {
         let new_array_vec = self
             .data
             .t()
@@ -145,7 +149,7 @@ impl Floats2d {
             .collect::<Vec<f64>>();
 
         Floats2d {
-            data: Array::from_shape_vec((self.column_count() + 1, self.row_count()), new_array_vec)
+            data: Array::from_shape_vec((self.ncols() + 1, self.nrows()), new_array_vec)
                 .unwrap()
                 .t()
                 .into_owned(),
@@ -153,6 +157,7 @@ impl Floats2d {
     }
 
     /// Extend the array by appending rows from another array
+    #[wasm_bindgen(js_name = rowsExtend)]
     pub fn rows_extend(&mut self, other: &Floats2d) {
         let new_array_vec = self
             .data
@@ -160,15 +165,14 @@ impl Floats2d {
             .chain(other.data.iter())
             .map(|x| *x)
             .collect::<Vec<f64>>();
-        self.data = Array::from_shape_vec(
-            (self.row_count() + other.row_count(), self.column_count()),
-            new_array_vec,
-        )
-        .unwrap();
+        self.data =
+            Array::from_shape_vec((self.nrows() + other.nrows(), self.ncols()), new_array_vec)
+                .unwrap();
     }
 
-    /// Return the result of extending the array by appending rows
-    /// from another array
+    /// Return the result of extending the array by appending rows for another
+    /// array
+    #[wasm_bindgen(js_name = rowsExtended)]
     pub fn rows_extended(&mut self, other: &Floats2d) -> Floats2d {
         let new_array_vec = self
             .data
@@ -179,7 +183,7 @@ impl Floats2d {
 
         Floats2d {
             data: Array::from_shape_vec(
-                (self.row_count() + other.row_count(), self.column_count()),
+                (self.nrows() + other.nrows(), self.ncols()),
                 new_array_vec,
             )
             .unwrap(),
@@ -187,7 +191,8 @@ impl Floats2d {
     }
 
     /// Extend the array by appending columns from another array
-    pub fn columns_extend(&mut self, other: &Floats2d) {
+    #[wasm_bindgen(js_name = colsExtend)]
+    pub fn cols_extend(&mut self, other: &Floats2d) {
         let new_array_vec = self
             .data
             .t()
@@ -196,18 +201,17 @@ impl Floats2d {
             .map(|x| *x)
             .collect::<Vec<f64>>();
 
-        self.data = Array::from_shape_vec(
-            (self.column_count() + other.column_count(), self.row_count()),
-            new_array_vec,
-        )
-        .unwrap()
-        .t()
-        .into_owned();
+        self.data =
+            Array::from_shape_vec((self.ncols() + other.ncols(), self.nrows()), new_array_vec)
+                .unwrap()
+                .t()
+                .into_owned();
     }
 
-    /// Return the result of extending the array by appending columns
-    /// from another array
-    pub fn columns_extended(&self, other: &Floats2d) -> Floats2d {
+    /// Return the result of extending the array by appending columns from
+    /// another array
+    #[wasm_bindgen(js_name = colsExtended)]
+    pub fn cols_extended(&self, other: &Floats2d) -> Floats2d {
         let new_array_vec = self
             .data
             .t()
@@ -218,7 +222,7 @@ impl Floats2d {
 
         Floats2d {
             data: Array::from_shape_vec(
-                (self.column_count() + other.column_count(), self.row_count()),
+                (self.ncols() + other.ncols(), self.nrows()),
                 new_array_vec,
             )
             .unwrap()
@@ -228,6 +232,7 @@ impl Floats2d {
     }
 
     /// Remove the row at the specified index and return it
+    #[wasm_bindgen(js_name = rowSplice)]
     pub fn row_splice(&mut self, index: usize) -> Floats1d {
         let row = self.get_row(index);
         let (first, second) = self
@@ -239,15 +244,14 @@ impl Floats2d {
             .map(|x| *x)
             .collect::<Vec<f64>>();
 
-        self.data =
-            Array::from_shape_vec((self.row_count() - 1, self.column_count()), new_array_vec)
-                .unwrap();
+        self.data = Array::from_shape_vec((self.nrows() - 1, self.ncols()), new_array_vec).unwrap();
 
         row
     }
 
     /// Remove the row at the specified index and return the modified array and
     /// the removed row
+    #[wasm_bindgen(js_name = rowSpliced)]
     pub fn row_spliced(&mut self, index: usize) -> js_sys::Array {
         let row = self.get_row(index);
         let (first, second) = self
@@ -260,16 +264,16 @@ impl Floats2d {
             .collect::<Vec<f64>>();
 
         let spliced = Floats2d {
-            data: Array::from_shape_vec((self.row_count() - 1, self.column_count()), new_array_vec)
-                .unwrap(),
+            data: Array::from_shape_vec((self.nrows() - 1, self.ncols()), new_array_vec).unwrap(),
         };
 
         js_sys::Array::of2(&JsValue::from(spliced), &JsValue::from(row))
     }
 
     /// Remove the column at the specified index and return it
-    pub fn column_splice(&mut self, index: usize) -> Floats1d {
-        let col = self.get_column(index);
+    #[wasm_bindgen(js_name = colSplice)]
+    pub fn col_splice(&mut self, index: usize) -> Floats1d {
+        let col = self.get_col(index);
         let (first, second) = self
             .data
             .multi_slice_mut((s![.., ..index], s![.., (index + 1)..]));
@@ -280,17 +284,17 @@ impl Floats2d {
             .map(|x| *x)
             .collect::<Vec<f64>>();
 
-        self.data =
-            Array::from_shape_vec((self.row_count(), self.column_count() - 1), new_array_vec)
-                .unwrap()
-                .t()
-                .to_owned();
+        self.data = Array::from_shape_vec((self.nrows(), self.ncols() - 1), new_array_vec)
+            .unwrap()
+            .t()
+            .to_owned();
 
         col
     }
 
     /// Remove the column at the specified index and return the modified array
     /// and the removed column
+    #[wasm_bindgen(js_name = colSpliced)]
     pub fn column_spliced(&mut self, index: usize) -> js_sys::Array {
         let col = self.get_row(index);
         let (first, second) = self
@@ -304,7 +308,7 @@ impl Floats2d {
             .collect::<Vec<f64>>();
 
         let spliced = Floats2d {
-            data: Array::from_shape_vec((self.row_count(), self.column_count() - 1), new_array_vec)
+            data: Array::from_shape_vec((self.nrows(), self.ncols() - 1), new_array_vec)
                 .unwrap()
                 .t()
                 .into_owned(),

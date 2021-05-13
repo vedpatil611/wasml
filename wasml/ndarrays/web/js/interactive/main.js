@@ -44,7 +44,8 @@ const run = text => {
 
   if (ret) {
     end.appendChild(createDisplayDiv('return', ret));
+  } else {
+    end.appendChild(createDisplayDiv('a', a));
+    end.appendChild(createDisplayDiv('b', b));
   }
-  end.appendChild(createDisplayDiv('a', a));
-  end.appendChild(createDisplayDiv('b', b));
 };
