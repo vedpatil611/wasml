@@ -35,6 +35,34 @@ const dataframeDemo = () => {
   let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
   console.log(df.display);
 
+  console.log("DataFrame size");
+  console.log(df.size());
+
+  console.log("DataFrame show Columns");
+  console.log(df.columns());
+
+  console.log("DataFrame show Datatypes");
+  console.log(df.dTypes);
+
+  console.log("DataFrame append series");
+  let sertest = new SeriesI32("Fruits", [9, 8, 9, 8]);
+  df.append(ColumnType.INTEGER, sertest.toJson());
+  console.log(df.display);
+
+  console.log("DataFrame loc get series with col name");
+  console.log(df.loc("Banana"));
+
+  console.log("DataFrame ilor get row");
+  console.log(df.ilocr(2));
+
+  console.log("DataFrame iloc get col");
+  console.log(df.ilocc(1));
+
+  console.group("DataFrame Math operations");
+  // console.log("DataFrame min");
+  // console.log(df.min());
+  // console.groupEnd();
+
   console.groupEnd();
 };
 
