@@ -88,13 +88,15 @@ impl Floats2d {
     }
 
     /// Get the mean of each row in the matrix
-    pub fn column_mean(&self) -> Floats1d {
+    #[wasm_bindgen(js_name = colMean)]
+    pub fn col_mean(&self) -> Floats1d {
         Floats1d {
             data: self.data.mean_axis(Axis(0)).unwrap(),
         }
     }
 
     /// Get the mean of each column in the matrix
+    #[wasm_bindgen(js_name = rowMean)]
     pub fn row_mean(&self) -> Floats1d {
         Floats1d {
             data: self.data.mean_axis(Axis(1)).unwrap(),
@@ -102,18 +104,21 @@ impl Floats2d {
     }
 
     /// Get the variance of all the elements in the array
+    #[wasm_bindgen(js_name = variance)]
     pub fn variance(&self, degree_of_freedom: f64) -> f64 {
         self.data.var(degree_of_freedom)
     }
 
     /// Get the variance of each row in the matrix
-    pub fn column_variance(&self, degree_of_freedom: f64) -> Floats1d {
+    #[wasm_bindgen(js_name = colVariance)]
+    pub fn col_variance(&self, degree_of_freedom: f64) -> Floats1d {
         Floats1d {
             data: self.data.var_axis(Axis(0), degree_of_freedom),
         }
     }
 
     /// Get the variance of each column in the matrix
+    #[wasm_bindgen(js_name = rowVariance)]
     pub fn row_variance(&self, degree_of_freedom: f64) -> Floats1d {
         Floats1d {
             data: self.data.var_axis(Axis(1), degree_of_freedom),
@@ -121,18 +126,21 @@ impl Floats2d {
     }
 
     /// Get the mean of all the elements in the array
+    #[wasm_bindgen(js_name = standardDeviation)]
     pub fn standard_deviation(&self, degree_of_freedom: f64) -> f64 {
         self.data.std(degree_of_freedom)
     }
 
     /// Get the standard deviation of each row in the matrix
-    pub fn column_standard_deviation(&self, degree_of_freedom: f64) -> Floats1d {
+    #[wasm_bindgen(js_name = colStandardDeviation)]
+    pub fn col_standard_deviation(&self, degree_of_freedom: f64) -> Floats1d {
         Floats1d {
             data: self.data.std_axis(Axis(0), degree_of_freedom),
         }
     }
 
     /// Get the standard deviation of each column in the matrix
+    #[wasm_bindgen(js_name = rowStandardDeviation)]
     pub fn row_standard_deviation(&self, degree_of_freedom: f64) -> Floats1d {
         Floats1d {
             data: self.data.std_axis(Axis(1), degree_of_freedom),

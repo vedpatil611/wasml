@@ -1,7 +1,7 @@
 const createNumDiv = (id, num) => {
   const numDiv = document.createElement('div');
   numDiv.classList.add('num');
-  numDiv.innerText = `${id} = ${num}`;
+  numDiv.innerText = `${id} = ${num.toFixed(2)}`;
 
   return numDiv;
 };
@@ -26,7 +26,7 @@ const createOneDiv = (id, one) => {
     cellDiv.classList.add('cell');
     dataDiv.appendChild(cellDiv);
 
-    cellDiv.innerText = element;
+    cellDiv.innerText = element.toFixed(2);
   });
 
   return oneDiv;
@@ -53,7 +53,7 @@ const createTwoDiv = (id, two) => {
       cellDiv.classList.add('cell');
       dataDiv.appendChild(cellDiv);
 
-      cellDiv.innerText = element;
+      cellDiv.innerText = element.toFixed(2);
     });
   });
 

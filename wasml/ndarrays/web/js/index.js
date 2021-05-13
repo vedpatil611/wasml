@@ -148,38 +148,29 @@ const two_dimensional_floats_basics = () => {
   console.log('a.set([2, 3], 5.0)', a.data);
   a.swap([1, 1], [1, 2]);
   console.log('a.swap([2, 2], [2, 3])', a.data);
-  console.log('a.get_column(0)', a.get_row(0).data);
-  console.log('a.get_row(0)', a.get_row(0).data);
+  console.log('a.getCol(0)', a.getCol(0).data);
+  console.log('a.getRow(0)', a.getRow(0).data);
 
-  const a_clone = a.clone();
+  const aClone = a.clone();
   const row = new Floats1d([-1.0, -2.0, -3.0]);
-  a_clone.set_row(0, row);
-  console.log('a_clone after set_row', a_clone.data);
+  aClone.setRow(0, row);
+  console.log('aClone after setRow', aClone.data);
   const col = new Floats1d([-4.0, 5.0]);
-  a_clone.set_column(0, col);
-  console.log('a_clone after set_column', a_clone.data);
+  aClone.setCol(0, col);
+  console.log('aClone after setCol', aClone.data);
+
+  console.log('a.rowAppended(a.getRow(0))', a.rowAppended(a.getRow(0)).data);
+  console.log('a.colAppended(a.getCol(0))', a.colAppended(a.getCol(0)).data);
+  console.log('a.rowsExtended(a.clone())', a.rowsExtended(a.clone()).data);
+  console.log('a.colsExtended(a.clone())', a.colsExtended(a.clone()).data);
 
   console.log(
-    'a.row_appended(a.get_row(0))',
-    a.row_appended(a.get_row(0)).data
+    'a.rowSpliced(1)',
+    a.rowSpliced(1).map(x => x.data)
   );
   console.log(
-    'a.column_appended(a.get_column(0))',
-    a.column_appended(a.get_column(0)).data
-  );
-  console.log('a.rows_extended(a.clone())', a.rows_extended(a.clone()).data);
-  console.log(
-    'a.columns_extended(a.clone())',
-    a.columns_extended(a.clone()).data
-  );
-
-  console.log(
-    'a.row_spliced(1)',
-    a.row_spliced(1).map(x => x.data)
-  );
-  console.log(
-    'a.column_spliced(1)',
-    a.column_spliced(1).map(x => x.data)
+    'a.colSpliced(1)',
+    a.colSpliced(1).map(x => x.data)
   );
 
   console.groupEnd();
@@ -206,14 +197,12 @@ const two_dimensional_floats_math = () => {
   console.log('a.dot(b.transposed())', a.dot(b.transposed()).data);
 
   console.log('mean', a.mean());
-  console.log('row mean', a.row_mean().data);
-  console.log('column mean', a.column_mean().data);
+  console.log('row mean', a.rowMean().data);
+  console.log('column mean', a.colMean().data);
   console.log('variance', a.variance(1));
-  console.log('row variance', a.row_variance(1).data);
-  console.log('column variance', a.column_variance(1).data);
-  console.log('standard deviation', a.standard_deviation(1));
-  console.log('row standard deviation', a.row_standard_deviation(1).data);
-  console.log('column standard deviation', a.column_standard_deviation(1).data);
+  console.log('row variance', a.rowVariance(1).data);
+  console.log('standard deviation', a.standardDeviation(1));
+  console.log('column standard deviation', a.colStandardDeviation(1).data);
 
   console.groupEnd();
 };
