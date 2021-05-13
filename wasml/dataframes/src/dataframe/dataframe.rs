@@ -13,16 +13,17 @@ use wasm_bindgen::prelude::*;
 //             let mut res: Vec<f64> = Vec::new();
 //             self.data.iter().for_each(|ser| match &ser {
 //                 Series::Integers(value) => {
-//                     res.push(value.mean());
+//                     res.push(value.$fn_name() as f64);
 //                 }
 //                 Series::Floats(value) => {
-//                     res.push(value.mean());
+//                     res.push(value.$fn_name());
 //                 }
+//                 _ => panic!(),
 //             });
 
 //             Floats1d::new(res)
 //         }
-//     }
+//     };
 // }
 
 #[wasm_bindgen]
@@ -203,7 +204,7 @@ impl DataFrame {
     }
 
     #[wasm_bindgen(getter,js_name = display)]
-    pub fn show(&self) -> String {
+    pub fn show(&self) -> String {  
         let mut res: String = String::from("");
         self.data.iter().for_each(|ser| match &ser {
             Series::Integers(value) => {
@@ -219,7 +220,33 @@ impl DataFrame {
         res
     }
 
-    pub fn min(&self) -> Floats1d {
+    pub fn min(&self, col: JsValue) -> f64 {
+        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
+        let mut r: f64 = 0.0;
+        for x in &self.data {
+            match x {
+                Series::Floats(value) => {
+                    if col_name == value.name() {
+                        r = value.min();
+                        break;
+                    }
+                },
+                Series::Integers(value) => {
+                    if col_name == value.name() {
+                        r = value.min() as f64;
+                        break;
+                    }
+                },
+                _ => {
+                    panic!()
+                }
+            }
+        }
+        r
+    }
+
+    #[wasm_bindgen(js_name = minColumns)]
+    pub fn min_colunmn(&self) -> Floats1d {
         let mut res: Vec<f64> = Vec::new();
         self.data.iter().for_each(|ser| match &ser {
             Series::Integers(value) => {
@@ -228,13 +255,37 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.min());
             }
-            _ => panic!(),
+            _ => {},
         });
 
         Floats1d::new(res)
     }
 
-    pub fn max(&self) -> Floats1d {
+    pub fn max(&self, col: JsValue) -> f64 {
+        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
+        let mut r: f64 = 0.0;
+        for x in &self.data {
+            match x {
+                Series::Floats(value) => {
+                    if col_name == value.name() {
+                        r = value.min();
+                        break;
+                    }
+                },
+                Series::Integers(value) => {
+                    if col_name == value.name() {
+                        r = value.min() as f64;
+                        break;
+                    }
+                },
+                _ => {}
+            }
+        }
+        r
+    }
+
+    #[wasm_bindgen(js_name = maxColumns)]
+    pub fn max_columns(&self) -> Floats1d {
         let mut res: Vec<f64> = Vec::new();
         self.data.iter().for_each(|ser| match &ser {
             Series::Integers(value) => {
@@ -243,14 +294,37 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.max());
             }
-            _ => panic!(),
+            _ => {},
         });
 
         Floats1d::new(res)
     }
 
-    // MMM!(mean);
-    pub fn mean(&self) -> Floats1d {
+    pub fn mean(&self, col: JsValue) -> f64 {
+        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
+        let mut r: f64 = 0.0;
+        for x in &self.data {
+            match x {
+                Series::Floats(value) => {
+                    if col_name == value.name() {
+                        r = value.mean();
+                        break;
+                    }
+                },
+                Series::Integers(value) => {
+                    if col_name == value.name() {
+                        r = value.mean();
+                        break;
+                    }
+                },
+                _ => {}
+            }
+        }
+        r
+    }
+
+    #[wasm_bindgen(js_name = meanColumns)]
+    pub fn mean_columns(&self) -> Floats1d {
         let mut res: Vec<f64> = Vec::new();
         self.data.iter().for_each(|ser| match &ser {
             Series::Integers(value) => {
@@ -259,13 +333,37 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.mean());
             }
-            _ => panic!(),
+            _ => {},
         });
 
         Floats1d::new(res)
     }
 
-    pub fn median(&self) -> Floats1d {
+    pub fn median(&self, col: JsValue) -> f64 {
+        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
+        let mut r: f64 = 0.0;
+        for x in &self.data {
+            match x {
+                Series::Floats(value) => {
+                    if col_name == value.name() {
+                        r = value.median();
+                        break;
+                    }
+                },
+                Series::Integers(value) => {
+                    if col_name == value.name() {
+                        r = value.median();
+                        break;
+                    }
+                },
+                _ => {}
+            }
+        }
+        r
+    }
+
+    #[wasm_bindgen(js_name = medianColumns)]
+    pub fn median_columns(&self) -> Floats1d {
         let mut res: Vec<f64> = Vec::new();
         self.data.iter().for_each(|ser| match &ser {
             Series::Integers(value) => {
@@ -274,7 +372,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.median());
             }
-            _ => panic!(),
+            _ => {},
         });
 
         Floats1d::new(res)
