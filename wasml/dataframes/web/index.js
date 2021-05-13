@@ -70,6 +70,7 @@ const dataframeDemo = () => {
 
 const seriesDemo = () => {
   console.group("SeriesI32");
+
   let ser1 = new SeriesI32("Integers", [1, 2, 3, 4]);
   console.log("SeriesI32");
   console.log(ser1.display);

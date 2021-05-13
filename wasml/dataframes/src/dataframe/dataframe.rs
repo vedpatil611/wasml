@@ -204,7 +204,7 @@ impl DataFrame {
     }
 
     #[wasm_bindgen(getter,js_name = display)]
-    pub fn show(&self) -> String {  
+    pub fn show(&self) -> String {
         let mut res: String = String::from("");
         self.data.iter().for_each(|ser| match &ser {
             Series::Integers(value) => {
@@ -228,7 +228,7 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.min();
                     }
-                },
+                }
                 Series::Integers(value) => {
                     if col_name == value.name() {
                         return value.min() as f64;
@@ -254,7 +254,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.min());
             }
-            _ => {},
+            _ => {}
         });
 
         Floats1d::new(res)
@@ -268,7 +268,7 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.min();
                     }
-                },
+                }
                 Series::Integers(value) => {
                     if col_name == value.name() {
                         return value.min() as f64;
@@ -294,7 +294,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.max());
             }
-            _ => {},
+            _ => {}
         });
 
         Floats1d::new(res)
@@ -308,7 +308,7 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.mean();
                     }
-                },
+                }
                 Series::Integers(value) => {
                     if col_name == value.name() {
                         return value.mean();
@@ -334,7 +334,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.mean());
             }
-            _ => {},
+            _ => {}
         });
 
         Floats1d::new(res)
@@ -348,7 +348,7 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.median();
                     }
-                },
+                }
                 Series::Integers(value) => {
                     if col_name == value.name() {
                         return value.median();
@@ -374,7 +374,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.median());
             }
-            _ => {},
+            _ => {}
         });
 
         Floats1d::new(res)
