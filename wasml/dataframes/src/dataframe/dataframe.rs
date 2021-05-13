@@ -228,7 +228,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.min());
             }
-            _ => panic!(),
+            _ => {}
         });
 
         Floats1d::new(res)
@@ -243,7 +243,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.max());
             }
-            _ => panic!(),
+            _ => {}
         });
 
         Floats1d::new(res)
@@ -259,7 +259,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.mean());
             }
-            _ => panic!(),
+            _ => {}
         });
 
         Floats1d::new(res)
@@ -274,7 +274,7 @@ impl DataFrame {
             Series::Floats(value) => {
                 res.push(value.median());
             }
-            _ => panic!(),
+            _ => {}
         });
 
         Floats1d::new(res)
