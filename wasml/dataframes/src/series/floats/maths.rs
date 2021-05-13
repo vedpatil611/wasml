@@ -3,28 +3,28 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl SeriesF64 {
+    pub fn min(&self) -> f64 {
+        self.data.min()
+    }
+
+    pub fn max(&self) -> f64 {
+        self.data.max()
+    }
+
+    pub fn sum(&self) -> f64 {
+        self.data.sum()
+    }
+
+    pub fn product(&self) -> f64 {
+        self.data.product()
+    }
+
     pub fn mean(&self) -> f64 {
         self.data.mean()
     }
 
-    pub fn max(&self) -> f64 {
-        let mut max: f64 = 0.0;
-        self.data.data.iter().for_each(|elem| {
-            if max < *elem {
-                max = *elem;
-            }
-        });
-        max
-    }
-
-    pub fn min(&self) -> f64 {
-        let mut min: f64 = self.data.get(0);
-        self.data.data.iter().for_each(|elem| {
-            if min > *elem {
-                min = *elem;
-            }
-        });
-        min
+    pub fn median(&self) -> f64 {
+        self.data.median()
     }
 
     // #[wasm_bindgen(js_name = standardDeviation)]

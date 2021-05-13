@@ -10,8 +10,8 @@
  - [X] extended
  - [X] insert
  - [X] inserted
- - [X] splice
- - [X] spliced  
+ - [ ] splice
+ - [ ] spliced  
  - [X] len  
  - [X] dtype   
 
@@ -19,4 +19,7 @@
  - [X] sum 
  - [X] product 
  - [X] mean
+ - [X] median
+ - [X] max
+ - [X] min
  

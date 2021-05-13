@@ -132,7 +132,7 @@ impl SeriesI32 {
             })
             .collect();
         format!(
-            "{}\n# {}{}#\n{}\n# {}\n{}",
+            "{}\n# {}{}#\n{}\n# {}\n{}\n",
             margin, col_name, space, margin, data, margin
         )
     }

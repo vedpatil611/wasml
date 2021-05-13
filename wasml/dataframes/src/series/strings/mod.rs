@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
-pub struct SeriesI32 {
+pub struct SeriesSTR {
     name: String,
     data: Strings1d,
 }

@@ -1,5 +1,6 @@
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
+use crate::series::strings::SeriesSTR;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
@@ -10,12 +11,14 @@ mod dataframe;
 pub enum ColumnType {
     INTEGER,
     FLOAT,
+    STR,
 }
 
 #[derive(Serialize, Deserialize)]
 pub enum Series {
     Integers(SeriesI32),
     Floats(SeriesF64),
+    Strings(SeriesSTR),
 }
 
 #[wasm_bindgen]
