@@ -47,14 +47,14 @@ impl Floats2d {
     }
 
     /// Dot product of two matrices
-    pub fn dot(&self, other: Floats2d) -> Floats2d {
+    pub fn dot(&self, other: &Floats2d) -> Floats2d {
         Floats2d {
             data: self.data.dot(&other.data),
         }
     }
 
     /// Efficiently performs self += alpha * rhs
-    pub fn scaled_add(&mut self, alpha: f64, other: Floats2d) {
+    pub fn scaled_add(&mut self, alpha: f64, other: &Floats2d) {
         self.data.scaled_add(alpha, &other.data);
     }
 
