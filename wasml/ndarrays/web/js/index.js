@@ -13,19 +13,19 @@ import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
   // matmul(100);
   // console.groupEnd();
 
-  // console.group(
-  //   '%cONE DIMENSIONAL',
-  //   'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
-  // );
-  // one_dimensional_floats();
-  // console.groupEnd();
-
   console.group(
-    '%cTWO DIMENSIONAL',
+    '%cONE DIMENSIONAL',
     'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
   );
-  two_dimensional_floats();
+  one_dimensional_floats();
   console.groupEnd();
+
+  // console.group(
+  //   '%cTWO DIMENSIONAL',
+  //   'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
+  // );
+  // two_dimensional_floats();
+  // console.groupEnd();
 })();
 
 const demo = () => {};
