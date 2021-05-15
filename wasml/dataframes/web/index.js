@@ -60,7 +60,9 @@ const dataframeDemo = () => {
 
   console.group("DataFrame Math operations");
   // console.log("DataFrame min");
-  // console.log(df.min());
+  console.log(df.min("Apples"));
+  console.log(df.maxColumns().data);
+  console.log(df.meanColumns().data);
   // console.groupEnd();
 
   console.groupEnd();
@@ -68,6 +70,7 @@ const dataframeDemo = () => {
 
 const seriesDemo = () => {
   console.group("SeriesI32");
+
   let ser1 = new SeriesI32("Integers", [1, 2, 3, 4]);
   console.log("SeriesI32");
   console.log(ser1.display);
