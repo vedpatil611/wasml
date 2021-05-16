@@ -12,16 +12,13 @@ impl SeriesI32 {
     }
 
     pub fn mean(&self) -> f64 {
-        let mut c = 0;
         let mut sum = 0;
-        let total;
-        self.data.data.iter().for_each(|x| {
-            c += 1;
+        
+        for x in &self.data.data {
             sum += x;
-        });
+        }
 
-        total = sum as f64 / c as f64;
-        total
+        sum as f64 / self.data.len() as f64
     }
 
     pub fn median(&self) -> f64 {
@@ -34,5 +31,9 @@ impl SeriesI32 {
 
     pub fn min(&self) -> i32 {
         self.data.min()
+    }
+
+    pub fn std_dev(&self, degree_of_freedom: f64) -> f64 {
+        self.data.standard_deviation(degree_of_freedom)
     }
 }

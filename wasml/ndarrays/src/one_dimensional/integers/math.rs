@@ -69,8 +69,13 @@ impl Integers1d {
     }
 
     /// Get the mean of all the elements in the array
-    pub fn mean(&self) -> i32 {
-        self.data.mean().unwrap()
+    pub fn mean(&self) -> f64 {
+        let mut sum: i32 = 0;
+        for x in &self.data {
+            sum += x;
+        }
+
+        sum as f64 / self.len() as f64
     }
 
     /// Get median of all elements
@@ -86,5 +91,22 @@ impl Integers1d {
         } else {
             d[mid] as f64
         }
+    }
+
+    /// Get variance of all elements in array
+    pub fn variance(&self, degree_of_freedom: f64) -> f64 {
+        let mean = self.mean();
+        let mut sqr_diff: f64 = 0.0;
+        
+        for x in &self.data {
+            sqr_diff += (*x as f64 - mean) * (*x as f64 - mean);
+        }
+
+        return sqr_diff as f64 / (self.len() as f64 - degree_of_freedom);
+    }
+
+    /// Get standard_deviation of all elements in array
+    pub fn standard_deviation(&self, degree_of_freedom: f64) -> f64 {
+        self.variance(degree_of_freedom).sqrt()
     }
 }

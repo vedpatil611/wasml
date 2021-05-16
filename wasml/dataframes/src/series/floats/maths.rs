@@ -26,9 +26,8 @@ impl SeriesF64 {
     pub fn median(&self) -> f64 {
         self.data.median()
     }
-
-    // #[wasm_bindgen(js_name = standardDeviation)]
-    // pub fn std_dev(&self) -> f64 {
-    //     self.data.standard_deviation()
-    // }
+    
+    pub fn std_dev(&self, degree_of_freedom: f64) -> f64 {
+        self.data.standard_deviation(degree_of_freedom)
+    }
 }
