@@ -6,6 +6,7 @@ use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
 mod dataframe;
+mod basic;
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
@@ -27,3 +28,4 @@ pub struct DataFrame {
     data: HashMap<String, Series>,
     index: HashMap<usize, String>
 }
+

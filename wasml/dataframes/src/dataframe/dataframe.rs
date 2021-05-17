@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use super::ColumnType;
 use super::DataFrame;
 use super::Series;
@@ -87,55 +89,24 @@ impl DataFrame {
         DataFrame { data: series_data }
     }
 
-    #[wasm_bindgen(js_name = columns)]
-    pub fn show_columns(&self) -> JsValue {
-        let mut res: Vec<String> = Vec::new();
-        //self.data.iter().for_each(|ser| {
-        //    match ser {
-        //        Series::Integers(x) => res.push(x.name()),
-        //        Series::Floats(x) => res.push(x.name()),
-        //       Series::Strings(x) => res.push(x.name()),
-        //    };
-        //});
-        for (name, ser) in &self.data {
-            res.push(*name);
-        }
-
-        serde_wasm_bindgen::to_value(&res).unwrap()
-    }
-
-    #[wasm_bindgen(getter, js_name = dTypes)]
-    pub fn show_datatypes(&self) -> JsValue {
-        let mut res: Vec<ColumnType> = Vec::new();
-        self.data.iter().for_each(|ser| {
-            match ser {
-                Series::Integers(x) => res.push(x.dtype()),
-                Series::Floats(x) => res.push(x.dtype()),
-                Series::Strings(x) => res.push(x.dtype()),
-            };
-        });
-
-        serde_wasm_bindgen::to_value(&res).unwrap()
-    }
-
+    
     #[wasm_bindgen(js_name = append)]
     pub fn add_column(&mut self, datatype: ColumnType, series: JsValue) {
-        // let dt: ColumnType = serde_wasm_bindgen::from_value(datatype).unwrap();
         match datatype {
             ColumnType::FLOAT => {
-                let ser = serde_wasm_bindgen::from_value(series).unwrap();
-                self.data.push(Series::Floats(ser));
-            }
+                let ser: SeriesF64 = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data[&ser.name()] = Series::Floats(ser);
+            },
             ColumnType::INTEGER => {
-                let ser = serde_wasm_bindgen::from_value(series).unwrap();
-                self.data.push(Series::Integers(ser));
-            }
+                let ser: SeriesF64 = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data[&ser.name()] = Series::Floats(ser);
+            },
             ColumnType::STR => {
-                let ser = serde_wasm_bindgen::from_value(series).unwrap();
-                self.data.push(Series::Strings(ser));
-            }
-        }
-    }
+                let ser: SeriesF64 = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data[&ser.name()] = Series::Floats(ser);
+            },
+        } 
+    } 
 
     #[wasm_bindgen(js_name = size)]
     pub fn dataframe_size(&self) -> usize {
