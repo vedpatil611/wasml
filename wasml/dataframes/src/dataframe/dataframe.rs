@@ -90,13 +90,16 @@ impl DataFrame {
     #[wasm_bindgen(js_name = columns)]
     pub fn show_columns(&self) -> JsValue {
         let mut res: Vec<String> = Vec::new();
-        self.data.iter().for_each(|ser| {
-            match ser {
-                Series::Integers(x) => res.push(x.name()),
-                Series::Floats(x) => res.push(x.name()),
-                Series::Strings(x) => res.push(x.name()),
-            };
-        });
+        //self.data.iter().for_each(|ser| {
+        //    match ser {
+        //        Series::Integers(x) => res.push(x.name()),
+        //        Series::Floats(x) => res.push(x.name()),
+        //       Series::Strings(x) => res.push(x.name()),
+        //    };
+        //});
+        for (name, ser) in &self.data {
+            res.push(*name);
+        }
 
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
@@ -276,7 +279,7 @@ impl DataFrame {
                 },
                 Series::Strings(value) => {
                     if col_name == value.name() {
-                        panic!("max function not supported for strings");
+
                     }
                 }
             }
