@@ -48,7 +48,7 @@ impl Floats1d {
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| *x)
+                .map(|x| x)
                 .chain(std::iter::once(element)),
         );
 
@@ -61,7 +61,7 @@ impl Floats1d {
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| *x)
+                .map(|x| x)
                 .chain(std::iter::once(element)),
         );
 
@@ -74,7 +74,7 @@ impl Floats1d {
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| *x)
+                .map(|x| x)
                 .chain(other.data.clone().into_iter().map(|x| x.clone())),
         );
 
@@ -87,8 +87,8 @@ impl Floats1d {
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| *x)
-                .chain(other.data.clone().into_iter().map(|x| *x)),
+                .map(|x| x)
+                .chain(other.data.clone().into_iter().map(|x| x)),
         );
 
         Floats1d { data: new }

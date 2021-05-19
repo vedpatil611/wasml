@@ -226,20 +226,24 @@ impl DataFrame {
     //     val
     // }
 
-    // #[wasm_bindgen(getter,js_name = display)]
-    // pub fn show(&self) -> String {
-    //     let mut res: String = String::from("");
-    //     self.data.iter().for_each(|ser| match &ser {
-    //         Series::Integers(value) => {
-    //             res.push_str(&value.show());
-    //         }
-    //         Series::Floats(value) => {
-    //             res.push_str(&value.show());
-    //         }
-    //         Series::Strings(value) => {
-    //             res.push_str(&value.show());
-    //         }
-    //     });
-    //     res
-    // }
+    #[wasm_bindgen(getter,js_name = display)]
+    pub fn show(&self) -> String {
+        let mut res: String = String::from("");
+        self.index.iter().for_each(|f| {
+            let map = &self.data;
+            let ser = &map[f];
+            match &ser {
+                Series::Integers(value) => {
+                    res.push_str(&value.show());
+                }
+                Series::Floats(value) => {
+                    res.push_str(&value.show());
+                }
+                Series::Strings(value) => {
+                    res.push_str(&value.show());
+                }
+            }
+        });
+        res
+    }
 }
