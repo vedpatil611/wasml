@@ -16,18 +16,18 @@ impl DataFrame {
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
 
-    #[wasm_bindgen(js_name = dTypes)]
-    pub fn show_datatypes(&self) -> JsValue {
-        let mut res: HashMap<String, ColumnType> = HashMap::new();
-        
-        for name in &self.index {
-            match &self.data[name] {
-                Series::Floats(_)   => res[name] = ColumnType::FLOAT,
-                Series::Integers(_) => res[name] = ColumnType::INTEGER,
-                Series::Strings(_)  => res[name] = ColumnType::STR,
-            }
-        }
-        
-        serde_wasm_bindgen::to_value(&res).unwrap()
-    }
+    // #[wasm_bindgen(js_name = dTypes)]
+    // pub fn show_datatypes(&self) -> JsValue {
+    //     let mut res: HashMap<String, ColumnType> = HashMap::new();
+
+    //     for name in &self.index {
+    //         match &self.data[name] {
+    //             Series::Floats(_)   => res[name] = ColumnType::FLOAT,
+    //             Series::Integers(_) => res[name] = ColumnType::INTEGER,
+    //             Series::Strings(_)  => res[name] = ColumnType::STR,
+    //         }
+    //     }
+
+    //     serde_wasm_bindgen::to_value(&res).unwrap()
+    // }
 }
