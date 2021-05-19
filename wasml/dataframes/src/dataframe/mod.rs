@@ -26,6 +26,8 @@ pub enum Series {
 #[wasm_bindgen]
 pub struct DataFrame {
     data: HashMap<String, Series>,
-    index: HashMap<usize, String>
+    index: Vec<String>,
+    num_rows: usize,
+    num_cols: usize
 }
 

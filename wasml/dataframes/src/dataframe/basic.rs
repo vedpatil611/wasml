@@ -11,11 +11,7 @@ use wasm_bindgen::prelude::*;
 impl DataFrame {
     #[wasm_bindgen(js_name = columns)]
     pub fn show_columns(&self) -> JsValue {
-        let mut res: Vec<String> = Vec::new();
-
-        for (name, ser) in &self.data {
-           res.push(*name); 
-        }
+        let mut res: Vec<String> = self.index.clone();
 
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
@@ -24,8 +20,8 @@ impl DataFrame {
     pub fn show_datatypes(&self) -> JsValue {
         let mut res: HashMap<String, ColumnType> = HashMap::new();
         
-        for(name, ser) in &self.data {
-            match ser {
+        for name in &self.index {
+            match &self.data[name] {
                 Series::Floats(_)   => res[name] = ColumnType::FLOAT,
                 Series::Integers(_) => res[name] = ColumnType::INTEGER,
                 Series::Strings(_)  => res[name] = ColumnType::STR,

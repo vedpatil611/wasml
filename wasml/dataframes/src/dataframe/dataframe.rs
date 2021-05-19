@@ -33,60 +33,76 @@ impl DataFrame {
     #[wasm_bindgen(constructor)]
     pub fn new(vec_series: Vec<JsValue>) -> DataFrame {
         //Get first Series data size
-        let mut series_size = 0;
+        
+        let mut num_rows = 0;
         let first_series_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_int) = first_series_int {
-            series_size = series_int.len()
+            num_rows = series_int.len()
         }
 
         let first_series_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_float) = first_series_float {
-            series_size = series_float.len()
+            num_rows = series_float.len()
         }
 
         let first_series_str: Result<SeriesSTR, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_str) = first_series_str {
-            series_size = series_str.len()
+            num_rows = series_str.len()
         }
 
-        let series_data = vec_series
-            .iter()
-            .map(|series| {
-                let as_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
-                    serde_wasm_bindgen::from_value(series.clone());
-
-                if let Ok(x) = as_int {
-                    if x.len() == series_size {
-                        return Series::Integers(x);
-                    }
+        let series_data: HashMap<String, Series> = HashMap::new();
+        let index: Vec<String> = Vec::new();
+        let num_cols: usize = 0;
+        for ser in &vec_series {
+           let as_int: Result<SeriesI32, serde_wasm_bindgen::Error> = serde_wasm_bindgen::from_value(ser.clone());
+            
+           if let Ok(x) = as_int {
+                if x.len() == num_rows {
+                    series_data[&x.name()] = Series::Integers(x);
+                    index.push(x.name());
+                    num_cols += 1;
+                    continue;
+                } else {
+                    panic!("Series length does not match");
                 }
+           }
 
-                let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
-                    serde_wasm_bindgen::from_value(series.clone());
+            let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> = serde_wasm_bindgen::from_value(ser.clone());
 
-                if let Ok(x) = as_float {
-                    if x.len() == series_size {
-                        return Series::Floats(x);
-                    }
+            if let Ok(x) = as_float {
+                if x.len() == num_rows {
+                    series_data[&x.name()] = Series::Floats(x);
+                    index.push(x.name());
+                    num_cols += 1;
+                    continue;
+                } else {
+                    panic!("Series length does not match");
                 }
+            }
 
-                let as_str: Result<SeriesSTR, serde_wasm_bindgen::Error> =
-                    serde_wasm_bindgen::from_value(series.clone());
+            let as_str: Result<SeriesSTR, serde_wasm_bindgen::Error> = serde_wasm_bindgen::from_value(ser.clone());
 
-                if let Ok(x) = as_str {
-                    if x.len() == series_size {
-                        return Series::Strings(x);
-                    }
+            if let Ok(x) = as_str {
+                if x.len() == num_rows {
+                    series_data[&x.name()] = Series::Strings(x);
+                    index.push(x.name());
+                    num_cols += 1;
+                    continue;
+                } else {
+                    panic!("Series length does not match");
                 }
+            }
+        }
 
-                panic!("Type couldn't be matched");
-            })
-            .collect();
-
-        DataFrame { data: series_data }
+        DataFrame {
+            data: series_data,
+            index,
+            num_rows,
+            num_cols
+        }
     }
 
     
