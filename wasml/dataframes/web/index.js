@@ -15,7 +15,6 @@ import init, {
 
   console.log("DataFrame");
   let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
-  console.log(df.display);
 
   // console.group(
   //   "%cSeries",

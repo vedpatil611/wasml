@@ -7,6 +7,7 @@ use wasm_bindgen::prelude::*;
 
 mod dataframe;
 mod basic;
+mod maths;
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
