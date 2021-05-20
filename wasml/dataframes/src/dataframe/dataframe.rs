@@ -379,4 +379,90 @@ impl DataFrame {
 
         Floats1d::new(res)
     }
+
+    /// Returns variance of given column with given degree of freedom
+    pub fn variance(&self, col: JsValue, degree_of_freedom: f64) -> f64 {
+        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
+        for ser in &self.data {
+            match ser {
+                Series::Floats(value) => {
+                    if col_name == value.name() {
+                        return value.variance(degree_of_freedom);
+                    }
+                },
+                Series::Integers(value) => {
+                    if col_name == value.name() {
+                        return value.variance(degree_of_freedom);
+                    }
+                },
+                Series::Strings(_value) => {
+                    panic!("Variance not supported for String");
+                }
+            }
+        }
+        panic!("Column name {} not found", col_name);
+    }
+
+    /// return degree of freedom of all columns
+    pub fn variance_columns(&self, degree_of_freedom: f64) -> Floats1d {
+        let mut res: Vec<f64> = Vec::new();
+
+        for ser in &self.data {
+           match ser {
+                Series::Floats(value) => {
+                    res.push(value.variance(degree_of_freedom));
+                },
+                Series::Integers(value) => {
+                    res.push(value.variance(degree_of_freedom));
+                },
+                _ => { }
+           } 
+        }
+
+        Floats1d::new(res)
+    } 
+
+    /// Returns standard deviation of given column with degree of freedom
+    #[wasm_bindgen(js_name = standardDeviation)]
+    pub fn std_dev(&self, col: JsValue, degree_of_freedom: f64) -> f64 {
+        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
+        for x in &self.data {
+            match x {
+                Series::Floats(value) => {
+                    if col_name == value.name() {
+                        return value.std_dev(degree_of_freedom);
+                    }
+                },
+                Series::Integers(value) => {
+                    if col_name == value.name() {
+                        return value.std_dev(degree_of_freedom);
+                    }
+                },
+                Series::Strings(_value) => {
+                    panic!("Standard Deviation is not supported for Strings");
+                }
+            }
+        }
+
+        panic!("Column name {} not found", col_name);
+    }
+    
+    /// Returns standard deviations of columns
+    #[wasm_bindgen(js_name = standardDeviationsColumns)]
+    pub fn std_dev_columns(&self, degree_of_freedom: f64) -> Floats1d {
+        let mut res: Vec<f64> = Vec::new();
+        for x in &self.data {
+            match x {
+                Series::Floats(value) => {
+                    res.push(value.std_dev(degree_of_freedom));
+                },
+                Series::Integers(value) => {
+                    res.push(value.std_dev(degree_of_freedom));
+                },
+                _ => { }
+            }
+        }
+
+        Floats1d::new(res)
+    }
 }
