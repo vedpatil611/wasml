@@ -28,7 +28,7 @@ import { matrixMultiplicationTest, timeit } from './matrix_multiplication.js';
   // console.groupEnd();
 })();
 
-const demo = () => {};
+const demo = () => { };
 
 const matmul = n => {
   console.log(`Multiplying 10 ${n}x${n} matrices ->`);
@@ -63,11 +63,32 @@ const matmul = n => {
 const one_dimensional_floats = () => {
   console.group('FLOATS');
 
+  one_dimensional_floats_constructors();
   one_dimensional_floats_basics();
   one_dimensional_floats_math();
 
   console.groupEnd();
 };
+
+const one_dimensional_floats_constructors = () => {
+  console.group('constructors');
+
+  console.log((new Floats1d([1, 2, 3, 4, 5])).data);
+
+  console.log(Floats1d.newWithZeros(5).data)
+  console.log(Floats1d.newWithOnes(5).data)
+  console.log(Floats1d.newWithElement(5, 2).data)
+
+  console.log(Floats1d.newWithSimpleFunc(5, () => Math.random()).data)
+  console.log(Floats1d.newWithFunc(5, (i) => i * 5).data)
+
+  console.log(Floats1d.newWithLinspace(0, 1, 5).data);
+  console.log(Floats1d.newWithRange(0, 5, 1).data);
+  console.log(Floats1d.newWithGeomspace(1, 1000, 4).data);
+  console.log(Floats1d.newWithLogspace(10, 0, 3, 4).data);
+
+  console.groupEnd();
+}
 
 const one_dimensional_floats_basics = () => {
   console.group('basics');
