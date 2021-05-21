@@ -231,6 +231,86 @@ impl Floats2d {
         }
     }
 
+    /// Insert a row at the specified index
+    #[wasm_bindgen(js_name = rowInsert)]
+    pub fn row_insert(&mut self, index: usize, row: Floats1d) {
+        let (first, second) = self
+            .data
+            .multi_slice_mut((s![..index, ..], s![index.., ..]));
+
+        let new_array_vec = first
+            .iter()
+            .chain(row.data.iter())
+            .chain(second.iter())
+            .map(|x| *x)
+            .collect::<Vec<f64>>();
+
+        self.data = Array::from_shape_vec((self.nrows() + 1, self.ncols()), new_array_vec).unwrap();
+    }
+
+    /// Insert a row at the specified index
+    #[wasm_bindgen(js_name = rowInserted)]
+    pub fn row_inserted(&mut self, index: usize, row: Floats1d) -> Floats2d {
+        let (first, second) = self
+            .data
+            .multi_slice_mut((s![..index, ..], s![index.., ..]));
+
+        let new_array_vec = first
+            .iter()
+            .chain(row.data.iter())
+            .chain(second.iter())
+            .map(|x| *x)
+            .collect::<Vec<f64>>();
+
+        Floats2d {
+            data: Array::from_shape_vec((self.nrows() + 1, self.ncols()), new_array_vec).unwrap(),
+        }
+    }
+
+    /// Insert a row at the specified index
+    #[wasm_bindgen(js_name = colInsert)]
+    pub fn col_insert(&mut self, index: usize, row: Floats1d) {
+        let (first, second) = self
+            .data
+            .multi_slice_mut((s![.., ..index], s![.., index..]));
+
+        let new_array_vec = first
+            .t()
+            .iter()
+            .chain(row.data.iter())
+            .chain(second.t().iter())
+            .map(|x| *x)
+            .collect::<Vec<f64>>();
+
+        self.data = Array::from_shape_vec((self.ncols() + 1, self.nrows()), new_array_vec)
+            .unwrap()
+            .t()
+            .into_owned();
+    }
+
+    /// Insert a row at the specified index
+    #[wasm_bindgen(js_name = colInserted)]
+    pub fn col_inserted(&mut self, index: usize, row: Floats1d) -> Floats2d {
+        let (first, second) = self
+            .data
+            .multi_slice_mut((s![.., ..index], s![.., index..]));
+
+        let new_array_vec = first
+            .t()
+            .iter()
+            .chain(row.data.iter())
+            .chain(second.t().iter())
+            .map(|x| *x)
+            .collect::<Vec<f64>>();
+
+        Floats2d {
+            data: Array::from_shape_vec((self.ncols() + 1, self.nrows()), new_array_vec)
+                .unwrap()
+                .t()
+                .into_owned(),
+        }
+    }
+
     /// Remove the row at the specified index and return it
     #[wasm_bindgen(js_name = rowSplice)]
     pub fn row_splice(&mut self, index: usize) -> Floats1d {

@@ -1,4 +1,34 @@
-import init, { Floats2d } from '../../pkg/ndarrays.js';
+import { Floats2d } from '../../../pkg/ndarrays.js';
+
+export const matmul = n => {
+  console.log(`Multiplying 10 ${n}x${n} matrices ->`);
+  const naive = [];
+  const wasml = [];
+  for (let i = 0; i < 10; ++i) {
+    const [ntime, wtime] = matrixMultiplicationTest(n, n);
+    naive.push(ntime);
+    wasml.push(wtime);
+  }
+  const naive_avg = naive.reduce((a, b) => a + b) / naive.length;
+  const naive_max = Math.max(...naive);
+  const naive_min = Math.min(...naive);
+  const wasml_avg = wasml.reduce((a, b) => a + b) / wasml.length;
+  const wasml_max = Math.max(...wasml);
+  const wasml_min = Math.min(...wasml);
+
+  console.table({
+    Naive: {
+      Maximum: naive_max,
+      Minimum: naive_min,
+      Average: naive_avg,
+    },
+    WASML: {
+      Maximum: wasml_max,
+      Minimum: wasml_min,
+      Average: wasml_avg,
+    },
+  });
+};
 
 export function timeit(callback) {
   const bef = new Date();
