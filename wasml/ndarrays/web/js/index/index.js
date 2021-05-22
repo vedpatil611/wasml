@@ -1,4 +1,4 @@
-import init from '../../../pkg/ndarrays.js';
+import init, { initThreadPool } from '../../../pkg/ndarrays.js';
 
 // import { matmul } from './matmul.js';
 // import { one_dimensional_floats } from './one.js';
@@ -6,6 +6,7 @@ import { two_dimensional_floats } from './two.js';
 
 (async () => {
     await init();
+    await initThreadPool(navigator.hardwareConcurrency);
 
     // console.group(
     //     '%cMATRIX MULTPLICATION TEST',
