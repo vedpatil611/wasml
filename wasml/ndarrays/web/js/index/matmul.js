@@ -1,13 +1,17 @@
 import { Floats2d } from '../../../pkg/ndarrays.js';
 
-export const matmul = n => {
-  console.log(`Multiplying 10 ${n}x${n} matrices ->`);
+export const matmul = (iters, n) => {
+  console.log(`Multiplying ${iters} ${n}x${n} matrices ->`);
   const naive = [];
   const wasml = [];
-  for (let i = 0; i < 10; ++i) {
-    const [ntime, wtime] = matrixMultiplicationTest(n, n);
-    naive.push(ntime);
-    wasml.push(wtime);
+  try {
+    for (let i = 0; i < iters; ++i) {
+      const [ntime, wtime] = matrixMultiplicationTest(n, n);
+      naive.push(ntime);
+      wasml.push(wtime);
+    }
+  } catch (e) {
+    console.error(e);
   }
   const naive_avg = naive.reduce((a, b) => a + b) / naive.length;
   const naive_max = Math.max(...naive);

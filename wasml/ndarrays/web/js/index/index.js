@@ -1,19 +1,19 @@
 import init, { initThreadPool } from '../../../pkg/ndarrays.js';
 
-// import { matmul } from './matmul.js';
+import { matmul } from './matmul.js';
 // import { one_dimensional_floats } from './one.js';
-import { two_dimensional_floats } from './two.js';
+// import { two_dimensional_floats } from './two.js';
 
 (async () => {
     await init();
     await initThreadPool(navigator.hardwareConcurrency);
 
-    // console.group(
-    //     '%cMATRIX MULTPLICATION TEST',
-    //     'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
-    // );
-    // matmul(100);
-    // console.groupEnd();
+    console.group(
+        '%cMATRIX MULTPLICATION TEST',
+        'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
+    );
+    matmul(5, 1024);
+    console.groupEnd();
 
     // console.group(
     //     '%cONE DIMENSIONAL',
@@ -22,10 +22,10 @@ import { two_dimensional_floats } from './two.js';
     // one_dimensional_floats();
     // console.groupEnd();
 
-    console.group(
-        '%cTWO DIMENSIONAL',
-        'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
-    );
-    two_dimensional_floats();
-    console.groupEnd();
+    // console.group(
+    //     '%cTWO DIMENSIONAL',
+    //     'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
+    // );
+    // two_dimensional_floats();
+    // console.groupEnd();
 })();
