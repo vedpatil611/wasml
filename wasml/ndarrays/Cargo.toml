@@ -32,4 +32,4 @@ wasm-bindgen-rayon = { version = "1.0", features = ["no-bundler"] }
 wasm-bindgen-test = "0.3.13"
 
 [profile.release]
-opt-level = "s"
+opt-level = 3

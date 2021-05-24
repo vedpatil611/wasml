@@ -12,7 +12,7 @@ import { matmul } from './matmul.js';
         '%cMATRIX MULTPLICATION TEST',
         'color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px'
     );
-    matmul(5, 1024);
+    matmul(5, 1000);
     console.groupEnd();
 
     // console.group(
