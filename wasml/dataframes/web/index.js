@@ -33,7 +33,7 @@ const dataframeDemo = () => {
 
   console.log("DataFrame");
   let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
-  console.log(df.display);
+  console.table(df.displayTable);
 
   console.log("DataFrame size");
   console.log(df.size());
@@ -47,7 +47,7 @@ const dataframeDemo = () => {
   console.log("DataFrame append series");
   let sertest = new SeriesI32("Fruits", [9, 8, 9, 8]);
   df.append(ColumnType.INTEGER, sertest.toJson());
-  console.log(df.display);
+  console.log(df.displayTable);
 
   console.log("DataFrame loc get series with col name");
   console.log(df.loc("Banana"));

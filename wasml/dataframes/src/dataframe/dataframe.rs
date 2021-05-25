@@ -220,6 +220,34 @@ impl DataFrame {
         res
     }
 
+    #[wasm_bindgen(getter,js_name = displayTable)]
+    pub fn show_table(&self) -> js_sys::Array {
+        let n = self.data.len();
+        let array_col = js_sys::Array::new();
+        for i in 0..n {
+            let array_row = js_sys::Array::new();
+            self.data.iter().for_each(|ser| {
+                match ser {
+                    Series::Integers(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
+                    }
+                    Series::Floats(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
+                    }
+                    Series::Strings(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
+                    }
+                };
+            });
+            array_col.push(&array_row);
+        }
+
+        array_col
+    }
+
     pub fn min(&self, col: JsValue) -> f64 {
         let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
         for x in &self.data {
@@ -233,7 +261,7 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.min() as f64;
                     }
-                },
+                }
                 Series::Strings(value) => {
                     if col_name == value.name() {
                         panic!("min function not supported for strings");
@@ -273,7 +301,7 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.min() as f64;
                     }
-                },
+                }
                 Series::Strings(value) => {
                     if col_name == value.name() {
                         panic!("max function not supported for strings");
@@ -313,7 +341,7 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.mean();
                     }
-                },
+                }
                 Series::Strings(value) => {
                     if col_name == value.name() {
                         panic!("mean function not supported for strings");
@@ -353,7 +381,7 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.median();
                     }
-                },
+                }
                 Series::Strings(value) => {
                     if col_name == value.name() {
                         panic!("median function not supported for strings");
@@ -389,12 +417,12 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.variance(degree_of_freedom);
                     }
-                },
+                }
                 Series::Integers(value) => {
                     if col_name == value.name() {
                         return value.variance(degree_of_freedom);
                     }
-                },
+                }
                 Series::Strings(_value) => {
                     panic!("Variance not supported for String");
                 }
@@ -408,19 +436,19 @@ impl DataFrame {
         let mut res: Vec<f64> = Vec::new();
 
         for ser in &self.data {
-           match ser {
+            match ser {
                 Series::Floats(value) => {
                     res.push(value.variance(degree_of_freedom));
-                },
+                }
                 Series::Integers(value) => {
                     res.push(value.variance(degree_of_freedom));
-                },
-                _ => { }
-           } 
+                }
+                _ => {}
+            }
         }
 
         Floats1d::new(res)
-    } 
+    }
 
     /// Returns standard deviation of given column with degree of freedom
     #[wasm_bindgen(js_name = standardDeviation)]
@@ -432,12 +460,12 @@ impl DataFrame {
                     if col_name == value.name() {
                         return value.std_dev(degree_of_freedom);
                     }
-                },
+                }
                 Series::Integers(value) => {
                     if col_name == value.name() {
                         return value.std_dev(degree_of_freedom);
                     }
-                },
+                }
                 Series::Strings(_value) => {
                     panic!("Standard Deviation is not supported for Strings");
                 }
@@ -446,7 +474,7 @@ impl DataFrame {
 
         panic!("Column name {} not found", col_name);
     }
-    
+
     /// Returns standard deviations of columns
     #[wasm_bindgen(js_name = standardDeviationsColumns)]
     pub fn std_dev_columns(&self, degree_of_freedom: f64) -> Floats1d {
@@ -455,11 +483,11 @@ impl DataFrame {
             match x {
                 Series::Floats(value) => {
                     res.push(value.std_dev(degree_of_freedom));
-                },
+                }
                 Series::Integers(value) => {
                     res.push(value.std_dev(degree_of_freedom));
-                },
-                _ => { }
+                }
+                _ => {}
             }
         }
 

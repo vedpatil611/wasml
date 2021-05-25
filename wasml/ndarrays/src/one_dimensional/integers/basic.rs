@@ -48,7 +48,7 @@ impl Integers1d {
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| *x)
+                .map(|x| x)
                 .chain(std::iter::once(element)),
         );
 
@@ -61,7 +61,7 @@ impl Integers1d {
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| *x)
+                .map(|x| x)
                 .chain(std::iter::once(element)),
         );
 
@@ -74,8 +74,8 @@ impl Integers1d {
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| *x)
-                .chain(other.data.clone().into_iter().map(|x| *x)),
+                .map(|x| x)
+                .chain(other.data.clone().into_iter().map(|x| x)),
         );
 
         self.data = new;
@@ -87,8 +87,8 @@ impl Integers1d {
             self.data
                 .clone()
                 .into_iter()
-                .map(|x| *x)
-                .chain(other.data.clone().into_iter().map(|x| *x)),
+                .map(|x| x)
+                .chain(other.data.clone().into_iter().map(|x| x)),
         );
 
         Integers1d { data: new }
