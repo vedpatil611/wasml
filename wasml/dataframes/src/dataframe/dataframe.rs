@@ -6,27 +6,7 @@ use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
 use crate::series::strings::SeriesSTR;
-use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
-
-// macro_rules! MMM {
-//     ($fn_name: ident) => {
-//         pub fn $fn_name(&self) -> Floats1d {
-//             let mut res: Vec<f64> = Vec::new();
-//             self.data.iter().for_each(|ser| match &ser {
-//                 Series::Integers(value) => {
-//                     res.push(value.$fn_name() as f64);
-//                 }
-//                 Series::Floats(value) => {
-//                     res.push(value.$fn_name());
-//                 }
-//                 _ => panic!(),
-//             });
-
-//             Floats1d::new(res)
-//         }
-//     };
-// }
 
 #[wasm_bindgen]
 impl DataFrame {
@@ -123,23 +103,51 @@ impl DataFrame {
         }
     }
 
-    // #[wasm_bindgen(js_name = append)]
-    // pub fn add_column(&mut self, datatype: ColumnType, series: JsValue) {
-    //     match datatype {
-    //         ColumnType::FLOAT => {
-    //             let ser: SeriesF64 = serde_wasm_bindgen::from_value(series).unwrap();
-    //             self.data[&ser.name()] = Series::Floats(ser);
-    //         }
-    //         ColumnType::INTEGER => {
-    //             let ser: SeriesF64 = serde_wasm_bindgen::from_value(series).unwrap();
-    //             self.data[&ser.name()] = Series::Floats(ser);
-    //         }
-    //         ColumnType::STR => {
-    //             let ser: SeriesF64 = serde_wasm_bindgen::from_value(series).unwrap();
-    //             self.data[&ser.name()] = Series::Floats(ser);
-    //         }
-    //     }
-    // }
+    #[wasm_bindgen(js_name = columns)]
+    pub fn show_columns(&self) -> JsValue {
+        let res: Vec<String> = self.index.clone();
+
+        serde_wasm_bindgen::to_value(&res).unwrap()
+    }
+
+    #[wasm_bindgen(js_name = dataTypes)]
+    pub fn get_datatypes(&self) -> JsValue {
+        let mut res: HashMap<String, ColumnType> = HashMap::new();
+
+        for (name, ser) in &self.data {
+            match ser {
+                Series::Floats(_value) => {
+                    res.entry(name.clone()).or_insert(ColumnType::FLOAT);
+                }
+                Series::Integers(_value) => {
+                    res.entry(name.clone()).or_insert(ColumnType::INTEGER);
+                }
+                Series::Strings(_value) => {
+                    res.entry(name.clone()).or_insert(ColumnType::STR);
+                }
+            }
+        }
+
+        serde_wasm_bindgen::to_value(&res).unwrap()
+    }
+
+    #[wasm_bindgen(js_name = append)]
+    pub fn add_column(&mut self, datatype: ColumnType, series: JsValue) {
+        match datatype {
+            ColumnType::FLOAT => {
+                let ser: SeriesF64 = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data.entry(ser.name()).or_insert(Series::Floats(ser));
+            }
+            ColumnType::INTEGER => {
+                let ser: SeriesI32 = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data.entry(ser.name()).or_insert(Series::Integers(ser));
+            }
+            ColumnType::STR => {
+                let ser: SeriesSTR = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data.entry(ser.name()).or_insert(Series::Strings(ser));
+            }
+        }
+    }
 
     #[wasm_bindgen(js_name = rowsCount)]
     pub fn num_rows(&self) -> usize {

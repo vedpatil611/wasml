@@ -24,12 +24,12 @@ import init, {
   // seriesDemo();
   // console.groupEnd();
 
-  // console.group(
-  //   "%cDataFrame",
-  //   "color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px"
-  // );
-  // dataframeDemo();
-  // console.groupEnd();
+  console.group(
+    "%cDataFrame",
+    "color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px"
+  );
+  dataframeDemo();
+  console.groupEnd();
 })();
 
 const dataframeDemo = () => {
@@ -50,7 +50,7 @@ const dataframeDemo = () => {
   console.log(df.columns());
 
   console.log("DataFrame show Datatypes");
-  console.log(df.dTypes);
+  console.log(df.dataTypes());
 
   console.log("DataFrame append series");
   let sertest = new SeriesI32("Fruits", [9, 8, 9, 8]);
@@ -69,9 +69,9 @@ const dataframeDemo = () => {
   console.group("DataFrame Math operations");
   // console.log("DataFrame min");
   console.log(df.min("Apples"));
-  console.log(df.maxColumns().data);
-  console.log(df.meanColumns().data);
-  // console.groupEnd();
+  console.log(df.maxColumns());
+  console.log(df.meanColumns());
+  console.groupEnd();
 
   console.groupEnd();
 };

@@ -3,29 +3,41 @@ use super::Series;
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
+macro_rules! operation {
+    ($fn_name: ident) => {
+        #[wasm_bindgen]
+        impl DataFrame {
+            /// Returns $fn_name of given column
+            pub fn $fn_name(&self, col: JsValue) -> f64 {
+                let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
+
+                if self.data.contains_key(&col_name) {
+                    match &self.data[&col_name] {
+                        Series::Floats(value) => {
+                            return value.$fn_name();
+                        }
+                        Series::Integers(value) => {
+                            return value.$fn_name() as f64;
+                        }
+                        Series::Strings(_value) => {
+                            panic!("min function not supported for strings");
+                        }
+                    }
+                } else {
+                    panic!("Column name {} not found", col_name);
+                }
+            }
+        }
+    };
+}
+
+operation!(min);
+operation!(max);
+operation!(mean);
+operation!(median);
+
 #[wasm_bindgen]
 impl DataFrame {
-    /// Returns minimun of given column
-    pub fn min(&self, col: JsValue) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-
-        if self.data.contains_key(&col_name) {
-            match &self.data[&col_name] {
-                Series::Floats(value) => {
-                    return value.min();
-                }
-                Series::Integers(value) => {
-                    return value.min() as f64;
-                }
-                Series::Strings(_value) => {
-                    panic!("min function not supported for strings");
-                }
-           }
-        } else {
-            panic!("Column name {} not found", col_name);
-        }
-    }
-
     /// Returns minimun of all columns
     #[wasm_bindgen(js_name = minColumns)]
     pub fn min_colunmns(&self) -> JsValue {
@@ -44,27 +56,6 @@ impl DataFrame {
         }
 
         serde_wasm_bindgen::to_value(&res).unwrap()
-    }
-
-    /// Return maximum element of given column
-    pub fn max(&self, col: JsValue) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-
-        if self.data.contains_key(&col_name) {
-            match &self.data[&col_name] {
-                Series::Floats(value) => {
-                    return value.min();
-                },
-                Series::Integers(value) => {
-                    return value.min() as f64;
-                },
-                Series::Strings(_value) => {
-                    panic!("Max function is nnot supported for Strings");
-                }
-            }
-       }
-
-       panic!("Column name {} not found", col_name);
     }
 
     /// Returns maximum elements of all colunms
@@ -87,23 +78,6 @@ impl DataFrame {
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
 
-    /// Returns mean of given column
-    pub fn mean(&self, col: JsValue) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-
-        if self.data.contains_key(&col_name) {
-            match &self.data[&col_name] {
-                Series::Floats(value) => return value.mean(),
-                Series::Integers(value) => return value.mean(),
-                Series::Strings(_value) => {
-                    panic!("Mean function not supported for strings");
-                }
-            }
-        }
-
-        panic!("Column name {} not found", col_name);
-    }
-
     /// Returns mean of all columns
     #[wasm_bindgen(js_name = meanColumns)]
     pub fn mean_columns(&self) -> JsValue {
@@ -123,23 +97,6 @@ impl DataFrame {
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
     
-    /// Returns median of given column
-    pub fn median(&self, col: JsValue) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-
-        if self.data.contains_key(&col_name) {
-            match &self.data[&col_name] {
-                Series::Floats(value) => return value.median(),
-                Series::Integers(value) => return value.median(),
-                Series::Strings(_value) => {
-                    panic!("Median function not supported for strings");
-                }
-            }
-        }
-
-        panic!("Column name {} not found", col_name);
-    }
-
     /// Returns median of all columns
     #[wasm_bindgen(js_name = medianColumns)]
     pub fn median_columns(&self) -> JsValue {
