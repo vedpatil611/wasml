@@ -43,8 +43,6 @@ impl DataFrame {
             if let Ok(x) = as_int {
                 let col_name = x.name();
                 if x.len() == num_rows {
-                    // series_data[&x.name()] = Series::Integers(x);
-                    // (*series_data.get_mut(&col_name).unwrap()) = Series::Integers(x);
                     series_data
                         .entry(col_name.clone())
                         .or_insert(Series::Integers(x));
@@ -62,8 +60,6 @@ impl DataFrame {
             if let Ok(x) = as_float {
                 let col_name = x.name();
                 if x.len() == num_rows {
-                    // series_data[&x.name()] = Series::Floats(x);
-                    // (*series_data.get_mut(&col_name).unwrap()) = Series::Floats(x);
                     series_data
                         .entry(col_name.clone())
                         .or_insert(Series::Floats(x));
@@ -81,8 +77,6 @@ impl DataFrame {
             if let Ok(x) = as_str {
                 let col_name = x.name();
                 if x.len() == num_rows {
-                    // series_data[&x.name()] = Series::Strings(x);
-                    // (*series_data.get_mut(&col_name).unwrap()) = Series::Strings(x);
                     series_data
                         .entry(col_name.clone())
                         .or_insert(Series::Strings(x));
@@ -164,30 +158,32 @@ impl DataFrame {
         self.data.iter().count()
     }
 
-    // pub fn loc(&self, column_name: String) -> String {
-    //     let mut res = String::from("");
-    //     self.data.iter().for_each(|ser| {
-    //         match ser {
-    //             Series::Integers(x) => {
-    //                 if x.name() == column_name {
-    //                     res = x.show();
-    //                 }
-    //             }
-    //             Series::Floats(x) => {
-    //                 if x.name() == column_name {
-    //                     res = x.show();
-    //                 }
-    //             }
-    //             Series::Strings(x) => {
-    //                 if x.name() == column_name {
-    //                     res = x.show();
-    //                 }
-    //             }
-    //         };
-    //     });
+    pub fn loc(&self, column_name: String) -> String {
+        let mut res = String::from("");
+        let map = &self.data;
+        self.index.iter().for_each(|f| {
+            let ser = &map[f];
+            match ser {
+                Series::Integers(x) => {
+                    if x.name() == column_name {
+                        res = x.show();
+                    }
+                }
+                Series::Floats(x) => {
+                    if x.name() == column_name {
+                        res = x.show();
+                    }
+                }
+                Series::Strings(x) => {
+                    if x.name() == column_name {
+                        res = x.show();
+                    }
+                }
+            };
+        });
 
-    //     res
-    // }
+        res
+    }
 
     pub fn ilocr(&self, row: usize) -> js_sys::Array {
         let array = js_sys::Array::new();
@@ -210,29 +206,27 @@ impl DataFrame {
             };
         });
 
-        // self.data.iter().for_each(|ser| {
-
-        // });
-
         array
     }
 
-    // pub fn ilocc(&self, col: usize) -> JsValue {
-    //     let val: JsValue;
-    //     let ser = &self.data[col];
-    //     match ser {
-    //         Series::Integers(x) => {
-    //             val = x.data();
-    //         }
-    //         Series::Floats(x) => {
-    //             val = x.data();
-    //         }
-    //         Series::Strings(x) => {
-    //             val = x.data();
-    //         }
-    //     };
-    //     val
-    // }
+    pub fn ilocc(&self, col: usize) -> JsValue {
+        let val: JsValue;
+        let map = &self.data;
+        let col_idx_name = &self.index[col];
+        let ser = &map[col_idx_name];
+        match ser {
+            Series::Integers(x) => {
+                val = x.data();
+            }
+            Series::Floats(x) => {
+                val = x.data();
+            }
+            Series::Strings(x) => {
+                val = x.data();
+            }
+        };
+        val
+    }
 
     #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> String {
@@ -253,5 +247,35 @@ impl DataFrame {
             }
         });
         res
+    }
+
+    #[wasm_bindgen(getter,js_name = displayTable)]
+    pub fn show_table(&self) -> js_sys::Array {
+        let n = self.index.len();
+        let array_col = js_sys::Array::new();
+        let map = &self.data;
+        for i in 0..n {
+            let array_row = js_sys::Array::new();
+            self.index.iter().for_each(|f| {
+                let ser = &map[f];
+                match ser {
+                    Series::Integers(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
+                    }
+                    Series::Floats(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
+                    }
+                    Series::Strings(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
+                    }
+                };
+            });
+            array_col.push(&array_row);
+        }
+
+        array_col
     }
 }

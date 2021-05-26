@@ -9,14 +9,6 @@ import init, {
 (async () => {
   await init();
 
-  let sera = new SeriesI32("Apples", [1, 2, 3, 4]);
-  let sero = new SeriesF64("Orange", [1.1, 2.1, 3.1, 4.1]);
-  let serb = new SeriesSTR("Banana", ["ban", "nan", "qwe", "rty"]);
-
-  console.log("DataFrame");
-  let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
-  console.log(df.display);
-
   // console.group(
   //   "%cSeries",
   //   "color: white; background-color: darkblue; padding: 5px 10px; border-radius: 5px"
@@ -37,25 +29,25 @@ const dataframeDemo = () => {
 
   let sera = new SeriesI32("Apples", [1, 2, 3, 4]);
   let sero = new SeriesF64("Orange", [1.1, 2.1, 3.1, 4.1]);
-  let serb = new SeriesSTR("Banana", ["ban", "nan", "qwe", "rty"]);
+  let serb = new SeriesSTR("Banana", ["ban", "nan", "qwesas", "rty"]);
 
   console.log("DataFrame");
   let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
-  console.log(df.display);
+  console.table(df.displayTable);
 
-  console.log("DataFrame size");
-  console.log(df.size());
+  // console.log("DataFrame size");
+  // console.log(df.size());
 
-  console.log("DataFrame show Columns");
-  console.log(df.columns());
+  // console.log("DataFrame show Columns");
+  // console.log(df.columns());
 
-  console.log("DataFrame show Datatypes");
-  console.log(df.dataTypes());
+  // console.log("DataFrame show Datatypes");
+  // console.log(df.dataTypes());
 
-  console.log("DataFrame append series");
-  let sertest = new SeriesI32("Fruits", [9, 8, 9, 8]);
-  df.append(ColumnType.INTEGER, sertest.toJson());
-  console.log(df.display);
+  // console.log("DataFrame append series");
+  // let sertest = new SeriesI32("Fruits", [9, 8, 9, 8]);
+  // df.append(ColumnType.INTEGER, sertest.toJson());
+  // console.log(df.display);
 
   console.log("DataFrame loc get series with col name");
   console.log(df.loc("Banana"));
@@ -66,14 +58,14 @@ const dataframeDemo = () => {
   console.log("DataFrame iloc get col");
   console.log(df.ilocc(1));
 
-  console.group("DataFrame Math operations");
-  // console.log("DataFrame min");
-  console.log(df.min("Apples"));
-  console.log(df.maxColumns());
-  console.log(df.meanColumns());
-  console.groupEnd();
+  // console.group("DataFrame Math operations");
+  // // console.log("DataFrame min");
+  // console.log(df.min("Apples"));
+  // console.log(df.maxColumns());
+  // console.log(df.meanColumns());
+  // console.groupEnd();
 
-  console.groupEnd();
+  // console.groupEnd();
 };
 
 const seriesDemo = () => {
