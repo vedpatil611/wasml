@@ -23,7 +23,6 @@ extern "C" {
 }
 
 // Run when the wasm module is instantiated
-#[cfg(feature = "basic")]
 #[wasm_bindgen(start)]
 pub fn start() {
     set_panic_hook();

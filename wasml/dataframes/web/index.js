@@ -60,7 +60,7 @@ const dataframeDemo = () => {
 
   // console.group("DataFrame Math operations");
   // // console.log("DataFrame min");
-  // console.log(df.min("Apples"));
+  console.log(df.min("Apples"));
   // console.log(df.maxColumns());
   // console.log(df.meanColumns());
   // console.groupEnd();
