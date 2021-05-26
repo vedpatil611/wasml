@@ -34,6 +34,7 @@ const dataframeDemo = () => {
   console.log("DataFrame");
   let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
   console.table(df.displayTable);
+  console.log(df.display);
 
   console.log("DataFrame size");
   console.log(df.size());
@@ -59,11 +60,10 @@ const dataframeDemo = () => {
   console.log(df.ilocc(1));
 
   console.group("DataFrame Math operations");
-  // console.log("DataFrame min");
+
   console.log(df.min("Apples"));
   console.log(df.maxColumns().data);
   console.log(df.meanColumns().data);
-  // console.groupEnd();
 
   console.groupEnd();
 };
