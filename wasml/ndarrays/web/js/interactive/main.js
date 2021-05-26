@@ -34,8 +34,8 @@ const run = text => {
     [10, 11, 12],
   ]);
 
-  const func = new Function('a', 'b', `return ${text}`);
-  const ret = func(a, b);
+  const func = new Function('a', 'b', 'Floats1d', 'Floats2d', `return ${text}`);
+  const ret = func(a, b, Floats1d, Floats2d);
 
   const end = document.querySelector('section.end');
   while (end.firstChild) {

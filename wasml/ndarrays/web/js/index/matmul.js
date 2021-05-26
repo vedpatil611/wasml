@@ -49,8 +49,12 @@ export function matrixMultiplicationTest(size) {
   const x = new Floats2d(a);
   const y = new Floats2d(b);
 
-  const [vRes, vTime] = timeit(() => vanillaMultiplication(a, b));
+  const [nRes, vTime] = timeit(() => vanillaMultiplication(a, b));
   const [oRes, oTime] = timeit(() => x.dot(y));
+
+  x.free();
+  y.free();
+  oRes.free();
 
   // console.log(
   //   `Time for pure js implementation: ${vTime.toString().padStart(8)} ms`
