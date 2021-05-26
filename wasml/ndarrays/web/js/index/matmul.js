@@ -1,5 +1,32 @@
 import { Floats2d } from '../../../pkg/ndarrays.js';
 
+export const bigTest = (start, inclusiveEnd, step, iters) => {
+  const data = {
+    'size': [],
+    'time': [],
+    'type': [],
+  };
+  for (let i = start; i <= inclusiveEnd; i += step) {
+    try {
+      for (let j = 0; j < iters; ++j) {
+        const [ntime, wtime] = matrixMultiplicationTest(i, i);
+        data['size'].push(i);
+        data['time'].push(ntime);
+        data['type'].push('naive');
+
+        data['size'].push(i);
+        data['time'].push(wtime);
+        data['type'].push('wasml');
+      }
+      console.log(i, 'done');
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  console.log(data);
+  console.log(JSON.stringify(data));
+}
+
 export const matmul = (iters, n) => {
   console.log(`Multiplying ${iters} ${n}x${n} matrices ->`);
   const naive = [];
