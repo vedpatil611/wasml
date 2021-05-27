@@ -159,28 +159,20 @@ impl DataFrame {
     }
 
     pub fn loc(&self, column_name: String) -> String {
-        let mut res = String::from("");
+        let res;
         let map = &self.data;
-        self.index.iter().for_each(|f| {
-            let ser = &map[f];
-            match ser {
-                Series::Integers(x) => {
-                    if x.name() == column_name {
-                        res = x.show();
-                    }
-                }
-                Series::Floats(x) => {
-                    if x.name() == column_name {
-                        res = x.show();
-                    }
-                }
-                Series::Strings(x) => {
-                    if x.name() == column_name {
-                        res = x.show();
-                    }
-                }
-            };
-        });
+        let ser = &map[&column_name];
+        match ser {
+            Series::Integers(x) => {
+                res = x.show().to_string();
+            }
+            Series::Floats(x) => {
+                res = x.show().to_string();
+            }
+            Series::Strings(x) => {
+                res = x.show().to_string();
+            }
+        };
 
         res
     }
@@ -230,9 +222,9 @@ impl DataFrame {
 
     #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> String {
+        let map = &self.data;
         let mut res: String = String::from("");
         self.index.iter().for_each(|f| {
-            let map = &self.data;
             let ser = &map[f];
             match &ser {
                 Series::Integers(value) => {

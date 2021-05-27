@@ -35,6 +35,8 @@ const dataframeDemo = () => {
   let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
   console.table(df.displayTable);
 
+  console.log(df.columns());
+  console.log(df.dataTypes());
   // console.log("DataFrame size");
   // console.log(df.size());
 
