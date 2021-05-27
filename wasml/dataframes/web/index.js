@@ -29,12 +29,14 @@ const dataframeDemo = () => {
 
   let sera = new SeriesI32("Apples", [1, 2, 3, 4]);
   let sero = new SeriesF64("Orange", [1.1, 2.1, 3.1, 4.1]);
-  let serb = new SeriesSTR("Banana", ["ban", "nan", "qwesas", "rty"]);
+  let serb = new SeriesSTR("Banana", ["ban", "nan", "qs", "rty"]);
 
   console.log("DataFrame");
   let df = new DataFrame([sera.toJson(), sero.toJson(), serb.toJson()]);
   console.table(df.displayTable);
 
+  console.log(df.columns());
+  console.log(df.dataTypes());
   // console.log("DataFrame size");
   // console.log(df.size());
 
