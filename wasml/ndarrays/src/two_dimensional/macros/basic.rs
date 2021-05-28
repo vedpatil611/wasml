@@ -25,7 +25,7 @@ macro_rules! two_dimensional_basic_methods {
                     index.get(0).as_f64().unwrap() as usize,
                     index.get(1).as_f64().unwrap() as usize,
                 );
-                self.data[index]
+                self.data[index].clone()
             }
 
             /// Get the row at the specified index
