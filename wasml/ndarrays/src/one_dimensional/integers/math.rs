@@ -1,38 +1,22 @@
 use super::Integers1d;
+use ndarray_stats::QuantileExt;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl Integers1d {
     /// Get minimun element
     pub fn min(&self) -> i32 {
-        let mut min: i32 = self.data[0];
-        self.data.iter().for_each(|elem| {
-            if min > *elem {
-                min = *elem;
-            }
-        });
-        min
+        *self.data.min().unwrap()
     }
 
     /// Get maximun element
     pub fn max(&self) -> i32 {
-        let mut max: i32 = self.data[0];
-        self.data.iter().for_each(|elem| {
-            if max < *elem {
-                max = *elem;
-            }
-        });
-        max
+        *self.data.max().unwrap()
     }
 
     /// Get the mean of all the elements in the array
-    pub fn mean(&self) -> f64 {
-        let mut sum: i32 = 0;
-        for x in &self.data {
-            sum += x;
-        }
-
-        sum as f64 / self.len() as f64
+    pub fn mean(&self) -> i32 {
+        self.data.mean().unwrap()
     }
 
     /// Get median of all elements
@@ -49,19 +33,15 @@ impl Integers1d {
     }
 
     /// Get variance of all elements in array
-    pub fn variance(&self, degree_of_freedom: f64) -> f64 {
+    pub fn var(&self, ddof: f64) -> f64 {
         let mean = self.mean();
-        let mut sqr_diff: f64 = 0.0;
+        let sqr_diff = self.data.iter().map(|x| (x - mean).pow(2)).sum::<i32>() as f64;
 
-        for x in &self.data {
-            sqr_diff += (*x as f64 - mean) * (*x as f64 - mean);
-        }
-
-        return sqr_diff as f64 / (self.len() as f64 - degree_of_freedom);
+        return sqr_diff / (self.len() as f64 - ddof);
     }
 
     /// Get standard_deviation of all elements in array
-    pub fn standard_deviation(&self, degree_of_freedom: f64) -> f64 {
-        self.variance(degree_of_freedom).sqrt()
+    pub fn std(&self, ddof: f64) -> f64 {
+        self.var(ddof).sqrt()
     }
 }
