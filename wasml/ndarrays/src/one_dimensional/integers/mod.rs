@@ -1,10 +1,13 @@
-pub mod basic;
-pub mod custom_serde;
 pub mod math;
-pub mod wasm;
+pub mod new;
+pub mod serde;
 
-use ndarray::{arr1, Array1};
+use ndarray::{arr1, s, Array1, Axis};
 use wasm_bindgen::prelude::*;
+
+use crate::{
+    one_dimensional_basic_methods, one_dimensional_interop_methods, one_dimensional_math_methods,
+};
 
 #[wasm_bindgen]
 pub struct Integers1d {
@@ -12,10 +15,6 @@ pub struct Integers1d {
     pub data: Array1<i32>,
 }
 
-// All the rust only functions
-impl Integers1d {
-    /// Create a new Integers1d
-    pub fn new(array: Vec<i32>) -> Integers1d {
-        Integers1d { data: arr1(&array) }
-    }
-}
+one_dimensional_interop_methods!(Integers1d, i32);
+one_dimensional_basic_methods!(Integers1d, i32);
+one_dimensional_math_methods!(Integers1d, i32);
