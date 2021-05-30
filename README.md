@@ -4,7 +4,7 @@ WebAssembly Powered Machine Learning
 
 # Modules
 
-- Ndarray Implementation
+- Linear Algebra
 - Data Manipulation
 - Graphing
 - Regression

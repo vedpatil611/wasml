@@ -1,4 +1,4 @@
-import { Floats1d } from '../../../pkg/ndarrays.js';
+import { Floats1d } from '../../../pkg/linalg.js';
 
 export const one_dimensional_floats = () => {
     one_dimensional_floats_constructors();
@@ -72,10 +72,8 @@ const one_dimensional_floats_math = () => {
     console.log('a.clone().scaled_add(2, b)', a_clone.data);
     console.log('a.sum()', a.sum());
     console.log('a.product()', a.product());
-    console.log('a.variance(0)', a.variance(0));
-    console.log('a.standard_deviation(0)', a.standard_deviation(0));
-    console.log('a.variance(1)', a.variance(1));
-    console.log('a.standard_deviation(1)', a.standard_deviation(1));
+    console.log('a.var(0)', a.var(0));
+    console.log('a.std(1)', a.std(1));
 
     console.groupEnd();
 };

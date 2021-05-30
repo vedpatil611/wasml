@@ -1,9 +1,9 @@
 [package]
 authors = ["Archit Bhonsle <abhonsle2000@gmail.com>"]
-description = "WASML's implementation of n-dimensional arrays"
+description = "Linear algebra accelerated by WebAssembly"
 edition = "2018"
 license-file = "../../LICENSE"
-name = "ndarrays"
+name = "linalg"
 repository = "https://github.com/wasml/wasml"
 version = "0.1.0"
 
@@ -11,9 +11,7 @@ version = "0.1.0"
 crate-type = ["cdylib", "rlib"]
 
 [features]
-# wee_alloc is causing problems
-basic = ["console_error_panic_hook"]
-default = ["basic"]
+default = ["console_error_panic_hook"]
 
 [dependencies]
 console_error_panic_hook = { version = "0.1", optional = true }
@@ -21,13 +19,12 @@ getrandom = { version = "0.2.2", features = ["js"] }
 js-sys = "0.3"
 ndarray = { version = "0.15", features = ["serde", "rayon", "matrixmultiply-threading"] }
 ndarray-stats = "0.5"
-serde = {version = "1.0", features = ["derive"]}
+rayon = "1.5"
+serde = { version = "1.0", features = ["derive"] }
 serde-wasm-bindgen = "0.1"
 wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
-wee_alloc = { version = "0.4", optional = true }
-rayon = "1.5"
 wasm-bindgen-rayon = { version = "1.0", features = ["no-bundler"] }
-
+wee_alloc = { version = "0.4", optional = true }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.13"

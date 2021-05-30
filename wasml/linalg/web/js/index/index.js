@@ -1,4 +1,4 @@
-import init, { initThreadPool, Integers2d, Strings2d } from '../../../pkg/ndarrays.js';
+import init, { initThreadPool, Integers2d, Strings2d } from '../../../pkg/linalg.js';
 
 // import { bigTest } from './matmul.js';
 import { one_dimensional_floats } from './one.js';

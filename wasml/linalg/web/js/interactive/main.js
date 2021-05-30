@@ -1,4 +1,4 @@
-import init, { Floats1d, Floats2d } from '../../../pkg/ndarrays.js';
+import init, { Floats1d, Floats2d } from '../../../pkg/linalg.js';
 import { createDisplayDiv } from './display.js';
 
 (async () => {

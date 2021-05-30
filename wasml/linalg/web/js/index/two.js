@@ -1,4 +1,4 @@
-import { Floats1d, Floats2d } from '../../../pkg/ndarrays.js';
+import { Floats1d, Floats2d } from '../../../pkg/linalg.js';
 
 export const two_dimensional_floats = () => {
     console.group('FLOATS');

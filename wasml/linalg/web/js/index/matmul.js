@@ -1,4 +1,4 @@
-import { Floats2d } from '../../../pkg/ndarrays.js';
+import { Floats2d } from '../../../pkg/linalg.js';
 
 export const bigTest = (start, inclusiveEnd, step, iters) => {
   const data = {
