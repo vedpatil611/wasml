@@ -1,4 +1,4 @@
-use ndarrays::one_dimensional::integers::Integers1d;
+use linalg::one_dimensional::integers::Integers1d;
 pub mod math;
 pub mod series_i32;
 

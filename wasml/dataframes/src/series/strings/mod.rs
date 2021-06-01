@@ -1,4 +1,4 @@
-use ndarrays::one_dimensional::strings::Strings1d;
+use linalg::one_dimensional::strings::Strings1d;
 pub mod series_str;
 
 use serde::{Deserialize, Serialize};
