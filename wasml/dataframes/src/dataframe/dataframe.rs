@@ -1,137 +1,156 @@
+use std::collections::HashMap;
+
 use super::ColumnType;
 use super::DataFrame;
 use super::Series;
 use crate::series::floats::SeriesF64;
 use crate::series::integers::SeriesI32;
 use crate::series::strings::SeriesSTR;
-use ndarrays::one_dimensional::floats::Floats1d;
 use wasm_bindgen::prelude::*;
-
-// macro_rules! MMM {
-//     ($fn_name: ident) => {
-//         pub fn $fn_name(&self) -> Floats1d {
-//             let mut res: Vec<f64> = Vec::new();
-//             self.data.iter().for_each(|ser| match &ser {
-//                 Series::Integers(value) => {
-//                     res.push(value.$fn_name() as f64);
-//                 }
-//                 Series::Floats(value) => {
-//                     res.push(value.$fn_name());
-//                 }
-//                 _ => panic!(),
-//             });
-
-//             Floats1d::new(res)
-//         }
-//     };
-// }
 
 #[wasm_bindgen]
 impl DataFrame {
     #[wasm_bindgen(constructor)]
     pub fn new(vec_series: Vec<JsValue>) -> DataFrame {
         //Get first Series data size
-        let mut series_size = 0;
+
+        let mut num_rows = 0;
         let first_series_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_int) = first_series_int {
-            series_size = series_int.len()
+            num_rows = series_int.len()
         }
 
         let first_series_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_float) = first_series_float {
-            series_size = series_float.len()
+            num_rows = series_float.len()
         }
 
         let first_series_str: Result<SeriesSTR, serde_wasm_bindgen::Error> =
             serde_wasm_bindgen::from_value(vec_series[0].clone());
         if let Ok(series_str) = first_series_str {
-            series_size = series_str.len()
+            num_rows = series_str.len()
         }
 
-        let series_data = vec_series
-            .iter()
-            .map(|series| {
-                let as_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
-                    serde_wasm_bindgen::from_value(series.clone());
+        let mut series_data: HashMap<String, Series> = HashMap::new();
+        let mut index: Vec<String> = Vec::new();
+        let mut num_cols: usize = 0;
+        for ser in &vec_series {
+            let as_int: Result<SeriesI32, serde_wasm_bindgen::Error> =
+                serde_wasm_bindgen::from_value(ser.clone());
 
-                if let Ok(x) = as_int {
-                    if x.len() == series_size {
-                        return Series::Integers(x);
-                    }
+            if let Ok(x) = as_int {
+                let col_name = x.name();
+                if x.len() == num_rows {
+                    series_data
+                        .entry(col_name.clone())
+                        .or_insert(Series::Integers(x));
+                    index.push(col_name);
+                    num_cols += 1;
+                    continue;
+                } else {
+                    panic!("Series length does not match");
                 }
+            }
 
-                let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
-                    serde_wasm_bindgen::from_value(series.clone());
+            let as_float: Result<SeriesF64, serde_wasm_bindgen::Error> =
+                serde_wasm_bindgen::from_value(ser.clone());
 
-                if let Ok(x) = as_float {
-                    if x.len() == series_size {
-                        return Series::Floats(x);
-                    }
+            if let Ok(x) = as_float {
+                let col_name = x.name();
+                if x.len() == num_rows {
+                    series_data
+                        .entry(col_name.clone())
+                        .or_insert(Series::Floats(x));
+                    index.push(col_name);
+                    num_cols += 1;
+                    continue;
+                } else {
+                    panic!("Series length does not match");
                 }
+            }
 
-                let as_str: Result<SeriesSTR, serde_wasm_bindgen::Error> =
-                    serde_wasm_bindgen::from_value(series.clone());
+            let as_str: Result<SeriesSTR, serde_wasm_bindgen::Error> =
+                serde_wasm_bindgen::from_value(ser.clone());
 
-                if let Ok(x) = as_str {
-                    if x.len() == series_size {
-                        return Series::Strings(x);
-                    }
+            if let Ok(x) = as_str {
+                let col_name = x.name();
+                if x.len() == num_rows {
+                    series_data
+                        .entry(col_name.clone())
+                        .or_insert(Series::Strings(x));
+                    index.push(col_name);
+                    num_cols += 1;
+                    continue;
+                } else {
+                    panic!("Series length does not match");
                 }
+            }
+        }
 
-                panic!("Type couldn't be matched");
-            })
-            .collect();
-
-        DataFrame { data: series_data }
+        DataFrame {
+            data: series_data,
+            index,
+            num_rows,
+            num_cols,
+        }
     }
 
     #[wasm_bindgen(js_name = columns)]
     pub fn show_columns(&self) -> JsValue {
-        let mut res: Vec<String> = Vec::new();
-        self.data.iter().for_each(|ser| {
-            match ser {
-                Series::Integers(x) => res.push(x.name()),
-                Series::Floats(x) => res.push(x.name()),
-                Series::Strings(x) => res.push(x.name()),
-            };
-        });
+        let res: Vec<String> = self.index.clone();
 
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
 
-    #[wasm_bindgen(getter, js_name = dTypes)]
-    pub fn show_datatypes(&self) -> JsValue {
-        let mut res: Vec<ColumnType> = Vec::new();
-        self.data.iter().for_each(|ser| {
+    #[wasm_bindgen(js_name = dataTypes)]
+    pub fn get_datatypes(&self) -> JsValue {
+        let mut res: HashMap<String, ColumnType> = HashMap::new();
+
+        for (name, ser) in &self.data {
             match ser {
-                Series::Integers(x) => res.push(x.dtype()),
-                Series::Floats(x) => res.push(x.dtype()),
-                Series::Strings(x) => res.push(x.dtype()),
-            };
-        });
+                Series::Floats(_value) => {
+                    res.entry(name.clone()).or_insert(ColumnType::FLOAT);
+                }
+                Series::Integers(_value) => {
+                    res.entry(name.clone()).or_insert(ColumnType::INTEGER);
+                }
+                Series::Strings(_value) => {
+                    res.entry(name.clone()).or_insert(ColumnType::STR);
+                }
+            }
+        }
 
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
 
     #[wasm_bindgen(js_name = append)]
     pub fn add_column(&mut self, datatype: ColumnType, series: JsValue) {
-        // let dt: ColumnType = serde_wasm_bindgen::from_value(datatype).unwrap();
         match datatype {
             ColumnType::FLOAT => {
-                let ser = serde_wasm_bindgen::from_value(series).unwrap();
-                self.data.push(Series::Floats(ser));
+                let ser: SeriesF64 = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data.entry(ser.name()).or_insert(Series::Floats(ser));
             }
             ColumnType::INTEGER => {
-                let ser = serde_wasm_bindgen::from_value(series).unwrap();
-                self.data.push(Series::Integers(ser));
+                let ser: SeriesI32 = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data.entry(ser.name()).or_insert(Series::Integers(ser));
             }
             ColumnType::STR => {
-                let ser = serde_wasm_bindgen::from_value(series).unwrap();
-                self.data.push(Series::Strings(ser));
+                let ser: SeriesSTR = serde_wasm_bindgen::from_value(series).unwrap();
+                self.data.entry(ser.name()).or_insert(Series::Strings(ser));
             }
         }
+    }
+
+    #[wasm_bindgen(js_name = rowsCount)]
+    pub fn num_rows(&self) -> usize {
+        self.num_rows
+    }
+
+    #[wasm_bindgen(js_name = columnsCount)]
+    pub fn num_cols(&self) -> usize {
+        self.num_cols
     }
 
     #[wasm_bindgen(js_name = size)]
@@ -140,33 +159,29 @@ impl DataFrame {
     }
 
     pub fn loc(&self, column_name: String) -> String {
-        let mut res = String::from("");
-        self.data.iter().for_each(|ser| {
-            match ser {
-                Series::Integers(x) => {
-                    if x.name() == column_name {
-                        res = x.show();
-                    }
-                }
-                Series::Floats(x) => {
-                    if x.name() == column_name {
-                        res = x.show();
-                    }
-                }
-                Series::Strings(x) => {
-                    if x.name() == column_name {
-                        res = x.show();
-                    }
-                }
-            };
-        });
+        let res;
+        let map = &self.data;
+        let ser = &map[&column_name];
+        match ser {
+            Series::Integers(x) => {
+                res = x.show().to_string();
+            }
+            Series::Floats(x) => {
+                res = x.show().to_string();
+            }
+            Series::Strings(x) => {
+                res = x.show().to_string();
+            }
+        };
 
         res
     }
 
     pub fn ilocr(&self, row: usize) -> js_sys::Array {
         let array = js_sys::Array::new();
-        self.data.iter().for_each(|ser| {
+        let map = &self.data;
+        self.index.iter().for_each(|f| {
+            let ser = &map[f];
             match ser {
                 Series::Integers(x) => {
                     let val = serde_wasm_bindgen::to_value(&x.get(row)).unwrap();
@@ -188,7 +203,9 @@ impl DataFrame {
 
     pub fn ilocc(&self, col: usize) -> JsValue {
         let val: JsValue;
-        let ser = &self.data[col];
+        let map = &self.data;
+        let col_idx_name = &self.index[col];
+        let ser = &map[col_idx_name];
         match ser {
             Series::Integers(x) => {
                 val = x.data();
@@ -205,264 +222,52 @@ impl DataFrame {
 
     #[wasm_bindgen(getter,js_name = display)]
     pub fn show(&self) -> String {
+        let map = &self.data;
         let mut res: String = String::from("");
-        self.data.iter().for_each(|ser| match &ser {
-            Series::Integers(value) => {
-                res.push_str(&value.show());
-            }
-            Series::Floats(value) => {
-                res.push_str(&value.show());
-            }
-            Series::Strings(value) => {
-                res.push_str(&value.show());
+        self.index.iter().for_each(|f| {
+            let ser = &map[f];
+            match &ser {
+                Series::Integers(value) => {
+                    res.push_str(&value.show());
+                }
+                Series::Floats(value) => {
+                    res.push_str(&value.show());
+                }
+                Series::Strings(value) => {
+                    res.push_str(&value.show());
+                }
             }
         });
         res
     }
 
-    pub fn min(&self, col: JsValue) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        for x in &self.data {
-            match x {
-                Series::Floats(value) => {
-                    if col_name == value.name() {
-                        return value.min();
+    #[wasm_bindgen(getter,js_name = displayTable)]
+    pub fn show_table(&self) -> js_sys::Array {
+        let n = self.index.len();
+        let array_col = js_sys::Array::new();
+        let map = &self.data;
+        for i in 0..n {
+            let array_row = js_sys::Array::new();
+            self.index.iter().for_each(|f| {
+                let ser = &map[f];
+                match ser {
+                    Series::Integers(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
                     }
-                }
-                Series::Integers(value) => {
-                    if col_name == value.name() {
-                        return value.min() as f64;
+                    Series::Floats(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
                     }
-                },
-                Series::Strings(value) => {
-                    if col_name == value.name() {
-                        panic!("min function not supported for strings");
+                    Series::Strings(x) => {
+                        let val = serde_wasm_bindgen::to_value(&x.get(i)).unwrap();
+                        array_row.push(&val);
                     }
-                }
-            }
-        }
-        panic!("Column name {} not found", col_name);
-    }
-
-    #[wasm_bindgen(js_name = minColumns)]
-    pub fn min_colunmn(&self) -> Floats1d {
-        let mut res: Vec<f64> = Vec::new();
-        self.data.iter().for_each(|ser| match &ser {
-            Series::Integers(value) => {
-                res.push(value.min() as f64);
-            }
-            Series::Floats(value) => {
-                res.push(value.min());
-            }
-            _ => {}
-        });
-
-        Floats1d::new(res)
-    }
-
-    pub fn max(&self, col: JsValue) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        for x in &self.data {
-            match x {
-                Series::Floats(value) => {
-                    if col_name == value.name() {
-                        return value.min();
-                    }
-                }
-                Series::Integers(value) => {
-                    if col_name == value.name() {
-                        return value.min() as f64;
-                    }
-                },
-                Series::Strings(value) => {
-                    if col_name == value.name() {
-                        panic!("max function not supported for strings");
-                    }
-                }
-            }
-        }
-        panic!("Column name {} not found", col_name);
-    }
-
-    #[wasm_bindgen(js_name = maxColumns)]
-    pub fn max_columns(&self) -> Floats1d {
-        let mut res: Vec<f64> = Vec::new();
-        self.data.iter().for_each(|ser| match &ser {
-            Series::Integers(value) => {
-                res.push(value.max() as f64);
-            }
-            Series::Floats(value) => {
-                res.push(value.max());
-            }
-            _ => {}
-        });
-
-        Floats1d::new(res)
-    }
-
-    pub fn mean(&self, col: JsValue) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        for x in &self.data {
-            match x {
-                Series::Floats(value) => {
-                    if col_name == value.name() {
-                        return value.mean();
-                    }
-                }
-                Series::Integers(value) => {
-                    if col_name == value.name() {
-                        return value.mean();
-                    }
-                },
-                Series::Strings(value) => {
-                    if col_name == value.name() {
-                        panic!("mean function not supported for strings");
-                    }
-                }
-            }
-        }
-        panic!("Column name {} not found", col_name);
-    }
-
-    #[wasm_bindgen(js_name = meanColumns)]
-    pub fn mean_columns(&self) -> Floats1d {
-        let mut res: Vec<f64> = Vec::new();
-        self.data.iter().for_each(|ser| match &ser {
-            Series::Integers(value) => {
-                res.push(value.mean());
-            }
-            Series::Floats(value) => {
-                res.push(value.mean());
-            }
-            _ => {}
-        });
-
-        Floats1d::new(res)
-    }
-
-    pub fn median(&self, col: JsValue) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        for x in &self.data {
-            match x {
-                Series::Floats(value) => {
-                    if col_name == value.name() {
-                        return value.median();
-                    }
-                }
-                Series::Integers(value) => {
-                    if col_name == value.name() {
-                        return value.median();
-                    }
-                },
-                Series::Strings(value) => {
-                    if col_name == value.name() {
-                        panic!("median function not supported for strings");
-                    }
-                }
-            }
-        }
-        panic!("Column name {} not found", col_name);
-    }
-
-    #[wasm_bindgen(js_name = medianColumns)]
-    pub fn median_columns(&self) -> Floats1d {
-        let mut res: Vec<f64> = Vec::new();
-        self.data.iter().for_each(|ser| match &ser {
-            Series::Integers(value) => {
-                res.push(value.median());
-            }
-            Series::Floats(value) => {
-                res.push(value.median());
-            }
-            _ => {}
-        });
-
-        Floats1d::new(res)
-    }
-
-    /// Returns variance of given column with given degree of freedom
-    pub fn variance(&self, col: JsValue, degree_of_freedom: f64) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        for ser in &self.data {
-            match ser {
-                Series::Floats(value) => {
-                    if col_name == value.name() {
-                        return value.variance(degree_of_freedom);
-                    }
-                },
-                Series::Integers(value) => {
-                    if col_name == value.name() {
-                        return value.variance(degree_of_freedom);
-                    }
-                },
-                Series::Strings(_value) => {
-                    panic!("Variance not supported for String");
-                }
-            }
-        }
-        panic!("Column name {} not found", col_name);
-    }
-
-    /// return degree of freedom of all columns
-    pub fn variance_columns(&self, degree_of_freedom: f64) -> Floats1d {
-        let mut res: Vec<f64> = Vec::new();
-
-        for ser in &self.data {
-           match ser {
-                Series::Floats(value) => {
-                    res.push(value.variance(degree_of_freedom));
-                },
-                Series::Integers(value) => {
-                    res.push(value.variance(degree_of_freedom));
-                },
-                _ => { }
-           } 
+                };
+            });
+            array_col.push(&array_row);
         }
 
-        Floats1d::new(res)
-    } 
-
-    /// Returns standard deviation of given column with degree of freedom
-    #[wasm_bindgen(js_name = standardDeviation)]
-    pub fn std_dev(&self, col: JsValue, degree_of_freedom: f64) -> f64 {
-        let col_name: String = serde_wasm_bindgen::from_value(col).unwrap();
-        for x in &self.data {
-            match x {
-                Series::Floats(value) => {
-                    if col_name == value.name() {
-                        return value.std_dev(degree_of_freedom);
-                    }
-                },
-                Series::Integers(value) => {
-                    if col_name == value.name() {
-                        return value.std_dev(degree_of_freedom);
-                    }
-                },
-                Series::Strings(_value) => {
-                    panic!("Standard Deviation is not supported for Strings");
-                }
-            }
-        }
-
-        panic!("Column name {} not found", col_name);
-    }
-    
-    /// Returns standard deviations of columns
-    #[wasm_bindgen(js_name = standardDeviationsColumns)]
-    pub fn std_dev_columns(&self, degree_of_freedom: f64) -> Floats1d {
-        let mut res: Vec<f64> = Vec::new();
-        for x in &self.data {
-            match x {
-                Series::Floats(value) => {
-                    res.push(value.std_dev(degree_of_freedom));
-                },
-                Series::Integers(value) => {
-                    res.push(value.std_dev(degree_of_freedom));
-                },
-                _ => { }
-            }
-        }
-
-        Floats1d::new(res)
+        array_col
     }
 }

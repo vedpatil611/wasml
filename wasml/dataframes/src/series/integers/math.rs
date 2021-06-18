@@ -35,11 +35,11 @@ impl SeriesI32 {
 
     /// Return varaince of series with given degree of freedom
     pub fn variance(&self, degree_of_freedom: f64) -> f64 {
-        self.data.variance(degree_of_freedom)
+        self.data.var(degree_of_freedom)
     }
 
     /// Return standard deviation of series with given degree of freedom
     pub fn std_dev(&self, degree_of_freedom: f64) -> f64 {
-        self.data.standard_deviation(degree_of_freedom)
+        self.data.std(degree_of_freedom)
     }
 }

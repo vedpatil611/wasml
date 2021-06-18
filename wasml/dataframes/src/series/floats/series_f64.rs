@@ -1,6 +1,6 @@
 use super::SeriesF64;
 use crate::dataframe::ColumnType;
-use ndarrays::one_dimensional::floats::Floats1d;
+use linalg::one_dimensional::floats::Floats1d;
 // use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
@@ -73,7 +73,7 @@ impl SeriesF64 {
         self.data.insert(index, value);
     }
 
-    pub fn inserted(&self, index: usize, value: f64) -> Floats1d {
+    pub fn inserted(&mut self, index: usize, value: f64) -> Floats1d {
         self.data.inserted(index, value)
     }
 

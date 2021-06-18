@@ -1,4 +1,4 @@
-use ndarrays::one_dimensional::floats::Floats1d;
+use linalg::one_dimensional::floats::Floats1d;
 pub mod series_f64;
 pub mod maths;
 

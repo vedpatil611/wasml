@@ -1,6 +1,6 @@
 use super::SeriesSTR;
 use crate::dataframe::ColumnType;
-use ndarrays::one_dimensional::strings::Strings1d;
+use linalg::one_dimensional::strings::Strings1d;
 // use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
