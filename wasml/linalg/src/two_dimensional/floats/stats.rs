@@ -1,8 +1,5 @@
 use super::Floats2d;
-use ndarray::{
-    Axis,
-    parallel::prelude::*,
-};
+use ndarray::{parallel::prelude::*, Axis};
 use ndarray_stats::QuantileExt;
 use wasm_bindgen::prelude::*;
 
@@ -23,15 +20,14 @@ impl Floats2d {
     #[wasm_bindgen(js_name = maxC)]
     pub fn max_c(&self) -> Floats1d {
         let mut vec = Vec::new();
-        self
-            .data
+        self.data
             .axis_iter(Axis(0))
             .into_par_iter()
             .map(|x| *x.max().unwrap())
             .collect_into_vec(&mut vec);
 
         Floats1d {
-            data: ndarray::Array1::from_vec(vec)
+            data: ndarray::Array1::from_vec(vec),
         }
     }
 
@@ -39,15 +35,14 @@ impl Floats2d {
     #[wasm_bindgen(js_name = maxR)]
     pub fn max_r(&self) -> Floats1d {
         let mut vec = Vec::new();
-        self
-            .data
+        self.data
             .axis_iter(Axis(1))
             .into_par_iter()
             .map(|x| *x.max().unwrap())
             .collect_into_vec(&mut vec);
 
         Floats1d {
-            data: ndarray::Array1::from_vec(vec)
+            data: ndarray::Array1::from_vec(vec),
         }
     }
 
@@ -64,15 +59,14 @@ impl Floats2d {
     #[wasm_bindgen(js_name = minC)]
     pub fn min_c(&self) -> Floats1d {
         let mut vec = Vec::new();
-        self
-            .data
+        self.data
             .axis_iter(Axis(0))
             .into_par_iter()
             .map(|x| *x.min().unwrap())
             .collect_into_vec(&mut vec);
 
         Floats1d {
-            data: ndarray::Array1::from_vec(vec)
+            data: ndarray::Array1::from_vec(vec),
         }
     }
 
@@ -80,15 +74,14 @@ impl Floats2d {
     #[wasm_bindgen(js_name = minR)]
     pub fn min_r(&self) -> Floats1d {
         let mut vec = Vec::new();
-        self
-            .data
+        self.data
             .axis_iter(Axis(1))
             .into_par_iter()
             .map(|x| *x.min().unwrap())
             .collect_into_vec(&mut vec);
 
         Floats1d {
-            data: ndarray::Array1::from_vec(vec)
+            data: ndarray::Array1::from_vec(vec),
         }
     }
 
