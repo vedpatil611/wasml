@@ -1,4 +1,4 @@
-import { Floats1d, Floats2d } from '../../../pkg/linalg.js';
+import { Floats2d } from '../../../pkg/linalg.js';
 
 export const two_dimensional_floats = () => {
     console.group('FLOATS');
@@ -84,6 +84,13 @@ const two_dimensional_floats_math = () => {
     console.log(a.sumR().data);
     console.log(a.sumC().data);
     console.log(a.product());
+
+    console.log(a.max());
+    console.log(a.maxR().data);
+    console.log(a.maxC().data);
+    console.log(a.min());
+    console.log(a.minR().data);
+    console.log(a.minC().data);
 
     console.log(a.mean());
     console.log(a.meanR().data);
