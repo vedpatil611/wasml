@@ -1,6 +1,6 @@
-pub mod math;
 pub mod new;
 pub mod serde;
+pub mod stats;
 
 use ndarray::{arr1, s, Array1, Axis};
 use wasm_bindgen::prelude::*;
